@@ -1,0 +1,303 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblCostStaying">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/هزینه%20اقامت%20هر%20ترم%20تحصیلی.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>   
+                  @Html.Hidden("fldCostCode")
+                 <tr>
+                   <td align="left">
+                     نام مقطع (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtSectionCodeId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td> 
+                    <td align="left">
+                     نوع وضعیت  (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtStatusCodeId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+                    </tr>
+                    <tr> 
+                    <td align="left">
+                        <span style="color: Red;">*</span> هزینه:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtCost")
+                        <span id="lblCostError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        توضیحات:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)
+                    </td>
+                </tr>
+                     
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نام مقطع" }, new { ID = "1", Name = "نوع وضعیت" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblCostStayingSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldCostCode).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldSectionName).Title("نام مقطع");
+                    columns.Bound(p => p.fldStatusType).Title("نوع وضعیت");
+                    columns.Bound(p => p.fldCost).Title("هزینه");
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                        .Read("Fill", "B_tblCostStaying")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var sectioncodeid='';
+        var statuscodeid='';
+        var isWinOpen = false;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#B_tblCostStaying").remove();
+            });
+
+            $('#txtSectionCodeId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("body", "faces/SearchSection/index/2");
+                    isWinOpen = true;
+                }
+            });
+
+            $('#txtStatusCodeId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("body", "faces/SearchStatusDorm/index/2");
+                    isWinOpen = true;
+                }
+            });
+            $('#B_tblCostStaying').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblCostStaying').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblCostStaying")';
+                var value1 = sectioncodeid;
+                if ($("#cboSearchFiald").val() == 0)
+                    value1 = statuscodeid;
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val(), value1);
+            });
+            $("#txtCost").keyup(function () {
+                if ($("#txtCost").val() != '') {
+                    $("#txtCost").removeClass("input-validation-error");
+                    $("#lblCostError").html("");
+                }
+                else {
+                    $("#txtCost").addClass("input-validation-error");
+                    $('#lblCostError').html('لطفا هزینه را وارد کنید.');
+                }
+            });
+        });
+        function Clear() {
+            $('#txtCost').val('');
+            $('#txtDesc').val('');
+            $('#fldCostCode').val(0);
+        }
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldCostCode;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblCostStaying/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+        function SaveRecord() {
+            var er = false;
+            if ($("#txtCost").val() == '') {
+                $("#txtCost").addClass("input-validation-error");
+                $('#lblCostError').html('لطفا هزینه را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblCostError').html('');
+
+            if (er)
+                return;
+
+            var data = {
+                fldSectionCodeId: sectioncodeid,
+                fldStatusCodeId: statuscodeid,
+                fldCost: $("#txtCost").val(),
+                fldDesc: $("#txtDesc").val(),
+                fldCostCode: $("#fldCostCode").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/B_tblCostStaying/Save")', "#win");
+            }
+            Clear();
+        }
+            function EditRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldCostCode;
+                    var URL = '@Url.Content("~/B_tblCostStaying/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            sectioncodeid = data.fldSectionCodeId;
+                            statuscodeid = data.fldStatusCodeId;
+                            $('#txtSectionCodeId').val(data.fldSectionName);
+                            $('#txtStatusCodeId').val(data.fldStatusType);
+                            $('#txtCost').val(data.fldCost);
+                            $('#txtDesc').val(data.fldDesc);
+                            $('#fldCostCode').val(data.fldCostCode);
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            }
+        function Reload(Url, gridname, field, value, top, searchType, value1) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType, value1: value1 },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblCostStaying")';
+                    Reload(url, 'Grid', '2', sectioncodeid, 30, 2, statuscodeid);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+
+

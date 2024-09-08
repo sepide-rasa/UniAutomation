@@ -1,0 +1,165 @@
+﻿<div id="Home">
+    @using Kendo.Mvc.UI;
+    <script src="@Url.Content("~/Scripts/kendo.treeview.min.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/style.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Content/jQueryRotate.2.2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    <style scoped="scoped">
+        .treeview-back {
+            float: left;
+            width: 220px;
+            margin: 30px;
+            padding: 20px;
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.45), inset 0 0 30px rgba(0,0,0,0.07);
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.45), inset 0 0 30px rgba(0,0,0,0.07);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.45), inner 0 0 30px rgba(0,0,0,0.07);
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+        }
+    </style>
+    <script type="text/javascript">
+    var angleSec = 0;
+    var angleMin = 0;
+    var angleHour = 0;
+    var min, hor;
+
+    setInterval(function () {
+        angleSec = ((angleSec / 6 + 1) * 6);
+        $("#seconds").rotate(angleSec);
+        if (angleSec >= 360) {
+
+            angleMin = (angleMin / 6 + 1) * 6;
+            $("#minutes").rotate(angleMin);
+            angleSec = 0;
+        }
+        if (angleMin >= 360) {
+            angleMin = 0;
+        }
+
+    }, 1000);
+    var Nodeid;
+    var MatnEtelaiie;
+    $(document).ready(function () {
+        var datetime = '@ViewBag.time';
+
+        angleHour = datetime.substring(0, 2);
+        angleMin = datetime.substring(3, 5);
+        angleSec = datetime.substring(6, 8);
+        angleSec = angleSec * 6;
+        angleMin = angleMin * 6;
+        angleHour = (angleHour * 5 + (angleMin / 6) / 12) * 6;
+        $("#seconds").rotate(angleSec);
+        $("#minutes").rotate(angleMin);
+        $("#hours").rotate(angleHour);
+
+
+  
+
+        $('#Reserv').click(function () {
+            windows('#Main', '/Reserv/index/1');
+        });
+
+        $('#ChPass').click(function () {
+            windows('#Main', '/ChPass');
+        });
+        $('#Charj').click(function () {
+            windows('#Main', '/Charj');
+        });
+        
+
+    });
+
+    </script>
+    @{
+        UniAutomation.Models.UniAutomationEntities Uni = new UniAutomation.Models.UniAutomationEntities();
+        var q = Uni.sp_PersonName(Convert.ToInt32(Session["PersonId"])).FirstOrDefault();
+    }
+    <div class="k-rtl" dir="rtl">
+        @(Html.Kendo().TabStrip()
+          .Name("tabstrip")
+          .SelectedIndex(0)
+          .Items(tabstrip =>
+          {
+              tabstrip.Add().Text("صفحه اصلی")
+                  .Selected(true)
+                  .Content(Html.Kendo().Splitter()
+                  .Name("MainPage")
+                  .Orientation(SplitterOrientation.Horizontal)
+                  .HtmlAttributes(new { @style = "height:600px", @Class = "k-rtl", @dir = "rtl" })
+                    .Panes(p =>
+                    {
+                        p.Add().Content(@<div>
+                            <div id="Main">
+                                @*<center>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <fieldset id="FillEtelaiie" style="width: 650px;">
+                                        <span id="Etelaiie" style="color:Red;font-size:small;">@Html.Raw(ViewBag.MatnEtelaiie)</span>
+                                    </fieldset>
+                                    <fieldset id="FillPishSabteNam" style="width: 650px;">
+                                        <span id="PishSabteNam" style="color:Black;font-size:small;"></span>
+                                    </fieldset>
+                                </center>*@
+                            </div>
+                        </div>);
+                        p.Add().Size("220px").Content(@<div dir="rtl">
+                @Html.Kendo().PanelBar().Name("Admin").Items(it =>
+                                 {
+                                     it.Add().Text("امور تغذیه").Expanded(true)
+                                         .ImageUrl(Url.Content("~/content/images/foods.png"))
+                                         .Items(items =>
+                                         {
+                                             items.Add().Text("رزرو غذا")
+                                                 .ImageUrl(Url.Content("~/content/images/food.png"))
+                                                 .HtmlAttributes(new { @id = "Reserv" });
+                                             items.Add().Text("افزایش اعتبار")
+                                                 .ImageUrl(Url.Content("~/content/images/charge.png"))
+                                                 .HtmlAttributes(new { @id = "Charj" });
+                                             items.Add().Text("تغییر رمز عبور")
+                                                 .ImageUrl(Url.Content("~/content/images/pass.png"))
+                                                 .HtmlAttributes(new { @id = "ChPass" });
+                                             items.Add().Text("خروج")
+                                                 .ImageUrl(Url.Content("~/content/images/quit.png"))
+                                                 .Action("Logout", "TeacherLogin");
+                                         });
+                                 }
+                                 )
+                <br />
+                <center dir="rtl">
+                    <br />
+                    <img alt="" src="@Url.Content("~/TeacherLogin/image/" + Session["PersonId"].ToString())" width="90px" height="120px" style=" border-color: #2E4796; border-radius: 6px 6px 6px 6px; border-style: solid;border-width:2px;" />
+                    <br />
+                    <span>@q.PersonName</span>
+                    <br />
+                    <div id="container">
+                        <div class="rotatingHands">
+                            <img alt="" id="hours" src="@Url.Content("~/Content/images/hours.png")" />
+                        </div>
+                        <div class="rotatingHands">
+                            <img alt="" id="minutes" src="@Url.Content("~/Content/images/minutes.png")" />
+                        </div>
+                        <div class="rotatingHands">
+                            <img alt="" id="seconds" src="@Url.Content("~/Content/images/seconds.png")" />
+                        </div>
+                        <div class="glass">
+                            <img alt="" src="@Url.Content("~/Content/images/glass.png")" />
+                        </div>
+                        <img alt="" src="@Url.Content("~/Content/images/clock.png")" />
+                    </div>
+                </center>
+            </div>);
+                    }).ToHtmlString()
+
+                  );
+
+
+          }))
+
+    </div>
+</div>

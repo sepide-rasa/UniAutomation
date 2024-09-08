@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "پایان";
+    }
+<table>
+    <tr>
+        <td>
+            <div class="tag">
+                شناسه پرداخت
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                @Session["paymentId"]
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                مبلغ
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                @Session["Amount"]
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                کد تایید
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                @ViewBag.Result
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <div class="tag">
+                مقدر کد تایید باید برابر مقدار مبلغ یا عدد 90- باشد تا تایید انجام شده باشد
+                <br />
+                در غیر این صورت خطایی رخ داده است
+            </div>
+        </td>
+    </tr>
+</table>

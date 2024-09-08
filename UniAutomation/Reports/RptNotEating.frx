@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/15/2014 09:17:20" ReportInfo.Modified="05/21/2015 10:35:34" ReportInfo.CreatorVersion="2013.2.5.0">
+  <Dictionary>
+    <TableDataSource Name="sp_RptNotEating" ReferenceName="uniAutomationDataSet.sp_RptNotEating" DataType="System.Int32" Enabled="true">
+      <Column Name="fldCount" DataType="System.Int32"/>
+      <Column Name="fldFoodProgramingID" DataType="System.Int32"/>
+      <Column Name="fldFoodCartID" DataType="System.Int64"/>
+      <Column Name="fldFoodDate" DataType="System.DateTime"/>
+      <Column Name="fldFoodName" DataType="System.String"/>
+      <Column Name="PersonName" DataType="System.String"/>
+      <Column Name="fldDate" DataType="System.DateTime"/>
+      <Column Name="fldDate1" Alias="fldDate" DataType="System.String"/>
+      <Column Name="fldFoodDate1" Alias="fldFoodDate" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <Parameter Name="University" DataType="System.String"/>
+    <Parameter Name="time" DataType="System.String"/>
+    <Parameter Name="date" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="718.2" Height="121.87">
+      <TableObject Name="Table1" Left="31.56" Top="97.31" Width="655.08" Height="24.56" Border.Lines="All">
+        <TableColumn Name="Column1" Width="137.96"/>
+        <TableColumn Name="Column3" Width="137.57"/>
+        <TableColumn Name="Column6" Width="123.26"/>
+        <TableColumn Name="Column13" Width="190.14"/>
+        <TableColumn Name="Column18"/>
+        <TableRow Name="Row1" Height="24.56">
+          <TableCell Name="Cell1" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تاریخ تحویل غذا" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تاریخ رزرو غذا" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt, style=Bold"/>
+          <TableCell Name="Cell6" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="شماره کارت" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt, style=Bold"/>
+          <TableCell Name="Cell13" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نام و نام خانوادگی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt, style=Bold"/>
+          <TableCell Name="Cell18" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="ردیف" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table3" Left="7.83" Top="1.9" Width="702.54" Height="94.14" Cursor="No">
+        <TableColumn Name="Column10" Width="176.36"/>
+        <TableColumn Name="Column11" Width="301.4"/>
+        <TableColumn Name="Column12" Width="224.78"/>
+        <TableRow Name="Row3" Height="94.14">
+          <TableCell Name="Cell10" Text="تاریخ چاپ :[date]&#13;&#10;ساعت چاپ:[time]&#13;&#10;صفحه:[Page#] از [TotalPages#]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt"/>
+          <TableCell Name="Cell11" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 11pt, style=Bold"/>
+          <TableCell Name="Cell12" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt">
+            <PictureObject Name="Picture1" Left="78.43" Top="8.51" Width="75.6" Height="75.6" DataColumn="sp_tblSettingSelect.fldImage"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="129.87" Width="718.2" Height="24.56" DataSource="sp_RptNotEating">
+      <TableObject Name="Table4" Left="31.56" Width="655.08" Height="24.56" Border.Lines="All">
+        <TableColumn Name="Column19" Width="137.96"/>
+        <TableColumn Name="Column20" Width="137.57"/>
+        <TableColumn Name="Column21" Width="123.26"/>
+        <TableColumn Name="Column22" Width="190.14"/>
+        <TableColumn Name="Column23"/>
+        <TableRow Name="Row4" Height="24.56">
+          <TableCell Name="Cell19" Border.Lines="All" Text="[sp_RptNotEating.fldFoodDate]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9.75pt"/>
+          <TableCell Name="Cell20" Border.Lines="All" Text="[sp_RptNotEating.fldDate]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9.75pt"/>
+          <TableCell Name="Cell21" Border.Lines="All" Text="[sp_RptNotEating.fldFoodCartID]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9.75pt"/>
+          <TableCell Name="Cell22" Border.Lines="All" Text="[sp_RptNotEating.PersonName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9.75pt"/>
+          <TableCell Name="Cell23" Border.Lines="All" Text="[Row#]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9.75pt"/>
+        </TableRow>
+      </TableObject>
+      <Sort>
+        <Sort Expression="[sp_RptNotEating.PersonName]"/>
+      </Sort>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="158.43" Width="718.2" Height="18.9"/>
+  </ReportPage>
+</Report>

@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="12/20/2015 15:04:49" ReportInfo.Modified="12/21/2015 09:21:34" ReportInfo.CreatorVersion="2015.1.2.0">
+  <Dictionary>
+    <TableDataSource Name="sp_tblL_BookTrustSelect" ReferenceName="uniAutomationDataSet.sp_tblL_BookTrustSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldBookId" DataType="System.Int32"/>
+      <Column Name="fldStartDate" DataType="System.String"/>
+      <Column Name="fldEndDate" DataType="System.String"/>
+      <Column Name="fldFoodCardId" DataType="System.Int64"/>
+      <Column Name="fldUserID" DataType="System.Int32"/>
+      <Column Name="fldDate" DataType="System.DateTime"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="fldBookTitle" DataType="System.String"/>
+      <Column Name="fldPersianName" DataType="System.String"/>
+      <Column Name="fldEnglishName" DataType="System.String"/>
+      <Column Name="fldPersonalID" DataType="System.Int64"/>
+      <Column Name="fldUserName" DataType="System.String"/>
+      <Column Name="fldStateBook" DataType="System.Boolean" BindableControl="CheckBox"/>
+      <Column Name="fldBookStateCaption" DataType="System.String"/>
+      <Column Name="fldStudentID" DataType="System.Int64"/>
+      <Column Name="fldTeacherID" DataType="System.Int32"/>
+      <Column Name="fldPrsonName" DataType="System.String"/>
+      <Column Name="fldTrustDate" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <Parameter Name="Tarikh" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="718.2" Height="142.63">
+      <TextObject Name="Text1" Left="164.84" Top="74.68" Width="388.52" Height="30.22" Text="گزارش کتاب های امانت داده شده از تاریخ [Tarikh]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+      <TableObject Name="Table1" Left="14.02" Top="110.53" Width="690.17" Height="32.1">
+        <TableColumn Name="Column1" Width="119.06"/>
+        <TableColumn Name="Column2" Width="112.44"/>
+        <TableColumn Name="Column3" Width="248.86"/>
+        <TableColumn Name="Column4" Width="143.66"/>
+        <TableColumn Name="Column5"/>
+        <TableRow Name="Row1" Height="32.1">
+          <TableCell Name="Cell1" Border.Lines="All" Text="تاریخ پایان" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="تاریخ شروع" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell3" Border.Lines="All" Text="نام کتاب" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell4" Border.Lines="All" Text="نام و نام خانوادگی" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell5" Border.Lines="All" Text="ردیف" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+        </TableRow>
+      </TableObject>
+      <PictureObject Name="Picture1" Left="639.77" Top="0.94" Width="75.6" Height="75.6" DataColumn="sp_tblSettingSelect.fldImage"/>
+      <TextObject Name="Text2" Left="154.5" Top="31.18" Width="409.2" Height="36.84" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 14pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="150.63" Width="718.2" Height="39.67" DataSource="sp_tblL_BookTrustSelect">
+      <TableObject Name="Table2" Left="14.02" Width="690.17" Height="39.67">
+        <TableColumn Name="Column6" Width="119.06"/>
+        <TableColumn Name="Column7" Width="112.44"/>
+        <TableColumn Name="Column8" Width="248.86"/>
+        <TableColumn Name="Column9" Width="143.66"/>
+        <TableColumn Name="Column10"/>
+        <TableRow Name="Row2" Height="39.67">
+          <TableCell Name="Cell6" Border.Lines="All" Text="[sp_tblL_BookTrustSelect.fldEndDate]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="[sp_tblL_BookTrustSelect.fldStartDate]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="[sp_tblL_BookTrustSelect.fldBookTitle]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell9" Border.Lines="All" Text="[sp_tblL_BookTrustSelect.fldPrsonName]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell10" Border.Lines="All" Text="[Row#]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 12pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="194.3" Width="718.2"/>
+  </ReportPage>
+</Report>

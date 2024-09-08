@@ -1,0 +1,132 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="SearchL_LibraryCard">
+@UniAutomation.Helper.winClass.windowHeader("", "جستجو ", 900, 500)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />        
+        <div>
+            <table>
+                <tr>
+                    <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald2", new SelectList(new[] { new { ID = "0", Name = "عنوان کتاب" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType2", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch2")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop2", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                </tr>
+            </table>
+            <br />
+        </div>
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Select1", "انتخاب", "Next")             
+                @UniAutomation.Helper.winClass.Buttons("exit2", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+           @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblFoodCartsSelect>()
+                .Name("Grid1")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldID).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldName).Title("نام");
+                    columns.Bound(p => p.fldFamily).Title("نام خانوادگی");
+                    columns.Bound(p => p.fldMelliCode).Title("کد ملی");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                        .Read("Fill", "SearchL_LibraryCard")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var state;
+        $("document").ready(function () {
+            $("#Select1").button();
+            $("#exit2").button();
+            state = '@ViewBag.state';
+            $("#exit2").click(function () {
+                isWinOpen = false;
+                $("#SearchL_LibraryCard").remove();
+            });
+
+            $('#txtSearch2').keyup(function () {
+                var url = '@Url.Action("Reload", "SearchL_LibraryCard")';
+                Reload2(url, 'Grid2', $("#cboSearchFiald2").val(), $("#txtSearch2").val(), $("#txtTop2").val(), $("#cboSearchType2").val());
+            });
+
+            $('#SearchL_LibraryCard').dblclick(function () { DblClick(); });
+
+            $('#SearchL_LibraryCard #Grid1 table tr').live('dblclick', function () { DblClick(); });
+
+            $('#SearchL_LibraryCard #btnClose').click(function () {
+                $("#SearchL_LibraryCard").remove();
+                isWinOpen = false;
+            });
+
+        function DblClick() {
+            var entityGrid = $("#Grid1").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    idLibraryCard = selectedItem.fldId;
+
+                    $('#txtFoodCardId').val(selectedItem.fldName + " " + selectedItem.fldFamily);
+                    isWinOpen = false;
+
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                $('#SearchL_LibraryCard').remove();
+            }
+
+            $('#Select1').click(function () {
+                var entityGrid = $("#Grid1").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    idLibraryCard = selectedItem.fldId;
+
+                    $('#txtFoodCardId').val(selectedItem.fldName + " " + selectedItem.fldFamily);
+                    isWinOpen = false;
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                $('#SearchL_LibraryCard').remove();
+            });
+        });
+        function Reload2(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        
+    </script>
+     @UniAutomation.Helper.winClass.windowFother();
+</div>

@@ -1,0 +1,152 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="SearchRoom2">
+@UniAutomation.Helper.winClass.windowHeader("", "جستجو  اتاق های ساختمان", 900, 500)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />        
+        <div>
+            <table>
+                <tr>
+                    <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald2", new SelectList(new[] { new { ID = "0", Name = "نام اتاق" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType2", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch2")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop2", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                </tr>
+            </table>
+            <br />
+        </div>
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Select1", "انتخاب", "Next")              
+                @UniAutomation.Helper.winClass.Buttons("exit2", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+              @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblBuildingRoomsSelect>()
+                .Name("Grid2")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldRoomCode).Title("کد ").Visible(false);
+                    columns.Bound(p => p.fldNameRoom).Title("شماره اتاق");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                .Read("Fill", "SearchRoom2")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var state;
+        var BuildingId;
+        $("document").ready(function () {
+            $("#Select1").button();
+            $("#exit2").button();
+            State = '@ViewBag.State';
+            BuildingId = '@ViewBag.BuildingId';
+            $("#exit2").click(function () {
+                isWinOpen = false;
+                $("#SearchRoom2").remove();
+            });
+            $('#SearchRoom2 #btnClose').click(function () {
+                $("#SearchRoom2").remove();
+                isWinOpen = false;
+            });
+            $('#txtSearch2').keyup(function () {
+                var url = '@Url.Action("Reload", "SearchRoom2")';
+                Reload2(url, 'Grid2', $("#cboSearchFiald2").val(), $("#txtSearch2").val(), $("#txtTop2").val(), $("#cboSearchType2").val(), BuildingId);
+            });
+            $('#SearchRoom2').dblclick(function () { DblClick(); });
+
+            $('#SearchRoom2 #Grid2 table tr').live('dblclick', function () { DblClick(); });
+        });
+        function DblClick() {
+            var entityGrid = $("#Grid2").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+               
+                if (State == 1) {
+                    isWinOpen = false; 
+                    roomcodeid = selectedItem.fldRoomCode;
+
+                    var url = '@Url.Action("Reload", "B_tblEquimpmentRoom")';
+                    Reload(url, 'Grid', '3', $("#cboBuildingCodeId").val(), '', 30, 1, roomcodeid);
+                }
+                else if (State == 2) {
+                    isWinOpen = false;
+                    RoomcodeID = selectedItem.fldRoomCode;
+                    var url = '@Url.Action("Reload", "B_tblRegistrationEvent")';
+                    Reload(url, 'Grid', '3', $("#cboBuildingCodeId").val(), '', 30, 1, RoomcodeID);
+                }
+              
+                $('#txtRoomCodeId').val(selectedItem.fldNameRoom);
+                fldNameRoom = selectedItem.fldNameRoom;
+                $('#txtBuildingRooms').val(selectedItem.fldBuildingCodeId);
+                fldBuildingCodeId = selectedItem.fldBuildingCodeId;
+                isWinOpen = false;
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            $('#SearchRoom2').remove();
+        }
+
+        $('#Select1').click(function () {
+            var entityGrid = $("#Grid2").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                if (State == 1) {
+                    isWinOpen = false;
+                    roomcodeid = selectedItem.fldRoomCode;
+                    var url = '@Url.Action("Reload", "B_tblEquimpmentRoom")';
+                    Reload(url, 'Grid', '3', $("#cboBuildingCodeId").val(), '', 30, 1, roomcodeid);
+                }
+                else if (State == 2) {
+                    isWinOpen = false;
+                    RoomcodeID = selectedItem.fldRoomCode;
+                    var url = '@Url.Action("Reload", "B_tblRegistrationEvent")';
+                    Reload(url, 'Grid', '3', $("#cboBuildingCodeId").val(), '', 30, 1, RoomcodeID);
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            $('#SearchRoom2').remove();
+        });
+      
+        function Reload2(Url, gridname, field, value, top, searchType, BuildingId) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType, BuildingId: BuildingId },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        
+    </script>
+     @UniAutomation.Helper.winClass.windowFother();
+</div>

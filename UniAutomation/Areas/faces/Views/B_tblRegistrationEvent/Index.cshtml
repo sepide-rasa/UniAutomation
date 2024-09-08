@@ -1,0 +1,483 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblRegistrationEvent">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>  
+     <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>   
+    <div>    
+        <br />
+          <a href="@Url.Content("~/Helps/ثبت%20وقایع%20خوابگاه.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>   
+                  @Html.Hidden("fldEventCode")
+                 <tr>
+                   <td align="left">
+                    <span style="color: Red;">*</span> نام ساختمان:
+                    </td>
+                      <td>
+                        @(Html.Kendo().DropDownList()
+                                  .Name("cboBuildingCodeId")
+                                  .OptionLabel("ساختمان...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetBuild", "B_tblRegistrationEvent");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+                    <span id="lblBuildingCodeIdError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                     <span style="color: Red;">*</span>شماره اتاق (Ins):
+                    </td> 
+                    <td>
+                     @Html.TextBox("txtRoomCodeId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                        <span id="lblRoomCodeIdError" style="color: Red;"></span>
+                    </td> 
+                    </tr>
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نام واقعه:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtEventName")
+                        <span id="lblEventNameError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span> شماره دانشجو (Ins):
+                    </td>
+                    <td>
+                     @Html.TextBox("txtStudentId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                      <span id="lblStudentIdError" style="color: Red;"></span>
+                    </td>
+                </tr>  
+                <tr>
+                 <td align="left">
+                  
+                        <span style="color: Red;">*</span>تاریخ :
+                    </td>
+                    <td>
+                     @Html.TextBox("txtEventDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblEventDateError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                         ساعت:
+                    </td>
+                    <td align="right">
+                        @Html.TextBox("txtEventTimeM", null, new { @style = "width:30px;height: 23px;" })
+                        : @Html.TextBox("txtEventTimeH", null, new { @style = "width:30px;height: 23px;" })
+                        <span id="lblEventTimeMError" style="color: Red;"></span>
+                        <span id="lblEventTimeHError" style="color: Red;"></span>
+                    </td>
+                </tr>  
+                 <tr>
+                    <td align="left">
+                        توضیحات:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)
+                    </td>
+                </tr>       
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نام واقعه" }, new { ID = "1", Name = "شماره دانشجویی" }, new { ID = "2", Name = "تاریخ واقعه" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblRegistrationEventSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldEventCode).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldBuildingName).Title("نام ساختمان");
+                    columns.Bound(p => p.fldNameRoom).Title("شماره اتاق");
+                    columns.Bound(p => p.fldEventName).Title("نام واقعه");
+                    columns.Bound(p => p.fldStudentNumber).Title("شماره دانشجویی");
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                        .Read("Fill", "B_tblRegistrationEvent")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var BuildingcodeID;
+        var RoomcodeID=0;
+        var isWinOpen = false;
+        var Sid=0;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#B_tblRegistrationEvent").remove();
+            });
+
+            $('#txtEventDate').datepicker({
+                showButtonPanel: true
+            });
+            $('#txtStudentId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#B_tblRegistrationEvent", "/faces/SearchStudentIns/index/1");
+                    isWinOpen = true;
+                }
+            });
+            //            $('#txtBuildingCodeId').keyup(function () {
+            //                if (isWinOpen == false) {
+            //                    windowAppend("body", "faces/SearchRoom");
+            //                    isWinOpen = true;
+            //                }
+            //            });
+
+            $('#txtRoomCodeId').keyup(function () {
+                if ($("#cboBuildingCodeId").val() != "") {
+                    if (isWinOpen == false) {
+                        $('#lblBuildingCodeIdError').html('');
+                        windowAppend("#B_tblRegistrationEvent", "/faces/SearchRoom2/index?BuildingId=" + $('#cboBuildingCodeId').val() + "&State=" + 2);
+                        isWinOpen = true;
+                    }
+                }
+                else
+                    $('#lblBuildingCodeIdError').html('لطفا نام ساختمان را انتخاب کنید.');
+            });
+            $('#B_tblRegistrationEvent').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblRegistrationEvent').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+
+            $("#cboBuildingCodeId").change(function () {
+                var url = '@Url.Action("Reload", "B_tblRegistrationEvent")';
+                Reload(url, 'Grid', '3', $("#cboBuildingCodeId").val(), "", 30, 2, RoomcodeID);
+
+                if ($('#cboBuildingCodeId').val() == '')
+                    Reload(url, 'Grid', '0', '', '', 30, 0, RoomcodeID);
+            });
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblRegistrationEvent")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $('#cboBuildingCodeId').val(), $("#txtTop").val(), $("#cboSearchType").val(), RoomcodeID);
+            });
+
+
+            $("#txtEventName").keyup(function () {
+                if ($("#txtEventName").val() != '') {
+                    $("#txtEventName").removeClass("input-validation-error");
+                    $("#lblEventNameError").html("");
+                }
+                else {
+                    $("#txtEventName").addClass("input-validation-error");
+                    $('#lblEventNameError').html('لطفا نام واقعه را وارد کنید.');
+                }
+            });
+
+
+
+            $("#txtEventDate").keyup(function () {
+                if ($("#txtEventDate").val() != '') {
+                    $("#txtEventDate").removeClass("input-validation-error");
+                    $("#lblEventDateError").html("");
+                }
+                else {
+                    $("#txtEventDate").addClass("input-validation-error");
+                    $('#lblEventDateError').html('لطفا تاریخ را وارد کنید.');
+                }
+            });
+
+            $("#txtEventTimeM").keyup(function () {
+                if ($("#txtEventTimeM").val() != '') {
+                    $("#txtEventTimeM").removeClass("input-validation-error");
+                    $("#lblEventTimeMError").html("");
+                }
+                else {
+                    $("#txtEventTimeM").addClass("input-validation-error");
+                    $('#lblEventTimeMError').html('');
+                }
+            });
+
+            $("#txtEventTimeH").keyup(function () {
+                if ($("#txtEventTimeH").val() != '') {
+                    $("#txtEventTimeH").removeClass("input-validation-error");
+                    $("#lblEventTimeHError").html("");
+                }
+                else {
+                    $("#txtEventTimeH").addClass("input-validation-error");
+                    $('#lblEventTimeHError').html('لطفا ساعت را وارد کنید.');
+                }
+            });
+
+        });
+        function Clear() {
+            $('#txtEventName').val('');
+            $('#txtRoomCodeId').val('');
+            $('#txtStudentId').val('');
+            $('#txtEventDate').val('');
+            $('#txtEventTimeM').val('');
+            $('#txtEventTimeH').val('');
+            $('#fldEventCode').val(0);
+            $('#txtDesc').val('');
+            RoomcodeID = 0;
+        }
+        function SaveRecord() {
+            var er = false;
+            if ($("#cboBuildingCodeId").val() == '') {
+                $("#cboBuildingCodeId").addClass("input-validation-error");
+                $('#lblBuildingCodeIdError').html('لطفا نام ساختمان را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblBuildingCodeIdError').html('');
+
+//            if ($("#txtBuildingCodeId").val() == '') {
+//                $("#txtBuildingCodeId").addClass("input-validation-error");
+//                $('#lblBuildingCodeIdError').html('لطفا نام ساختمان را وارد کنید.');
+//                er = true;
+//            }
+//            else
+//                $('#lblBuildingCodeIdError').html('');
+
+            if (RoomcodeID == 0) {
+                $("#txtRoomCodeId").addClass("input-validation-error");
+                $('#lblRoomCodeIdError').html('لطفا شماره اتاق را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblRoomCodeIdError').html('');
+
+            if ($("#txtEventName").val() == '') {
+                $("#txtEventName").addClass("input-validation-error");
+                $('#lblEventNameError').html('لطفا نام واقعه را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblEventNameError').html('');
+
+            if (Sid == 0) {
+                $("#txtStudentId").addClass("input-validation-error");
+                $('#lblStudentIdError').html('لطفا شماره دانشجویی را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblStudentIdError').html('');
+
+            if ($("#txtEventDate").val() == '') {
+                $("#txtEventDate").addClass("input-validation-error");
+                $('#lblEventDateError').html('لطفا تاریخ را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblEventDateError').html('');
+
+            if ($("#txtEventTimeM").val() == '') {
+                $("#txtEventTimeM").addClass("input-validation-error");
+                $('#lblEventTimeMError').html('');
+                er = true;
+            }
+            else
+                $('#lblEventTimeMError').html('');
+
+            if ($("#txtEventTimeH").val() == '') {
+                $("#txtEventTimeH").addClass("input-validation-error");
+                $('#lblEventTimeHError').html('لطفا ساعت را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblEventTimeHError').html('');
+
+            if (er)
+                return;
+            EventTime = $("#txtEventTimeH").val() + ':' + $("#txtEventTimeM").val();
+            var data = {
+                fldStudentId: Sid,
+                fldBuildingCodeId: $('#cboBuildingCodeId').val(),
+                fldRoomCodeId: RoomcodeID,
+                fldEventName: $("#txtEventName").val(),
+                //fldStudentNumber: $("#txtStudentId").val(),
+                fldEventDate: $("#txtEventDate").val(),
+                fldEventTime: EventTime,
+                fldDesc: $("#txtDesc").val(),
+                fldEventCode: $("#fldEventCode").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/B_tblRegistrationEvent/Save")', "#win");
+            }
+            Clear();
+        }
+     function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldEventCode;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblRegistrationEvent/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldEventCode;
+                var URL = '@Url.Content("~/B_tblRegistrationEvent/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+
+                        $('#txtEventName').val(data.fldEventName);
+                        // BuildingcodeID = data.fldBuildingCodeId;
+                        // $('#txtBuildingCodeId').val(data.fldBuildingName);
+                        $('#txtRoomCodeId').val(data.fldNameRoom);
+                        $('#txtStudentId').val(data.fldStudentNumber);
+                        $('#txtName').val(data.fldName);
+                        $('#txtEventDate').val(data.fldEventDate);
+                        $('#txtEventTimeM').val(data.fldEventTimeM);
+                        $('#txtEventTimeH').val(data.fldEventTimeH);
+                        $('#txtDesc').val(data.fldDesc);
+                        $('#fldEventCode').val(data.fldEventCode);
+                        //$('#txtStudentNumber').val(data.fldStudentNumber);
+                        var model3 = $("#cboBuildingCodeId").data("kendoDropDownList");
+                        model3.value(data.fldBuildingCodeId);
+                        Sid = data.fldStudentId;
+                        RoomcodeID = data.fldRoomCodeId;
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+
+        function Reload(Url, gridname, field, value, value2, top, searchType, RoomId) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, value2: value2, top: top, searchtype: searchType, RoomId: RoomId },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblRegistrationEvent")';
+                    Reload(url, 'Grid', '3', $("#cboBuildingCodeId").val(), '', 30, 1, RoomcodeID);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+
+

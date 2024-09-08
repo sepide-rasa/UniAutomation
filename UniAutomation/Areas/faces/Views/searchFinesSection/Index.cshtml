@@ -1,0 +1,108 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="searchFinesSection">
+@UniAutomation.Helper.winClass.windowHeader("", "جستجو  جریمه بر اساس مقطع تحصیلی", 900, 500)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />        
+        <div>
+            <table>
+                <tr>
+                    <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald2", new SelectList(new[] { new { ID = "0", Name = "نام مقطع" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType2", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch2")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop2", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                </tr>
+            </table>
+            <br />
+        </div>
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Select1", "انتخاب", "Next")           
+                @UniAutomation.Helper.winClass.Buttons("exit2", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+              @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblFinesSectionSelect>()
+                .Name("Grid2")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldFinesCode).Title("کد جریمه").Visible(false);
+                    columns.Bound(p => p.fldSectionName).Title("نام مقطع");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                        .Read("Fill", "searchFinesSection")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var state;
+        $("document").ready(function () {
+            $("#Select1").button();
+            $("#exit2").button();
+            state = '@ViewBag.state';
+            $("#exit2").click(function () {
+                isWinOpen = false;
+                $("#searchFinesSection").remove();
+            });
+            $('#searchFinesSection #btnClose').click(function () {
+                $("#searchFinesSection").remove();
+                isWinOpen = false;
+            });
+            $('#txtSearch2').keyup(function () {
+                var url = '@Url.Action("Reload", "searchFinesSection")';
+                Reload2(url, 'Grid2', $("#cboSearchFiald2").val(), $("#txtSearch2").val(), $("#txtTop2").val(), $("#cboSearchType2").val());
+            });
+
+            $('#Select1').click(function () {
+                var entityGrid = $("#Grid2").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    finessectionid = selectedItem.fldFinesCode;
+                    $('#txtFinesSectionId').val(selectedItem.fldSectionName);
+                    isWinOpen = false;
+
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                $('#searchFinesSection').remove();
+            });
+        });
+        function Reload2(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        
+    </script>
+     @UniAutomation.Helper.winClass.windowFother();
+</div>

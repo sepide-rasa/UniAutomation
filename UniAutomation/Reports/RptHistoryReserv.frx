@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/13/2014 16:14:55" ReportInfo.Modified="09/22/2019 09:57:41" ReportInfo.CreatorVersion="2015.1.2.0">
+  <Dictionary>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblHistoryReserveSelect" ReferenceName="uniAutomationDataSet.sp_tblHistoryReserveSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldID" DataType="System.Int32"/>
+      <Column Name="fldFoodCartID" DataType="System.Int64"/>
+      <Column Name="fldFoodProgramingID" DataType="System.Int32"/>
+      <Column Name="fldCount" DataType="System.Int32"/>
+      <Column Name="fldPrice" DataType="System.Int32"/>
+      <Column Name="fldType" DataType="System.Boolean" BindableControl="CheckBox"/>
+      <Column Name="fldTypeTitle" DataType="System.String"/>
+      <Column Name="fldTarikh" DataType="System.String"/>
+      <Column Name="fldTime" DataType="System.String"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="fldPersonName" DataType="System.String"/>
+      <Column Name="fldFoodDate" DataType="System.String"/>
+      <Column Name="fldFoodName" DataType="System.String"/>
+      <Column Name="fldNobat" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldSelfId" DataType="System.Int32"/>
+      <Column Name="fldNobatTitle" DataType="System.String"/>
+    </TableDataSource>
+    <Parameter Name="University" DataType="System.String"/>
+    <Parameter Name="time" DataType="System.String"/>
+    <Parameter Name="date" DataType="System.String"/>
+    <Parameter Name="AzTarikh" DataType="System.String"/>
+    <Parameter Name="TaTarikh" DataType="System.String"/>
+    <Total Name="SumRezerve" Expression="[sp_RptReservs.fldCount]" Evaluator="Data1" ResetOnReprint="true"/>
+    <Total Name="TotalRezerve" Expression="[sp_RptReservs.fldCount]" Evaluator="Data1"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Landscape="true" PaperWidth="297" PaperHeight="210" RawPaperSize="9">
+    <ReportTitleBand Name="ReportTitle1" Width="1047.06"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="1047.06" Height="175.8" Guides="69.93">
+      <TableObject Name="Table3" Left="-3" Top="-0.94" Width="1053.06" Height="75.24">
+        <TableColumn Name="Column59" Width="280.65"/>
+        <TableColumn Name="Column60" Width="500"/>
+        <TableColumn Name="Column61" Width="272.41"/>
+        <TableRow Name="Row3" Height="75.24">
+          <TableCell Name="Cell59" Text="تاریخ چاپ :[date]&#13;&#10;ساعت چاپ:[time]&#13;&#10;صفحه:[Page#] از [TotalPages#]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Microsoft Sans Serif, 10pt"/>
+          <TableCell Name="Cell60" Text="[sp_tblSettingSelect.fldName]&#13;&#10;تاریخچه رزرو غذا از تاریخ [AzTarikh] تا تاریخ [TaTarikh]&#13;&#10;وعده [sp_tblHistoryReserveSelect.fldNobatTitle]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Microsoft Sans Serif, 11pt, style=Bold"/>
+          <TableCell Name="Cell61" HorzAlign="Right" VertAlign="Center" RightToLeft="true" Font="Microsoft Sans Serif, 10pt">
+            <PictureObject Name="Picture1" Left="109.62" Top="2.84" Width="75.6" Height="67.1" DataColumn="sp_tblSettingSelect.fldImage"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table5" Left="70.87" Top="151.29" Width="905.33" Height="24.56" Border.Lines="All">
+        <TableColumn Name="Column76" Width="189.54"/>
+        <TableColumn Name="Column77" Width="118.79"/>
+        <TableColumn Name="Column78" Width="83.68"/>
+        <TableColumn Name="Column79" Width="108.85"/>
+        <TableColumn Name="Column80" Width="120.15"/>
+        <TableColumn Name="Column81" Width="137.2"/>
+        <TableColumn Name="Column82" Width="91.86"/>
+        <TableColumn Name="Column83" Width="1"/>
+        <TableColumn Name="Column84" Width="54.26"/>
+        <TableRow Name="Row5" Height="24.56">
+          <TableCell Name="Cell88" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="زمان عملیات" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell89" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نوع عملیات" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell90" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تعداد" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell91" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="مبلغ" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell92" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تاریخ تحویل غذا" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell93" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نام غذا" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell94" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell95" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell96" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="ردیف" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text1" Left="166.94" Top="99.22" Width="806.13" Height="26.45" Text="نام: [sp_tblHistoryReserveSelect.fldPersonName]        شماره کارت: [sp_tblHistoryReserveSelect.fldFoodCartID]" VertAlign="Center" RightToLeft="true" Font="Microsoft Sans Serif, 11pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="183.8" Width="1047.06" Height="30.23" DataSource="sp_tblHistoryReserveSelect">
+      <TableObject Name="Table8" Left="70.87" Width="905.33" Height="30.23" Border.Lines="All">
+        <TableColumn Name="Column103" Width="189.54"/>
+        <TableColumn Name="Column104" Width="118.79"/>
+        <TableColumn Name="Column105" Width="83.68"/>
+        <TableColumn Name="Column106" Width="108.85"/>
+        <TableColumn Name="Column107" Width="120.15"/>
+        <TableColumn Name="Column108" Width="137.2"/>
+        <TableColumn Name="Column109" Width="91.86"/>
+        <TableColumn Name="Column110" Width="1"/>
+        <TableColumn Name="Column111" Width="54.26"/>
+        <TableRow Name="Row8" Height="30.23">
+          <TableCell Name="Cell115" Border.Lines="All" Text="[sp_tblHistoryReserveSelect.fldTarikh]-[sp_tblHistoryReserveSelect.fldTime]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell116" Border.Lines="All" Text="[sp_tblHistoryReserveSelect.fldTypeTitle]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell117" Border.Lines="All" Text="[sp_tblHistoryReserveSelect.fldCount]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell118" Border.Lines="All" Text="[sp_tblHistoryReserveSelect.fldPrice]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell119" Border.Lines="All" Text="[sp_tblHistoryReserveSelect.fldFoodDate]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell120" Border.Lines="All" Text="[sp_tblHistoryReserveSelect.fldFoodName]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell121" Border.Lines="All" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell122" Border.Lines="All" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+          <TableCell Name="Cell123" Border.Lines="All" Text="[Row#]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 9pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="218.03" Width="1047.06"/>
+  </ReportPage>
+</Report>

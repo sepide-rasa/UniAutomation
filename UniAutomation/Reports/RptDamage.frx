@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="09/25/2014 09:17:43" ReportInfo.Modified="05/21/2015 10:26:24" ReportInfo.CreatorVersion="2013.2.5.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+
+    private void Data1_AfterData(object sender, EventArgs e)
+    {
+      
+    }
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="sp_B_tblDamagePersonSelect" ReferenceName="uniAutomationDataSet.sp_B_tblDamagePersonSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldDamageCode" DataType="System.Int32"/>
+      <Column Name="fldDamageName" DataType="System.String"/>
+      <Column Name="fldStudentCodeId" DataType="System.Int64"/>
+      <Column Name="fldDamageDate" DataType="System.String"/>
+      <Column Name="fldTotalAmount" DataType="System.Decimal"/>
+      <Column Name="fldDate" DataType="System.DateTime"/>
+      <Column Name="fldUserId" DataType="System.Int32"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="fldDamageTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEquimpmentRoomId" DataType="System.Int32"/>
+      <Column Name="fldCount" DataType="System.Int32"/>
+      <Column Name="fldEqName" DataType="System.String"/>
+      <Column Name="fldStudentNumber" DataType="System.String"/>
+      <Column Name="StudentName" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" Landscape="true" PaperWidth="297" PaperHeight="210" FirstPageSource="256" OtherPagesSource="256" Guides="750.33,1033.88,417.12,639.4,-0.8,1057.32,208.14,70.43,45.85,306.78,444.97,-0.36,78.93,524.7,566.63,630.28,770.87,80.84,898.8,1028.61,1057.31,45.84,306.77,444.96,524.69,566.62,630.27,770.86,898.79,1028.6">
+    <PageHeaderBand Name="PageHeader1" Width="1047.06" Height="259.87" Guides="18.9,86.91,166.33,185.23,222.08,259.87,0,37.79">
+      <TextObject Name="Text2" Left="417.12" Top="166.33" Width="222.28" Height="18.9" CanBreak="false" Text="گزارش خسارت به اقلام تحویلی " Format="Custom" Format.Format="G" AutoWidth="true" HorzAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+      <TableObject Name="Table1" Left="-0.8" Top="222.08" Width="1058.12" Height="37.79" Border.Lines="All">
+        <TableColumn Name="Column1" Width="91.06"/>
+        <TableColumn Name="Column2" Width="71.23"/>
+        <TableColumn Name="Column3" Width="46.65"/>
+        <TableColumn Name="Column4" Width="98.64"/>
+        <TableColumn Name="Column5" Width="57.14"/>
+        <TableColumn Name="Column6" Width="0.44"/>
+        <TableColumn Name="Column7" Width="0.44"/>
+        <TableColumn Name="Column8" Width="0.44"/>
+        <TableColumn Name="Column9" Width="79.73"/>
+        <TableColumn Name="Column10" Width="79.73"/>
+        <TableColumn Name="Column11" Width="41.93"/>
+        <TableColumn Name="Column12" Width="63.65"/>
+        <TableColumn Name="Column13" Width="58.95"/>
+        <TableColumn Name="Column14" Width="81.64"/>
+        <TableColumn Name="Column15" Width="127.93"/>
+        <TableColumn Name="Column16" Width="129.81"/>
+        <TableColumn Name="Column17" Width="28.71"/>
+        <TableRow Name="Row1" Height="37.79">
+          <TableCell Name="Cell1" Border.Lines="All" Text="توضیحات" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell2" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell4" Border.Lines="All" Text="عنوان وسیله آسیب دبده" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell5" Text="مبلغ کل" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold" ColSpan="5"/>
+          <TableCell Name="Cell26" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell27" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell28" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell29" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell30" Border.Lines="All" Text="مبلغ واحد" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell31" Border.Lines="All" Text="تعداد" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell32" Border.Lines="All" Text="عنوان خسارت" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell33" Border.Lines="All" Text="تاریخ و ساعت" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold" ColSpan="2"/>
+          <TableCell Name="Cell34" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell35" Border.Lines="All" Text="شماره دانشجویی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell36" Border.Lines="All" Text="نام و نام خانوادگی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell37" Border.Lines="All" Text="ردیف" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <PictureObject Name="Picture1" Left="933.66" Top="18.9" Width="75.6" Height="75.6" DataColumn="sp_tblSettingSelect.fldImage"/>
+      <TextObject Name="Text1" Left="346.55" Top="21.74" Width="353.96" Height="46.33" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="263.87" Width="1047.06" Height="37.79" AfterDataEvent="Data1_AfterData" Guides="0,37.79" DataSource="sp_B_tblDamagePersonSelect">
+      <TableObject Name="Table3" Left="-0.81" Width="1058.12" Height="37.79" Border.Lines="All">
+        <TableColumn Name="Column35" Width="91.06"/>
+        <TableColumn Name="Column36" Width="71.23"/>
+        <TableColumn Name="Column37" Width="46.65"/>
+        <TableColumn Name="Column38" Width="98.64"/>
+        <TableColumn Name="Column39" Width="57.14"/>
+        <TableColumn Name="Column40" Width="0.44"/>
+        <TableColumn Name="Column41" Width="0.44"/>
+        <TableColumn Name="Column42" Width="0.44"/>
+        <TableColumn Name="Column43" Width="79.73"/>
+        <TableColumn Name="Column44" Width="79.73"/>
+        <TableColumn Name="Column45" Width="41.93"/>
+        <TableColumn Name="Column46" Width="63.65"/>
+        <TableColumn Name="Column47" Width="58.95"/>
+        <TableColumn Name="Column48" Width="81.64"/>
+        <TableColumn Name="Column49" Width="127.93"/>
+        <TableColumn Name="Column50" Width="129.81"/>
+        <TableColumn Name="Column51" Width="28.71"/>
+        <TableRow Name="Row3" Height="37.79">
+          <TableCell Name="Cell55" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.fldDesc]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold" ColSpan="3"/>
+          <TableCell Name="Cell56" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell57" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell58" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.fldEqName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell59" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold" ColSpan="5"/>
+          <TableCell Name="Cell60" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell61" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell62" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell63" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell64" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.fldTotalAmount]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell65" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.fldCount]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell66" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.fldDamageName]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell67" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.fldDate]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold" ColSpan="2"/>
+          <TableCell Name="Cell68" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell69" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.fldStudentNumber]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell70" Border.Lines="All" Text="[sp_B_tblDamagePersonSelect.StudentName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+          <TableCell Name="Cell71" Border.Lines="All" Text="[Row#]" HorzAlign="Center" VertAlign="Center" Angle="270" RightToLeft="true" Font="RasaFont, 8pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="305.66" Width="1047.06" Height="37.8"/>
+  </ReportPage>
+</Report>

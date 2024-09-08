@@ -1,0 +1,136 @@
+﻿<div id="VorudBeKhabgah">
+    @using Kendo.Mvc.UI;
+    <script type="text/javascript">
+        var cartId = 0;
+        var TypeKhoruj = 0;
+        $(document).ready(function () {
+            $('#btnSearch').button();
+            $('#btnSearch').click(function () {
+                windowAppend("#VorudBeKhabgah", "/faces/SearchFoodCartsIns/index/7");
+            });
+
+            $('#VorudBeKhabgah').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    if ($('#txtShCart').val().length > 0) {
+                        var id = $('#txtShCart').val();
+                        $.ajax({
+                            type: "GET",
+                            data: { rfid: RFID },
+                            url: '@Url.Content("~/VorudBeKhabgah/CheckStatus")',
+                            success: function (data1) {
+                                if (data1.fldStatus)
+                                    windowAppend("#VorudBeKhabgah", "/faces/VorudBeKhabgah/TypeKhoruj?id=" + RFID);
+                                else {
+                                    $.ajax({
+                                        url: '/VorudBeKhabgah/VorudReload',
+                                        type: 'get',
+                                        datatype: 'json',
+                                        data: { rfid: id },
+                                        error: function (xhr, status, error) {
+                                            alert(xhr + status);
+                                        },
+                                        success: function (result) {
+                                            $("#VorudGrid").data("kendoGrid").dataSource.data(result.Vorud);
+                                            $('#PersonName').html(result.PersonName);
+                                            $('#Khabgah').html(result.Khabgah);
+                                            $('#Otagh').html(result.Otagh);
+                                            var g = '@Url.Content("~/faces/VorudBeKhabgah/image/")' + result.foodcartID;
+                                            $('#image').attr('src', g);
+
+                                            var audioElement = document.getElementById('audio');
+
+                                            if (result.havekhabgah == false) {
+                                                audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                                $('#HaveKhabgah').html('شما مجاز به ورود به خوابگاه نیستید.');
+                                                $('#HaveKhabgah').attr('style', 'background-color: red;font-size: x-large;');
+
+                                            } else {
+                                                audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                                $('#HaveKhabgah').html('شما مجاز به ورود به خوابگاه هستید.');
+                                                $('#HaveKhabgah').attr('style', 'background-color: green;font-size: x-large;');
+                                            }
+
+                                            audioElement.play();
+
+                                            $('#txtShCart').val('');
+                                        }
+                                    });
+                                }
+                            },
+                            failure: function (data) {
+                                alert(data.data);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+    <center>
+        <br />
+        <audio id="audio" src="" preload="auto"></audio>
+        <table>
+            <tr>
+                <td colspan="2" align="center">
+                    شماره کارت : @Html.TextBox("txtShCart", null, new {@type="password", @style = "direction: rtl;font-family: tornado tahoma;width: 100px;height: 23px;" })
+                    @UniAutomation.Helper.winClass.Buttons("btnSearch", "جستجو", "search")
+                    <br />
+                    <br />
+                    <br />
+                    <span id="HaveKhabgah"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img id="image" src="" alt="" width="65px" height="80px" />
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                نام و نام خانوادگی: <span id="PersonName"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                نام خابگاه: <span id="Khabgah"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                شماره اتاق: <span id="Otagh"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            
+        </table>
+        
+        <fieldset style="width: 600px;">
+            <legend>رفت و آمدهای امروز </legend>
+            <br />
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblVorudBeKhabgahSelect>()
+                   .Name("VorudGrid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldStudentName).Title("نام دانشجو");
+                    columns.Bound(p => p.fldBuildingName).Title("نام خابگاه");
+                    columns.Bound(p => p.fldNameRoom).Title("شماره اتاق");
+                    columns.Bound(p => p.fldStatusTitle).Title("وضعیت");
+                    columns.Bound(p => p.fldTime).Title("ساعت").ClientTemplate("#=fldTime.Hours#:#=fldTime.Minutes#:#=fldTime.Seconds#");
+                })
+                .DataSource(data =>
+                    data.Ajax()
+                    .PageSize(10)
+                    
+                )
+                .Pageable()
+            )
+        </fieldset>
+    </center>
+</div>

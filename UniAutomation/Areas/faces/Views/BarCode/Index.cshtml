@@ -1,0 +1,54 @@
+﻿<div id="rptReserv">
+    @using Kendo.Mvc.UI;
+    <table>
+        
+        <tr>
+            <td>
+                محل چاپ:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboPosition")
+                              .OptionLabel("محل چاپ ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "ابتدا صفحه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "وسط صفحه",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "انتهای صفحه",
+                                                          Value = "3"
+                                                      }
+                                                   
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                                    )
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var CartId;
+        $(document).ready(function () {
+            CartId = '@ViewBag.CartId';
+            $('#show').button();
+            $('#show').click(function () {
+               // window.open('/faces/Barcode/rptBarcode?id=' + CartId + '&P=' + $('#cboPosition').val());
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/Barcode/rptBarcode?id=' + CartId + '&P=' + $('#cboPosition').val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+        });
+    </script>
+</div>

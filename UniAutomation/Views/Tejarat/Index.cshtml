@@ -1,0 +1,55 @@
+﻿@{
+    UniAutomation.Models.UniAutomationEntities p = new UniAutomation.Models.UniAutomationEntities();
+    var q = p.sp_tblParametrHay_Dargah_PardakhtSelect("fldBankId", "2","", 0).ToList();
+    var id = 0;
+    var id_Url = 0;
+    foreach (var item in q)
+    {
+        if (item.fldEnglishName == "merchantId")
+        {
+            id = item.fldId;
+        }
+        else if (item.fldEnglishName == "BackURL")
+        {
+            id_Url = item.fldId;
+        }
+    }
+    var q1 = p.sp_tblDargah_Pardakht_InfoSelect("fldDargahPardakhtId", Session["Type"].ToString(), 0).Where(h => h.fldParametrId == id).FirstOrDefault();
+    var q2 = p.sp_tblDargah_Pardakht_InfoSelect("fldDargahPardakhtId", Session["Type"].ToString(), 0).Where(h => h.fldParametrId == id_Url).FirstOrDefault();
+    var url = "http://" + q2.fldMount + "/Tejarat/Back";
+}
+<form action="https://kica.shaparak.ir/epay/info" method="post">
+<table>
+    <tr>
+        <td>
+            <div class="tag">
+                شناسه قبض
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                @Session["Tax"]
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                مبلغ پرداخت
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                @Session["Amount"]
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <input type="hidden" id="merchantId" name="merchantId" value="@q1.fldMount" />
+            <input type="hidden" id="amount" name="amount" value="@Session["Amount"]" />
+            <input type="hidden" id="paymentId" name="paymentId" value="@Session["Tax"]" />
+            <input type="hidden" id="revertURL" name="revertURL" value="@url" />
+            <input type="submit" id="Run" name="Run" value="پرداخت" class="run" />
+        </td>
+    </tr>
+</table>
+</form>

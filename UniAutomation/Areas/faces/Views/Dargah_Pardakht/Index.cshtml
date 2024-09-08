@@ -1,0 +1,312 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="Dargah_Pardakht">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />
+       <a href="@Url.Content("~/Helps/تعریف درگاه پرداخت.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+       
+        <center>
+            <table>
+                <tr>
+                    <td align="left">
+                        @Html.Hidden("fldId")
+                        <span style="color: Red;">*</span> نام بانک:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                        .Name("cboBank")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetBankName", "Dargah_Pardakht");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                        )
+                        <span id="lblcboBankError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        نوع پرداخت:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboPayType")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "Online",
+                              Value = "1"
+                          },
+                          new SelectListItem() {
+                              Text = "Pose",
+                              Value = "0"
+                          }
+                      })
+                        )
+                    </td>
+                    <td align="left">
+                        نوع درگاه پرداخت:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboType")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "شارژ تغذیه",
+                              Value = "1"
+                          },
+                          new SelectListItem() {
+                              Text = "شهریه",
+                              Value = "2"
+                          },
+                          new SelectListItem() {
+                              Text = "خوابگاه",
+                              Value = "3"
+                          },
+                          new SelectListItem() {
+                              Text = "سایر پرداخت ها",
+                              Value = "4"
+                          },
+                          new SelectListItem() {
+                              Text = "پیش ثبت نام خوابگاه",
+                              Value = "5"
+                          }
+                      })
+                        )
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td align="left">
+                        توضیحات:
+                    </td>
+                    <td colspan="3">
+                        @UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)
+                    </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+      
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblDargah_PardakhtSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldDargahTypeName).Title("نوع درگاه پرداخت");
+                    columns.Bound(p => p.fldTitle).Title("نام بانک");
+
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                .Read("Fill", "Dargah_Pardakht")
+            )
+            )
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#Dargah_Pardakht").remove();
+            });
+            $('#Dargah_Pardakht').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#Dargah_Pardakht').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+             $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "Dargah_Pardakht")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+            $('#cboBank').change(function () {
+                var url = '@Url.Action("Reload", "Dargah_Pardakht")';
+                Reload(url, 'Grid', 0, $("#cboBank").val(), $("#CboType").val(), $("#CboPayType").val(), 0, 2);
+            });
+            $('#CboType').change(function () {
+                var url = '@Url.Action("Reload", "Dargah_Pardakht")';
+                Reload(url, 'Grid', 0, $("#cboBank").val(), $("#CboType").val(), $("#CboPayType").val(), 0, 2);
+            });
+            $('#CboPayType').change(function () {
+                var tt = false;
+                if ($("#CboPayType").val() == "1")
+                    tt = true;
+                var url = '@Url.Action("Reload", "Dargah_Pardakht")';
+                Reload(url, 'Grid', 0, $("#cboBank").val(), $("#CboType").val(),tt, 0, 2);
+            });
+        
+
+        });
+        function Clear() {
+            $('#fldId').val(0);
+            $('#txtDesc').val('');
+        }
+
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/Dargah_Pardakht/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+
+        function SaveRecord() {
+            var er = false;
+   
+
+            if (er)
+                return;
+            var tt = false;
+            if ($("#CboPayType").val() == "1")
+                tt = true;
+            var data = {
+                fldPos_Online: tt,
+                fldDargahType: $("#CboType").val(),
+                fldBankId: $('#cboBank').val(),
+                fldDesc: $("#txtDesc").val(),
+                fldId: $("#fldId").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/Dargah_Pardakht/Save")', "#win");
+            }
+            Clear();
+        }
+
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/Dargah_Pardakht/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        $('#fldId').val(data.fldId);
+                        var model = $("#cboBank").data("kendoDropDownList");
+                        model.value(data.fldBankId);
+                        var model1 = $("#CboType").data("kendoDropDownList");
+                        model1.value(data.fldDargahType);
+                        var model1 = $("#CboPayType").data("kendoDropDownList");
+                        model1.value(data.fldPos_Online);
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+
+        function Reload(Url, gridname, field, value, value2,Pos_Online, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value,value2:value2,Pos_Online:Pos_Online, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "Dargah_Pardakht")';
+                    Reload(url, 'Grid', 0, $("#cboBank").val(), $("#CboType").val(), $("#CboPayType").val(), 0, 2);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+
+    </script>
+</div>

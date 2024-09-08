@@ -1,0 +1,59 @@
+﻿@using Kendo.Mvc.UI;
+<div id="RptEtebar_Date">
+    @using Kendo.Mvc.UI;
+    <table>
+        <tr>
+            <td>
+                در تاریخ:
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtStart")
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "exit")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        var State = '@ViewBag.State';
+        $(document).ready(function () {
+            $('#show').button();
+            $('#exit').button();
+            $('#show').click(function () {
+                //window.open('/faces/RptEtebar_Date/Book_TakhirReport?Tarikh=' + $('#txtStart').val());
+                if (State == 1) {
+                    if (isWinOpen == false) {
+                        isWinOpen = true;
+                        windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                        var t = '/faces/RptEtebar_Date/rptEtebar_Date?Tarikh=' + $('#txtStart').val();
+                        $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                    }
+                }
+                else if (State == 2) {
+                    if (isWinOpen == false) {
+                        isWinOpen = true;
+                        windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                        var t = '/faces/RptEtebar_Date/RptTrustBook?Tarikh=' + $('#txtStart').val();
+                        $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                    }
+                }
+            });
+            $('#exit').click(function () {
+                $('#RptEtebar_Date').remove();
+            });
+
+            $('#txtStart').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtEnd').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+           
+        });
+    </script>
+</div>

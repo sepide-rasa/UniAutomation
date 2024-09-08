@@ -1,0 +1,236 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="EatFood_Date">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/accounting.js")" type="text/javascript"></script>
+    <div>
+        <br />
+       <center>
+            <table>
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تاریخ:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblDateError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Eat", "تحویل", "yes")
+                @UniAutomation.Helper.winClass.Buttons("GroupEat", "تحویل گروهی", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @*@(Html.Kendo().PanelBar()
+            .Name("panelbar-images")
+            .Items(panelbar =>
+            {
+                panelbar.Add().Text("جستجو")
+                    .ImageUrl(Url.Content("~/Content/images/search.png"))
+                    .Content(@<div>
+                        <table>
+                            <tr>
+                                <td>
+                                    فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = " کد پرسنلی" }, new { ID = "1", Name = "نام خانوادگی" }},"ID", "Name"))
+                                </td>
+                                <td>
+                                    نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                                </td>
+                                <td>
+                        <br />
+                                    نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                                </td>
+                            </tr>
+                        </table>
+                    </div>);
+            })
+            )*@
+        <script type="text/javascript">
+
+        </script>
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_RptNotEating>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldFoodCartID).Title("کد").Hidden(true);
+                    columns.Bound(p => p.fldFoodProgramingID).Title("کد").Hidden(true);
+                    columns.Bound(p => p.PersonName).Title("نام و نام خانوادگی");
+                })
+            .Editable(editable => editable.Mode(GridEditMode.InCell))
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Scrollable(m => m.Virtual(true))
+            .Navigatable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(100000)
+                    //.Read(read => read.Action("Fill", "RezervGoruhi"))
+                .Model(m =>
+                    {
+                        m.Id(p => p.fldFoodCartID);
+                        m.Field(p => p.PersonName).Editable(false);
+                    }
+                )
+            )
+            )
+        </div>
+    </div>
+    <script type="text/javascript">
+    $("document").ready(function () {
+
+        $("#Eat").button();
+        $("#GroupEat").button();
+        $("#exit").button();
+        $('#Help').button();
+
+
+        $("#exit").click(function () {
+            $("#EatFood_Date").remove();
+        });
+
+        $('#txtDate').datepicker({
+            showButtonPanel: true
+        });
+
+
+        $('#txtDate').change(function () {
+            var url = '@Url.Action("Reload", "EatFood_Date")';
+            Reload(url, 'Grid', $("#txtDate").val());
+        });
+
+        $(document).keyup(function (event) {
+            if (event.which == 119) {
+                SaveRecord();
+            }
+            else if (event.which == 113) {
+                EditRecord();
+            }
+        });
+
+
+        jQuery("#Eat").click(function () {
+            Eat();
+        });
+
+        $("#GroupEat").click(function () {
+            GroupEat();
+        });
+    });
+
+    function Eat() {
+        var entityGrid = $("#Grid").data("kendoGrid");
+        var selectedItem = entityGrid.dataItem(entityGrid.select());
+        if (selectedItem) {
+
+            var data = {
+                fldFoodCartID: selectedItem.fldFoodCartID,
+                fldFoodProgramingID: selectedItem.fldFoodProgramingID
+            };
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Content("~/EatFood_Date/Save")',
+                data: data,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("عملیات موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    $('#Lock').hide();
+                    var url = '@Url.Action("Reload", "EatFood_Date")';
+                    Reload(url, 'Grid', $("#txtDate").val());
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+        else {
+            alert('لطفا یک سطر را انتخاب کنید.');
+        }
+        }
+        function GroupEat() {
+            var EatFood = new Array();
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var row = entityGrid.items();
+            var fldFoodCartID;
+            var fldFoodProgramingID;
+            for (var i = 0; i < row.length; i++) {
+                fldFoodCartID = row[i].cells[0].textContent;
+                fldFoodProgramingID = row[i].cells[1].textContent
+
+                EatFood.push({
+                    'fldFoodCartID': fldFoodCartID,
+                    'fldFoodProgramingID': fldFoodProgramingID
+                });
+            }
+
+            //if (data != '') {
+            PostForm(EatFood, '@Url.Content("~/EatFood_Date/SaveGroup")', "#win");
+
+        }
+    function Reload(Url, gridname, Sdate) {
+        var grid = $('#' + gridname).data('kendoGrid');
+        $.ajax({
+            url: Url,
+            type: 'get',
+            datatype: 'json',
+            data: { Sdate: Sdate },
+            error: function (xhr, status, error) {
+                alert(xhr + status);
+            },
+            success: function (result) {
+                $("#" + gridname).data("kendoGrid").dataSource.data(result);
+
+            }
+
+        });
+    }
+
+    function PostForm(datas, url, id) {
+        var sendInfo = datas;
+        $('#Lock').show();
+        $.ajax({
+            type: "POST",
+            url: url,
+            datatype: "json",
+            data: JSON3.stringify(sendInfo),
+            contentType: 'application/json',
+            success: function (data) {
+                var m = data;
+                windowAppend("body", "/faces/metro/error");
+                $("#message").html(m.data);
+                switch (m.state) {
+                    case 0:
+                        $("#error .wintitle").html("عملیات موفق");
+                        break;
+                    case 1:
+                        $("#error .wintitle").html("خطا");
+                        break;
+                }
+                var url = '@Url.Action("Reload", "EatFood_Date")';
+                Reload(url, 'Grid', $("#txtDate").val());
+                $('#Lock').hide();
+            },
+            failure: function (data) {
+                alert(data.data);
+            }
+        });
+    }
+    </script>
+</div>

@@ -1,0 +1,193 @@
+﻿<div id="Eating">
+    @using Kendo.Mvc.UI;
+    <script type="text/javascript">
+        var cartId = 0;
+        $(document).ready(function () {
+            $('#btnSearch').button();
+            $('#btnSearch').click(function () {
+                windowAppend("#Eating", "/faces/SearchFoodCartsIns/index/2");
+            });
+
+            $('#Eating').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    if ($('#txtShCart').val().length > 0) {
+                        var id = $('#txtShCart').val();
+                        $.ajax({
+                            url: '/Eating/ReservReload',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { rfid: id },
+                            error: function (xhr, status, error) {
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                var audioElement = document.getElementById('audio');
+                                if (result.VaghtGhazaNis == 1) {
+                                    audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                    $('#HaveFood').html('برای این ساعت برنامه غذایی ای ثبت نشده');
+                                    $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+                                }
+                                else{
+                                if (result.moreThanOneAzad == 1) {
+                                    windowAppend("#Eating", "/faces/Eating/SelectAzadMenu?foodcartId=" + result.foodcartID);
+                                }
+                                else {
+                                    $("#EatingGrid").data("kendoGrid").dataSource.data(result.Eating);
+                                    $("#RGrid").data("kendoGrid").dataSource.data(result.data);
+                                    $("#AmarGrid").data("kendoGrid").dataSource.data(result.Amar);
+                                    $('#PersonName').html(result.PersonName);
+                                    $('#Count').html(result.Count);
+                                    var g = '@Url.Content("~/faces/Eating/image/")' + result.foodcartID;
+                                    $('#image').attr('src', g);
+
+                                    if (result.Count > 0) {
+                                        audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                        $('#HaveFood').html('شما غذا رزرو کرده اید.');
+                                        $('#HaveFood').attr('style', 'background-color: green;font-size: x-large;');
+                                    }
+                                    else if (result.HaveEating == 1) {
+                                        audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                        $('#HaveFood').html('شما غذای خود را قبلا دریافت کرده اید.');
+                                        $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+
+                                    }
+                                    else {
+                                        if (result.havesharj == true) {
+                                            if (result.Azadcount > 0) {
+
+                                                audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                                $('#HaveFood').html('شما غذا ' + result.GhazaAzad + ' به نرخ آزاد گرفته اید.');
+                                                $('#HaveFood').attr('style', 'background-color: green;font-size: x-large;');
+                                            } else {
+                                                audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                                $('#HaveFood').html(' شما غذا رزرو نکرده اید <br/> یا آن را قبلا دریافت کرده اید.');
+                                                $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+                                            }
+                                        } else {
+                                            audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                            $('#HaveFood').html('اعتبار شما برای دریافت غذا کافی نیست.');
+                                            $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+                                        }
+                                    }
+                                    audioElement.play();
+                                    $('#txtShCart').val('');
+                                }
+                            }
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+    <center>
+        <br />
+
+        <audio id="audio" src="" preload="auto"></audio>
+        <table>
+            <tr>
+                <td colspan="2" align="center">
+                    شماره کارت غذا: @Html.TextBox("txtShCart", null, new {@type="password", @style = "direction: rtl;font-family: tornado tahoma;width: 100px;height: 23px;" })
+                    @UniAutomation.Helper.winClass.Buttons("btnSearch", "جستجو", "search")
+                    <br />
+                    <br />
+                    <br />
+                    <span id="HaveFood"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img id="image" src="" alt="" width="65px" height="80px" />
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                نام و نام خانوادگی: <span id="PersonName"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                تعداد غذای رزرو شده در این سلف: <span id="Count"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_ReservInCurrentDate>()
+                        .Name("RGrid")
+                        .HtmlAttributes(new { @style = "width:400px;" })
+                        .Columns(columns =>
+                        {
+                            columns.Bound(p => p.fldFoodProgramingID).Visible(false);
+                            columns.Bound(p => p.fldFoodName).Title("نام غذا");
+                            columns.Bound(p => p.fldCount).Title("تعداد");
+                        })
+                        .DataSource(data =>
+                            data.Ajax()
+                            .Model(m => m.Id(h => h.fldFoodProgramingID))
+                        )
+                    )
+                </td>
+            </tr>
+        </table>
+        <br />
+        <br />
+        <fieldset style="width: 850px;">
+            <legend>آمار غذا </legend>
+            <br />
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_AmarSelect>()
+                .Name("AmarGrid")
+                .HtmlAttributes(new { @style = "font-size: large;" })
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldNobat).Title("وعده").Width(10); 
+                    columns.Bound(p => p.fldFoodName).Title("نام غذا").Width(200);
+                    columns.Bound(p => p.total).Title("رزرو شده").Width(20);
+                    columns.Bound(p => p.Eating).Title("تحویل شده").Width(20);
+                    columns.Bound(p => p.Mande).Title("باقی مانده").Width(30); 
+                    columns.Bound(p => p.Azad).Title("فروش آزاد").Width(20);
+                    columns.Bound(p => p.Student).Title("تحویل دانشجو").Width(20);
+                    columns.Bound(p => p.Ostad).Title("تحویل استاد").Width(20);
+                    columns.Bound(p => p.Karmand).Title("تحویل کارمند").Width(20); 
+                })
+                .DataSource(data =>
+                    data.Ajax()
+                    .PageSize(10)
+                    .Read(rd => rd.Action("Fill", "Eating"))
+                    .Model(m => m.Id(h => h.fldFoodProgramingID))
+                )
+                .Pageable()
+            )
+        </fieldset>
+        <br />
+        <br />
+        <fieldset style="width: 600px;">
+            <legend>غذاهای تحویلی امروز </legend>
+            <br />
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblEatingSelect>()
+                .Name("EatingGrid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.PersonName).Title("نام شخص");
+                    columns.Bound(p => p.fldFoodName).Title("نام غذا");
+                    columns.Bound(p => p.fldNobatName).Title("وعده");
+                    columns.Bound(p => p.fldType).Title("نوع");
+                    columns.Bound(p => p.EatingTime).Title("زمان تحویل").ClientTemplate("#=EatingTime.Hours#:#=EatingTime.Minutes#:#=EatingTime.Seconds#");
+                })
+                .DataSource(data =>
+                    data.Ajax()
+                    .PageSize(10)
+                    .Model(m => m.Id(h => h.fldFoodProgramingID))
+                )
+                .Pageable()
+            )
+        </fieldset>
+    </center>
+</div>

@@ -1,0 +1,262 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="SharjGoruhi">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/accounting.js")" type="text/javascript"></script>
+   
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/افزایش%20اعتبار%20گروهی.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            @(Html.Kendo().DropDownList()
+                              .Name("cboGroup")
+                              .OptionLabel("گروه آموزشی...")
+                                .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetGroups", "SharjGoruhi");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+            @(Html.Kendo().DropDownList()
+                              .Name("cboTerms")
+                              .OptionLabel("ترم ورودی...")
+                                .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetTerms", "SharjGoruhi");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+            )
+           مبلغ شارژ:
+                @UniAutomation.Helper.winClass.textbox("txtPrice")
+              
+            <p>
+                
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+               @* @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                     @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")*@
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @*@(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = " کد پرسنلی" }, new { ID = "1", Name = "نام خانوادگی" }},"ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                    <br />
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                </div>);
+        })
+        )*@
+        <script type="text/javascript">
+            
+    </script>
+        <div class="k-rtl demo-section">
+        
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_GroupChargeSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldFoodCartsId).Title("کد").Hidden(true);
+                    columns.Bound(p => p.PersonName).Title("نام و نام خانوادگی");
+                    columns.Bound(p => p.fldPrice).Title("شارژ");
+                    columns.Bound(p => p.fldMande).Title("مانده شارژ");
+                })
+            .Editable(editable => editable.Mode(GridEditMode.InCell))
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Scrollable(m => m.Virtual(true))
+            .Navigatable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(100000)                         
+                .Model(m =>
+                    {
+                        m.Id(p => p.fldFoodCartsId);
+                        m.Field(p => p.PersonName).Editable(false);
+                        m.Field(p => p.fldMande).Editable(false);
+                    }
+                )
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var AllPrice = "";
+    $("document").ready(function () {
+
+
+        $("#AddLink").button();
+        $("#EditLink").button();
+        $("#exit").button();
+        $('#Help').button();
+
+        $("#exit").click(function () {
+            $("#SharjGoruhi").remove();
+        });
+
+        $('#cboGroup').change(function () {
+            Reload('@Url.Action("Reload", "SharjGoruhi")', 'Grid', $('#cboGroup').val(), $('#cboTerms').val());
+        });
+        $('#cboTerms').change(function () {
+            Reload('@Url.Action("Reload", "SharjGoruhi")', 'Grid', $('#cboGroup').val(), $('#cboTerms').val());
+        });
+
+
+        $('#SharjGoruhi').on('keyup', 'input', function (event) {
+            if (event.which == 13) {
+                var inputs = $('#SharjGoruhi').find(':input:visible');
+                inputs.eq(inputs.index(this) + 1).focus();
+            }
+        });
+        $(document).keyup(function (event) {
+            if (event.which == 119) {
+                SaveRecord();
+            }
+            else if (event.which == 113) {
+                EditRecord();
+            }
+
+        });
+        $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+        $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+        $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+        jQuery("#EditLink").click(function () {
+            EditRecord();
+        });
+
+        $("#AddLink").click(function () {
+            SaveRecord();
+        });
+
+
+    });
+        function Clear() {
+            AllPrice = "";
+        }
+    function EditRecord() {
+        var entityGrid = $("#Grid").data("kendoGrid");
+        var selectedItem = entityGrid.dataItem(entityGrid.select());
+        if (selectedItem) {
+            var id = selectedItem.fldID;
+            var URL = '@Url.Content("~/SharjGoruhi/Details")';
+            URL = URL + "/" + id;
+            $.ajax({
+                type: "GET",
+                url: URL,
+                success: function (data) {
+
+                    $('#fldID').val(data.fldID);
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+        else {
+            alert('لطفا یک سطر را انتخاب کنید.');
+        }
+    }
+        function SaveRecord() {
+            AllPrice = $("#txtPrice").val();
+            var charge = new Array();
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var row = entityGrid.items();
+            var Id;
+            var price;
+            for (var i = 0; i < row.length; i++) {
+                Id = row[i].cells[0].textContent;
+                if (AllPrice == "")
+                    price = row[i].cells[2].textContent;
+                else
+                    price = AllPrice;
+                if (price > 0) {
+                    charge.push({
+                        'fldFoodCartsID': Id,
+                        'fldPrice': price
+                    });
+                }
+            }
+
+            if (charge != '') {
+                PostForm(charge, '@Url.Content("~/SharjGoruhi/Save")', "#win");
+            }
+            Clear();
+        }
+        function Reload(Url, gridname, value, Term) {
+        var grid = $('#' + gridname).data('kendoGrid');
+        $.ajax({
+            url: Url,
+            type: 'get',
+            datatype: 'json',
+            data: { id: value, Term: Term },
+            error: function (xhr, status, error) {
+                alert(xhr + status);
+            },
+            success: function (result) {
+                $("#" + gridname).data("kendoGrid").dataSource.data(result);
+            }
+
+        });
+    }
+
+    function PostForm(datas, url, id) {
+        var sendInfo = datas;
+        $('#Lock').show();
+        $.ajax({
+            type: "POST",
+            url: url,
+            datatype: "json",
+            data: JSON3.stringify(sendInfo),
+            contentType: 'application/json',
+            success: function (data) {
+                var m = data;
+                windowAppend("body", "/faces/metro/error");
+                $("#message").html(m.data);
+                switch (m.state) {
+                    case 0:
+                        $("#error .wintitle").html("ذخیره موفق");
+                        break;
+                    case 1:
+                        $("#error .wintitle").html("خطا");
+                        break;
+                }
+                Reload('@Url.Action("Reload", "SharjGoruhi")', 'Grid', $('#cboGroup').val(), $('#cboTerms').val());
+                $('#Lock').hide();
+            },
+            failure: function (data) {
+                alert(data.data);
+            }
+        });
+    }
+    </script>
+</div>
+
+    
+       
+                    

@@ -1,0 +1,411 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblCallRegister_Status">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script> 
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>     
+    <div>    
+        <br />
+          <a href="@Url.Content("~/Helps/تعریف%20فراخوان%20پیش%20ثبت%20نام%20براساس%20جنسیت.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>   
+             @Html.Hidden("fldCallCode")
+             <tr>
+             <td align="left">
+                    <span style="color: Red;">*</span> نوع وضعیت (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtStatusCodeId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                        <span id="lblStatusCodeIdError" style="color: Red;"></span>
+                    </td> 
+             </tr>
+                <tr>
+                <td align="left">
+                  
+                        <span style="color: Red;">*</span>تاریخ شروع :
+                    </td>
+                    <td>
+                     @Html.TextBox("txtStartDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblStartDateError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                  
+                        <span style="color: Red;">*</span>تاریخ پایان :
+                    </td>
+                    <td>
+                     @Html.TextBox("txtEndDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblEndDateError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td align="left">
+                         از ساعت:
+                    </td>
+                    <td align="right">
+                        @Html.TextBox("txtStartTimeM", null, new { @style = "width:30px;height: 23px;" })
+                        : @Html.TextBox("txtStartTimeH", null, new { @style = "width:30px;height: 23px;" })
+                        <span id="lblStartTimeMError" style="color: Red;"></span>
+                        <span id="lblStartTimeHError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                         تا ساعت:
+                    </td>
+                    <td align="right">
+                        @Html.TextBox("txtEndTimeM", null, new { @style = "width:30px;height: 23px;" })
+                        : @Html.TextBox("txtEndTimeH", null, new { @style = "width:30px;height: 23px;" })
+                        <span id="lblEndTimeMError" style="color: Red;"></span>
+                        <span id="lblEndTimeHError" style="color: Red;"></span>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نوع وضعیت" }, new { ID = "1", Name = "تاریخ شروع" }, new { ID = "2", Name = "تاریخ پایان" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblCallRegister_StatusSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldCallCode).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldStatusType).Title("نوع وضعیت");
+                    columns.Bound(p => p.fldStartDate).Title("تاریخ شروع");
+                    columns.Bound(p => p.fldEndDate).Title("تاریخ پایان");
+                    columns.Bound(p => p.fldStartTime).ClientTemplate("#=fldStartTime.Hours#:#=fldStartTime.Minutes#").Title("از ساعت");
+                    columns.Bound(p => p.fldEndTime).ClientTemplate("#=fldEndTime.Hours#:#=fldEndTime.Minutes#").Title("تا ساعت");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                        .Read("Fill", "B_tblCallRegister_Status")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var StatuscodeID;
+        var isWinOpen = false;
+        $("document").ready(function () {
+            
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#B_tblCallRegister_Status").remove();
+            });
+
+            $('#txtStartDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $('#txtEndDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $('#txtStatusCodeId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("body", "faces/SearchStatusDorm/index/1");
+                    isWinOpen = true;
+                }
+            });
+
+            jQuery("#EditLink").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldCallCode;
+                    var URL = '@Url.Content("~/B_tblCallRegister_Status/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            $('#txtStatusCodeId').val(data.fldStatusType);
+                            StatuscodeID = data.fldStatusCodeId;
+                            $('#txtStartDate').val(data.fldStartDate);
+                            $('#txtEndDate').val(data.fldEndDate);
+                            $('#txtStartTimeM').val(data.fldStartTimeM);
+                            $('#txtStartTimeH').val(data.fldStartTimeH);
+                            $('#txtEndTimeM').val(data.fldEndTimeM);
+                            $('#txtEndTimeH').val(data.fldEndTimeH);
+                            $('#txtDesc').val(data.fldDesc);
+                            $('#fldCallCode').val(data.fldCallCode);
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblCallRegister_Status")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+            $('#DelLink').click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldCallCode;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblCallRegister_Status/Delete")';
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                Clear();
+            });
+
+            $("#txtStartDate").keyup(function () {
+                if ($("#txtStartDate").val() != '') {
+                    $("#txtStartDate").removeClass("input-validation-error");
+                    $("#lblStartDateError").html("");
+                }
+                else {
+                    $("#txtStartDate").addClass("input-validation-error");
+                    $('#lblStartDateError').html('لطفا تاریخ شروع را وارد کنید.');
+                }
+            });
+
+            $("#txtEndDate").keyup(function () {
+                if ($("#txtEndDate").val() != '') {
+                    $("#txtEndDate").removeClass("input-validation-error");
+                    $("#lblEndDateError").html("");
+                }
+                else {
+                    $("#txtEndDate").addClass("input-validation-error");
+                    $('#lblEndDateError').html('لطفا تاریخ پایان را وارد کنید.');
+                }
+            });
+
+            $("#txtStartTimeM").keyup(function () {
+                if ($("#txtStartTimeM").val() != '') {
+                    $("#txtStartTimeM").removeClass("input-validation-error");
+                    $("#lblStartTimeMError").html("");
+                }
+                else {
+                    $("#txtStartTimeM").addClass("input-validation-error");
+                    $('#lblStartTimeMError').html('');
+                }
+            });
+
+            $("#txtStartTimeH").keyup(function () {
+                if ($("#txtStartTimeH").val() != '') {
+                    $("#txtStartTimeH").removeClass("input-validation-error");
+                    $("#lblStartTimeHError").html("");
+                }
+                else {
+                    $("#txtStartTimeH").addClass("input-validation-error");
+                    $('#lblStartTimeHError').html('لطفا ساعت شروع را وارد کنید.');
+                }
+            });
+
+            $("#txtEndTimeM").keyup(function () {
+                if ($("#txtEndTimeM").val() != '') {
+                    $("#txtEndTimeM").removeClass("input-validation-error");
+                    $("#lblEndTimeMError").html("");
+                }
+                else {
+                    $("#txtEndTimeM").addClass("input-validation-error");
+                    $('#lblEndTimeMError').html('');
+                }
+            });
+
+            $("#txtEndTimeH").keyup(function () {
+                if ($("#txtEndTimeH").val() != '') {
+                    $("#txtEndTimeH").removeClass("input-validation-error");
+                    $("#lblEndTimeHError").html("");
+                }
+                else {
+                    $("#txtEndTimeH").addClass("input-validation-error");
+                    $('#lblEndTimeHError').html('لطفا ساعت پایان را وارد کنید.');
+                }
+            });
+
+            txtStatusCodeId
+
+            $("#AddLink").click(function () {
+                var er = false;
+
+                if ($("#txtStatusCodeId").val() == '') {
+                    $("#txtStatusCodeId").addClass("input-validation-error");
+                    $('#lblStatusCodeIdError').html('لطفا نوع وضعیت را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblStatusCodeIdError').html('');
+
+                if ($("#txtStartDate").val() == '') {
+                    $("#txtStartDate").addClass("input-validation-error");
+                    $('#lblStartDateError').html('لطفا تاریخ شروع را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblStartDateError').html('');
+
+                if ($("#txtEndDate").val() == '') {
+                    $("#txtEndDate").addClass("input-validation-error");
+                    $('#lblEndDateError').html('لطفا تاریخ پایان را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblEndDateError').html('');
+
+                if ($("#txtStartTimeM").val() == '') {
+                    $("#txtStartTimeM").addClass("input-validation-error");
+                    $('#lblStartTimeMError').html('');
+                    er = true;
+                }
+                else
+                    $('#lblStartTimeMError').html('');
+
+                if ($("#txtStartTimeH").val() == '') {
+                    $("#txtStartTimeH").addClass("input-validation-error");
+                    $('#lblStartTimeHError').html('لطفا ساعت شروع را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblStartTimeHError').html('');
+
+                if ($("#txtEndTimeM").val() == '') {
+                    $("#txtEndTimeM").addClass("input-validation-error");
+                    $('#lblEndTimeMError').html('');
+                    er = true;
+                }
+                else
+                    $('#lblEndTimeMError').html('');
+
+                if ($("#txtEndTimeH").val() == '') {
+                    $("#txtEndTimeH").addClass("input-validation-error");
+                    $('#lblEndTimeHError').html('لطفا ساعت پایان را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblEndTimeHError').html('');
+
+
+                if (er)
+                    return;
+                StartTime = $("#txtStartTimeH").val() + ':' + $("#txtStartTimeM").val();
+                EndTime = $("#txtEndTimeH").val() + ':' + $("#txtEndTimeM").val();
+                var data = {
+                    fldStatusCodeId: StatuscodeID,
+                    fldStartDate: $("#txtStartDate").val(),
+                    fldEndDate: $("#txtEndDate").val(),
+                    fldStartTime: StartTime,
+                    fldEndTime: EndTime,
+                    fldDesc: $("#txtDesc").val(),
+                    fldCallCode: $("#fldCallCode").val()
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/B_tblCallRegister_Status/Save")', "#win");
+                }
+                Clear();
+            });
+
+        });
+        function Clear() {
+            $('#txtStartDate').val('');
+            $('#txtEndDate').val('');
+            $('#txtStartTimeM').val('');
+            $('#txtStartTimeH').val('');
+            $('#txtEndTimeM').val('');
+            $('#txtEndTimeH').val('');
+            $('#fldCallCode').val(0);
+            $('#txtDesc').val('');
+        }
+
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblCallRegister_Status")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+

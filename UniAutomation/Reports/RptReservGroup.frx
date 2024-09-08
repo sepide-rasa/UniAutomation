@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/13/2014 16:14:55" ReportInfo.Modified="05/21/2015 10:43:26" ReportInfo.CreatorVersion="2013.2.5.0">
+  <Dictionary>
+    <TableDataSource Name="sp_RptReservsGroups" ReferenceName="uniAutomationDataSet.sp_RptReservsGroups" DataType="System.Int32" Enabled="true">
+      <Column Name="fldCartId" DataType="System.Int64"/>
+      <Column Name="fldPersonName" DataType="System.String"/>
+      <Column Name="fldCount" DataType="System.Int32"/>
+      <Column Name="fldPrice" DataType="System.Int32"/>
+      <Column Name="fldTotal" DataType="System.Int32"/>
+      <Column Name="fldFoodDate" DataType="System.String"/>
+      <Column Name="fldReservDate" DataType="System.String"/>
+      <Column Name="fldFoodName" DataType="System.String"/>
+      <Column Name="fldNobat" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldSelfId" DataType="System.Int32"/>
+      <Column Name="fldEducationGroupId" DataType="System.Byte"/>
+      <Column Name="GroupName" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <Parameter Name="University" DataType="System.String"/>
+    <Parameter Name="time" DataType="System.String"/>
+    <Parameter Name="date" DataType="System.String"/>
+    <Total Name="SumRezerve" Expression="[sp_RptReservsGroups.fldCount]" Evaluator="Data1" PrintOn="GroupFooter1" ResetOnReprint="true"/>
+  </Dictionary>
+  <ReportPage Name="Page1" Landscape="true" PaperWidth="297" PaperHeight="210">
+    <ReportTitleBand Name="ReportTitle1" Width="1047.06"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="1047.06" Height="74.3">
+      <TableObject Name="Table3" Left="-3" Top="-0.94" Width="1053.06" Height="75.24">
+        <TableColumn Name="Column59" Width="280.65"/>
+        <TableColumn Name="Column60" Width="500"/>
+        <TableColumn Name="Column61" Width="272.41"/>
+        <TableRow Name="Row3" Height="75.24">
+          <TableCell Name="Cell59" Text="تاریخ چاپ :[date]&#13;&#10;ساعت چاپ:[time]&#13;&#10;صفحه:[Page#] از [TotalPages#]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt"/>
+          <TableCell Name="Cell60" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 11pt, style=Bold"/>
+          <TableCell Name="Cell61" HorzAlign="Right" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 10pt">
+            <PictureObject Name="Picture1" Left="99.22" Top="3.78" Width="75.6" Height="68.04" DataColumn="sp_tblSettingSelect.fldImage"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+    </PageHeaderBand>
+    <GroupHeaderBand Name="GroupHeader1" Top="82.3" Width="1047.06" Height="52.9" StartNewPage="true" Condition="[sp_RptReservsGroups.fldEducationGroupId]">
+      <TableObject Name="Table5" Left="16.51" Top="28.34" Width="1014.04" Height="24.56" Border.Lines="All">
+        <TableColumn Name="Column76" Width="102.53"/>
+        <TableColumn Name="Column77" Width="92.35"/>
+        <TableColumn Name="Column78" Width="101.62"/>
+        <TableColumn Name="Column79" Width="121.12"/>
+        <TableColumn Name="Column80" Width="120.15"/>
+        <TableColumn Name="Column81" Width="137.2"/>
+        <TableColumn Name="Column82" Width="197.7"/>
+        <TableColumn Name="Column83" Width="87.11"/>
+        <TableColumn Name="Column84" Width="54.26"/>
+        <TableRow Name="Row5" Height="24.56">
+          <TableCell Name="Cell88" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="مبلغ کل" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell89" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تعداد" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell90" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="مبلغ" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell91" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تاریخ رزرو غذا" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell92" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تاریخ تحویل غذا" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell93" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نام غذا" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell94" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نام و نام خانوادگی" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell95" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="شماره کارت" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          <TableCell Name="Cell96" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="ردیف" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" Font="Tornado Tahoma, 9pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text1" Left="528.83" Top="4.71" Width="513.48" Height="18.9" Text="[sp_RptReservsGroups.fldName]-[sp_RptReservsGroups.GroupName]" RightToLeft="true" Font="Tahoma, 9.75pt, style=Bold"/>
+      <DataBand Name="Data1" Top="139.2" Width="1047.06" Height="24.56" DataSource="sp_RptReservsGroups">
+        <TableObject Name="Table6" Left="16.51" Width="1014.04" Height="24.56" Border.Lines="All">
+          <TableColumn Name="Column85" Width="102.53"/>
+          <TableColumn Name="Column86" Width="92.35"/>
+          <TableColumn Name="Column87" Width="101.62"/>
+          <TableColumn Name="Column88" Width="121.12"/>
+          <TableColumn Name="Column89" Width="120.15"/>
+          <TableColumn Name="Column90" Width="137.2"/>
+          <TableColumn Name="Column91" Width="197.7"/>
+          <TableColumn Name="Column92" Width="87.11"/>
+          <TableColumn Name="Column93" Width="54.26"/>
+          <TableRow Name="Row6" Height="24.56">
+            <TableCell Name="Cell97" Border.Lines="All" Text="[sp_RptReservsGroups.fldTotal]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell98" Border.Lines="All" Text="[sp_RptReservsGroups.fldCount]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell99" Border.Lines="All" Text="[sp_RptReservsGroups.fldPrice]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell100" Border.Lines="All" Text="[sp_RptReservsGroups.fldReservDate]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell101" Border.Lines="All" Text="[sp_RptReservsGroups.fldFoodDate]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell102" Border.Lines="All" Text="[sp_RptReservsGroups.fldFoodName]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell103" Border.Lines="All" Text="[sp_RptReservsGroups.fldPersonName]" AutoShrink="FontWidth" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell104" Border.Lines="All" Text="[sp_RptReservsGroups.fldCartId]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+            <TableCell Name="Cell105" Border.Lines="All" Text="[Row#]" AutoShrink="FontWidth" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tornado Tahoma, 9pt, style=Bold"/>
+          </TableRow>
+        </TableObject>
+      </DataBand>
+      <GroupFooterBand Name="GroupFooter1" Top="167.76" Width="1047.06" Height="29.29">
+        <TextObject Name="Text3" Left="746.63" Top="10.39" Width="270.26" Height="18.9" Text="تعداد غذای رزرو شده: [SumRezerve]" RightToLeft="true" Font="Tornado Tahoma, 9.75pt, style=Bold"/>
+      </GroupFooterBand>
+    </GroupHeaderBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="201.05" Width="1047.06"/>
+    <PageFooterBand Name="PageFooter1" Top="205.05" Width="1047.06"/>
+  </ReportPage>
+</Report>

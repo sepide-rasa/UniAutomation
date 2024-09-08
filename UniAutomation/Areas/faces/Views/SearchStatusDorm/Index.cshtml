@@ -1,0 +1,157 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="SearchStatusDorm">
+@UniAutomation.Helper.winClass.windowHeader("", "جستجو وضعیت ", 900, 500)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />        
+        <div>
+            <table>
+                <tr>
+                    <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald2", new SelectList(new[] { new { ID = "0", Name = "نوع وضعیت " } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType2", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch2")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop2", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                </tr>
+            </table>
+            <br />
+        </div>
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Select2", "انتخاب", "Next")                
+                @UniAutomation.Helper.winClass.Buttons("exit2", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+           @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblStatusDormSelect>()
+                .Name("Grid1")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldStatusCode).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldStatusType).Title("نوع وضعیت");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                                .Read("Fill", "SearchStatusDorm")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var state;
+        $("document").ready(function () {
+            $("#Select2").button();
+            $("#exit2").button();
+            state = '@ViewBag.state';
+            $("#exit2").click(function () {
+                isWinOpen = false;
+                $("#SearchStatusDorm").remove();
+            });
+            $('#SearchStatusDorm #btnClose').click(function () {
+                $("#SearchStatusDorm").remove();
+                isWinOpen = false;
+            });
+            $('#txtSearch2').keyup(function () {
+                var url = '@Url.Action("Reload", "SearchStatusDorm")';
+                Reload3(url, 'Grid1', $("#cboSearchFiald2").val(), $("#txtSearch2").val(), $("#txtTop2").val(), $("#cboSearchType2").val());
+            });
+            $('#SearchStatusDorm').dblclick(function () { DblClick(); });
+
+            $('#SearchStatusDorm #Grid1 table tr').live('dblclick', function () { DblClick(); });
+        });
+
+        function DblClick() {
+           var entityGrid = $("#Grid1").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    if (state == 1) {
+                        statuscodeE = selectedItem.fldStatusCode;
+                        $('#txtStatusCode').val(selectedItem.fldStatusType);
+
+                        StatuscodeID = selectedItem.fldStatusCode;
+                        $('#txtStatusCodeId').val(selectedItem.fldStatusType);
+                    }
+                    else if (state == 2) {
+                        statuscodeid = selectedItem.fldStatusCode;
+                        $('#txtStatusCodeId').val(selectedItem.fldStatusType);
+
+                        var url = '@Url.Action("Reload", "B_tblCostStaying")';
+                        if (sectioncodeid != '')
+                            Reload(url, 'Grid', '2', sectioncodeid, 30, 2, statuscodeid);
+                        else
+                            Reload(url, 'Grid', '3', statuscodeid, 30, 2, '');
+                    }
+                    isWinOpen = false;
+                    $('#SearchStatusDorm').remove();
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                
+            }
+            $('#Select2').click(function () {
+                var entityGrid = $("#Grid1").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    if (state == 1) {
+                        statuscodeE = selectedItem.fldStatusCode;
+                        $('#txtStatusCode').val(selectedItem.fldStatusType);
+
+                        StatuscodeID = selectedItem.fldStatusCode;
+                        $('#txtStatusCodeId').val(selectedItem.fldStatusType);
+                    }
+                    else if (state == 2) {
+                        statuscodeid = selectedItem.fldStatusCode;
+                        $('#txtStatusCodeId').val(selectedItem.fldStatusType);
+
+                        var url = '@Url.Action("Reload", "B_tblCostStaying")';
+                        if (sectioncodeid != '')
+                            Reload(url, 'Grid', '2', sectioncodeid, 30, 2, statuscodeid);
+                        else
+                            Reload(url, 'Grid', '3', statuscodeid, 30, 2, '');
+                    }
+                    isWinOpen = false;
+                    $('#SearchStatusDorm').remove();
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+               
+            });
+     
+        function Reload3(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        
+    </script>
+     @UniAutomation.Helper.winClass.windowFother();
+</div>
+

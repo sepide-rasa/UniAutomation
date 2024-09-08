@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="01/14/2015 11:32:08" ReportInfo.Modified="10/12/2019 13:07:17" ReportInfo.CreatorVersion="2015.1.2.0">
+  <Dictionary>
+    <TableDataSource Name="sp_rpt_tblDeliveryFoodSelect" ReferenceName="uniAutomationDataSet.sp_rpt_tblDeliveryFoodSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldFoodCartID" DataType="System.Int64"/>
+      <Column Name="fldFoodName" DataType="System.String"/>
+      <Column Name="fldNobat" DataType="System.String"/>
+      <Column Name="fldFoodDate" DataType="System.String"/>
+      <Column Name="fldPrice" DataType="System.String"/>
+      <Column Name="fldSystemNumber" DataType="System.String"/>
+      <Column Name="fldPersonType" DataType="System.String"/>
+      <Column Name="fldPersonTypeName" DataType="System.String"/>
+      <Column Name="SDate" DataType="System.String"/>
+      <Column Name="EDate" DataType="System.String"/>
+      <Column Name="fldCount" DataType="System.Int32"/>
+      <Column Name="fldMablagh" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <Parameter Name="date" DataType="System.String"/>
+    <Parameter Name="time" DataType="System.String"/>
+    <Parameter Name="Title" DataType="System.String"/>
+    <Total Name="TotalCount" Expression="[sp_rpt_tblDeliveryFoodSelect.fldCount]" Evaluator="Data1"/>
+    <Total Name="TotalMablagh" Expression="[sp_rpt_tblDeliveryFoodSelect.fldMablagh]" Evaluator="Data1"/>
+  </Dictionary>
+  <ReportPage Name="Page1">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="718.2" Height="246.56">
+      <TextObject Name="Text2" Left="34.42" Top="89.76" Width="649.37" Height="35.92" Text=" گزارش غذا های [Title] تحویل داده شده در وعده [sp_rpt_tblDeliveryFoodSelect.fldNobat] از تاریخ : [sp_rpt_tblDeliveryFoodSelect.SDate] تا تاریخ: [sp_rpt_tblDeliveryFoodSelect.EDate]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+      <PictureObject Name="Picture1" Left="634.09" Top="1.89" Width="75.6" Height="66.17" DataColumn="sp_tblSettingSelect.fldImage"/>
+      <TextObject Name="Text1" Left="204.11" Top="2.83" Width="309.99" Height="37.78" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Microsoft Sans Serif, 12pt, style=Bold"/>
+      <TextObject Name="Text3" Left="20.25" Top="170.1" Width="680.4" Height="28.35" Text="نام : [sp_rpt_tblDeliveryFoodSelect.fldName]    شماره دانشجویی(کدملی): [sp_rpt_tblDeliveryFoodSelect.fldSystemNumber]" VertAlign="Center" RightToLeft="true" Font="RasaFont, 14pt, style=Bold"/>
+      <TableObject Name="Table1" Left="12.15" Top="205" Width="693.91" Height="41.56" Border.Lines="All">
+        <TableColumn Name="Column1" Width="155.66"/>
+        <TableColumn Name="Column2" Width="94.11"/>
+        <TableColumn Name="Column3" Width="96.98"/>
+        <TableColumn Name="Column4" Width="178.3"/>
+        <TableColumn Name="Column5" Width="168.86"/>
+        <TableRow Name="Row1" Height="41.56">
+          <TableCell Name="Cell1" Border.Lines="All" Fill.Color="Orange" Text="مبلغ" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell2" Border.Lines="All" Fill.Color="Orange" Text="تعداد" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" Fill.Color="Orange" Text="نام غذا" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell4" Border.Lines="All" Fill.Color="Orange" Text="وعده غذایی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell5" Border.Lines="All" Fill.Color="Orange" Text="تاریخ تحویل" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="254.56" Width="718.2" Height="41.56" DataSource="sp_rpt_tblDeliveryFoodSelect">
+      <TableObject Name="Table2" Left="12.15" Width="693.91" Height="41.56" Border.Lines="All">
+        <TableColumn Name="Column6" Width="155.66"/>
+        <TableColumn Name="Column7" Width="94.11"/>
+        <TableColumn Name="Column8" Width="96.98"/>
+        <TableColumn Name="Column9" Width="178.3"/>
+        <TableColumn Name="Column10" Width="168.86"/>
+        <TableRow Name="Row2" Height="41.56">
+          <TableCell Name="Cell6" Border.Lines="All" Text="[sp_rpt_tblDeliveryFoodSelect.fldMablagh]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="[sp_rpt_tblDeliveryFoodSelect.fldCount]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="[sp_rpt_tblDeliveryFoodSelect.fldFoodName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell9" Border.Lines="All" Text="[sp_rpt_tblDeliveryFoodSelect.fldNobat]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell10" Border.Lines="All" Text="[sp_rpt_tblDeliveryFoodSelect.fldFoodDate]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="300.12" Width="718.2" Height="32.11">
+      <TableObject Name="Table3" Left="12.15" Width="693.91" Height="32.11" Border.Lines="All">
+        <TableColumn Name="Column11" Width="155.66"/>
+        <TableColumn Name="Column12" Width="94.11"/>
+        <TableColumn Name="Column13" Width="96.98"/>
+        <TableColumn Name="Column14" Width="178.3"/>
+        <TableColumn Name="Column15" Width="168.86"/>
+        <TableRow Name="Row3" Height="32.11">
+          <TableCell Name="Cell11" Border.Lines="All" Text="[TotalMablagh]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell12" Border.Lines="All" Text="[TotalCount]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell13" Border.Lines="All" Text="جمع" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt" ColSpan="3"/>
+          <TableCell Name="Cell14" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell15" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+        </TableRow>
+      </TableObject>
+    </ReportSummaryBand>
+    <PageFooterBand Name="PageFooter1" Top="336.23" Width="718.2"/>
+  </ReportPage>
+</Report>

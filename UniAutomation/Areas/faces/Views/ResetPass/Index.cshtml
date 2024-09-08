@@ -1,0 +1,45 @@
+﻿<div>
+    @UniAutomation.Helper.winClass.Buttons("Reset", "ریست", "yes");
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Reset').button();
+
+            $('#Reset').click(function () {
+                PostForm('', '@Url.Content("~/ResetPass/Save")', '');
+            });
+        });
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    if (data.ch == '')
+                        $("#message").html(m.data);
+                    else
+                        $("#message").html(m.data + ' افراد بدون اعتبار:' + data.ch);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "RezervGoruhi")';
+                    Reload(url, 'Grid', $("#cboSelfService").val(), $("#txtDate").val(), $("#cboVade").val(), $("#cboGroup").val());
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }   
+    </script>
+</div>

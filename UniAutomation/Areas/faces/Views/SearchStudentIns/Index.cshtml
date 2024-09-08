@@ -1,0 +1,296 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="SearchStudentIns">
+@UniAutomation.Helper.winClass.windowHeader("", "جستجو دانشجو", 900, 500)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />        
+        <div>
+            <table>
+                <tr>
+                    <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald3", new SelectList(new[] { new { ID = "0", Name = "نام خانوادگی" }, new { ID = "1", Name = "نام" }, new { ID = "2", Name = "شماره دانشجویی" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType3", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch3")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop3", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                </tr>
+            </table>
+            <br />
+        </div>
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Select3", "انتخاب", "Next")          
+                @UniAutomation.Helper.winClass.Buttons("exit3", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+           @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblStudentSelect>()
+                .Name("Grid3")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldID).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldName).Title("نام");
+                    columns.Bound(p => p.fldFamily).Title("نام خانوادگی");
+                    columns.Bound(p => p.fldStudentNumber).Title("شماره دانشجویی");
+                    columns.Bound(p => p.fldTermName).Title("ترم");
+                    columns.Bound(p => p.fldMobile).Title(" تلفن همراه");
+                    columns.Bound(p => p.fldEmail).Title("آدرس ایمیل");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                .Read("Fill", "SearchStudentIns")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var state;
+        $("document").ready(function () {
+            $("#Select3").button();
+            $("#New3").button();
+            $("#exit3").button();
+            state = '@ViewBag.state';
+            $("#exit3").click(function () {
+                $("#SearchStudentIns").remove();
+            });
+
+            $('#SearchStudentIns #btnClose').click(function () {
+                $("#SearchStudentIns").remove();
+                isWinOpen = false;
+            });
+            $('#txtSearch3').keyup(function () {
+                var url = '@Url.Action("Reload", "SearchStudentIns")';
+                Reload3(url, 'Grid3', $("#cboSearchFiald3").val(), $("#txtSearch3").val(), $("#txtTop3").val(), $("#cboSearchType3").val());
+            });
+
+         //   $('#SearchStudentIns').dblclick(function () { DblClick(); });
+
+            $('#SearchStudentIns #Grid3 table tr').live('dblclick', function () { DblClick(); });
+
+        });
+
+        function DblClick() {
+            var entityGrid = $("#Grid3").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                Sid = selectedItem.fldID;
+                Name = selectedItem.fldName;
+                Famil = selectedItem.fldFamily;
+                MeliCode = selectedItem.fldMelliCode;
+                StudentNumber = selectedItem.fldStudentNumber;
+                CourseName = selectedItem.fldCourseName;
+                Mobile = selectedItem.fldMobile;
+                ParentPhone = selectedItem.fldParentPhone;
+                Telephone = selectedItem.fldTelephone;
+                SectionName = selectedItem.fldSectionName;
+                StatusName = selectedItem.fldStatusName;
+                City = selectedItem.fldCity;
+                if (state == 1) {
+                    $('#txtName').val(Name + " " + Famil);
+                    $('#txtMeliCode').val(MeliCode);
+                    $('#txtStudentNumber').val(StudentNumber);
+                    $('#txtCourse').val(CourseName);
+                    $('#txtMobile').val(Mobile);
+                    $('#txtParentPhone').val(ParentPhone);
+                    $('#txtTelephone').val(Telephone);
+                    $('#txtStatus').val(StatusName);
+                    $('#txtCity').val(City);
+                    $('#txtSection').val(SectionName);
+                    $('#txtStudentId').val(StudentNumber);
+                    Pass = MeliCode;
+
+                    isWinOpen = false;
+                    $('#SearchStudentIns').remove();
+                }
+                else if (state == 2) {
+                    $('#txtName').val(Name + " " + Famil);
+                    $('#txtMeliCode').val(MeliCode);
+                    $('#txtStudentNumber').val(StudentNumber);
+                    $('#txtCourse').val(CourseName);
+                    $('#txtMobile').val(Mobile);
+                    $('#txtParentPhone').val(ParentPhone);
+                    $('#txtTelephone').val(Telephone);
+                    $('#txtStatus').val(StatusName);
+                    $('#txtCity').val(City);
+                    $('#txtSection').val(SectionName);
+                    $('#txtStudentId').val(StudentNumber);
+
+                    var url = '@Url.Action("Reload", "B_tblDamagePerson")';
+                    Reload(url, 'Grid', '1', Sid, 50, 2);
+
+                    isWinOpen = false;
+                    $('#SearchStudentIns').remove();
+                }
+                else if (state == 3) {
+                    var URL = '@Url.Content("~/B_tblEnterDorm/CheckStudent")';
+                    URL = URL + "?StudentNumber=" + StudentNumber + "&SarbargId=" + SarbargId;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            if (data.HaveDorm) {
+                                alert('برای دانشجوی مورد نظر خوابگاه در این ترم انتخاب شده است.');
+                            }
+                            else {
+                                $('#txtName').val(Name + " " + Famil);
+                                $('#txtMeliCode').val(MeliCode);
+                                $('#txtStudentNumber').val(StudentNumber);
+                                $('#txtCourse').val(CourseName);
+                                $('#txtMobile').val(Mobile);
+                                $('#txtParentPhone').val(ParentPhone);
+                                $('#txtTelephone').val(Telephone);
+                                $('#txtStatus').val(StatusName);
+                                $('#txtCity').val(City);
+                                $('#txtSection').val(SectionName);
+                                $('#txtStudentId').val(StudentNumber);
+
+                                isWinOpen = false;
+                                $('#SearchStudentIns').remove();
+                            }
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });                   
+                    
+                }
+                if (state == 4) {
+                    $('#txtName').val(Name + " " + Famil);
+                    $('#txtMeliCode').val(MeliCode);
+                    FID = Sid;
+
+                    isWinOpen = false;
+                    $('#SearchStudentIns').remove();
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            
+        }
+        $('#Select3').click(function () {
+            var entityGrid = $("#Grid3").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                Sid = selectedItem.fldID;
+                Name = selectedItem.fldName;
+                Famil = selectedItem.fldFamily;
+                MeliCode = selectedItem.fldMelliCode;
+                StudentNumber = selectedItem.fldStudentNumber;
+                CourseName = selectedItem.fldCourseName;
+                Mobile = selectedItem.fldMobile;
+                ParentPhone = selectedItem.fldParentPhone;
+                Telephone = selectedItem.fldTelephone;
+                SectionName = selectedItem.fldSectionName;
+                StatusName = selectedItem.fldStatusName;
+                City = selectedItem.fldCity;
+
+                if (state == 1) {
+                    $('#txtName').val(Name + " " + Famil);
+                    $('#txtMeliCode').val(MeliCode);
+                    $('#txtStudentNumber').val(StudentNumber);
+                    $('#txtCourse').val(CourseName);
+                    $('#txtMobile').val(Mobile);
+                    $('#txtParentPhone').val(ParentPhone);
+                    $('#txtTelephone').val(Telephone);
+                    $('#txtStatus').val(StatusName);
+                    $('#txtCity').val(City);
+                    $('#txtSection').val(SectionName);
+                    $('#txtStudentId').val(StudentNumber);
+                    Pass = MeliCode;
+
+                    isWinOpen = false;
+                    $('#SearchStudentIns').remove();
+                }
+                else if (state == 2) {
+                    $('#txtName').val(Name + " " + Famil);
+                    $('#txtMeliCode').val(MeliCode);
+                    $('#txtStudentNumber').val(StudentNumber);
+                    $('#txtCourse').val(CourseName);
+                    $('#txtMobile').val(Mobile);
+                    $('#txtParentPhone').val(ParentPhone);
+                    $('#txtTelephone').val(Telephone);
+                    $('#txtStatus').val(StatusName);
+                    $('#txtCity').val(City);
+                    $('#txtSection').val(SectionName);
+                    $('#txtStudentId').val(StudentNumber);
+
+                    var url = '@Url.Action("Reload", "B_tblDamagePerson")';
+                    Reload(url, 'Grid', '1', Sid, 50, 2);
+
+                    isWinOpen = false;
+                    $('#SearchStudentIns').remove();
+                }
+                else if (state == 3) {
+                    var URL = '@Url.Content("~/B_tblEnterDorm/CheckStudent")';
+                    URL = URL + "?StudentNumber=" + StudentNumber + "&SarbargId=" + SarbargId;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            if (data.HaveDorm) {
+                                alert('برای دانشجوی مورد نظر خوابگاه در این ترم انتخاب شده است.');
+                            }
+                            else {
+                                $('#txtName').val(Name + " " + Famil);
+                                $('#txtMeliCode').val(MeliCode);
+                                $('#txtStudentNumber').val(StudentNumber);
+                                $('#txtCourse').val(CourseName);
+                                $('#txtMobile').val(Mobile);
+                                $('#txtParentPhone').val(ParentPhone);
+                                $('#txtTelephone').val(Telephone);
+                                $('#txtStatus').val(StatusName);
+                                $('#txtCity').val(City);
+                                $('#txtSection').val(SectionName);
+                                $('#txtStudentId').val(StudentNumber);
+
+                                isWinOpen = false;
+                                $('#SearchStudentIns').remove();
+                            }
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        });
+
+        function Reload3(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        
+    </script>
+     @UniAutomation.Helper.winClass.windowFother();
+</div>

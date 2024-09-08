@@ -1,0 +1,1863 @@
+﻿<div id="Reserv">    
+    @{
+        UniAutomation.Models.UniAutomationEntities p = new UniAutomation.Models.UniAutomationEntities();
+        var user = p.sp_GetCharge(Convert.ToInt32(Session["PersonId"])).FirstOrDefault();
+        string ss="";
+        if (user.Charge < 0)
+        { ss = "(بدهکار)";}
+        var nowDate = p.sp_GetDate().FirstOrDefault();
+        if (ViewBag.State == 2)
+        {
+            nowDate.fldDateTime = nowDate.fldDateTime.AddDays(7);
+        }
+        if (ViewBag.State == 3)
+        {
+            nowDate.fldDateTime = nowDate.fldDateTime.AddDays(14);
+        }
+        var date = MyLib.Shamsi.ShamsiDayname(MyLib.Shamsi.Miladi2ShamsiString(nowDate.fldDateTime));        
+        int back = 0, front = 0;
+        switch (date)
+        {
+            case "شنبه":
+                front = 7;
+                break;
+            case "یکشنبه":
+                back = 1;
+                front = 5;
+                break;
+            case "دوشنبه":
+                back = 2;
+                front = 4;
+                break;
+            case "سه شنبه":
+                back = 3;
+                front = 3;
+                break;
+            case "چهارشنبه":
+                back = 4;
+                front = 2;
+                break;
+            case "پنج شنبه":
+                back = 5;
+                front = 1;
+                break;
+            case "جمعه":
+                back = 6;
+                break;
+        }
+        System.Collections.ArrayList ar = new System.Collections.ArrayList();
+        ar.Clear();
+        for (int i = back; i >= 0; i--)
+        {
+            var d = MyLib.Shamsi.Miladi2ShamsiString(nowDate.fldDateTime.AddDays(-i));
+            ar.Add(d);
+        }
+        //if (back == 0 || front == 0)
+        //{
+        //    ar.Add(MyLib.Shamsi.Miladi2ShamsiString(nowDate.fldDateTime));
+        //}
+        for (int i = 0; i <= front; i++)
+        {
+            var d = MyLib.Shamsi.Miladi2ShamsiString(nowDate.fldDateTime.AddDays(i + 1));
+            ar.Add(d);
+        }
+    }
+    <script type="text/javascript">
+        function filterFoodsS1() {
+            var dropdownlist = $("#CountS1").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[0]'
+                , Nobat: 1
+            };
+        }
+        function filterFoodsS2() {
+            var dropdownlist = $("#CountS2").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[1]'
+                , Nobat: 1
+            };
+        }
+        function filterFoodsS3() {
+            var dropdownlist = $("#CountS3").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[2]'
+                , Nobat: 1
+            };
+        }
+        function filterFoodsS4() {
+            var dropdownlist = $("#CountS4").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[3]'
+                , Nobat: 1
+            };
+        }
+        function filterFoodsS5() {
+            var dropdownlist = $("#CountS5").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[4]'
+                , Nobat: 1
+            };
+        }
+        function filterFoodsS6() {
+            var dropdownlist = $("#CountS6").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[5]'
+                , Nobat: 1
+            };
+        }
+        function filterFoodsS7() {
+            var dropdownlist = $("#CountS7").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[6]'
+                , Nobat: 1
+            };
+        }
+        ////////////////////////////////////
+        function filterFoods1() {
+            var dropdownlist = $("#CountN1").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[0]'
+                ,Nobat:2
+            };
+        }
+        function filterFoods2() {
+            var dropdownlist = $("#CountN2").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[1]'
+                , Nobat: 2
+            };
+        }
+        function filterFoods3() {
+            var dropdownlist = $("#CountN3").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[2]'
+                , Nobat: 2
+            };
+        }
+        function filterFoods4() {
+            var dropdownlist = $("#CountN4").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[3]'
+                , Nobat: 2
+            };
+        }
+        function filterFoods5() {
+            var dropdownlist = $("#CountN5").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[4]'
+                , Nobat: 2
+            };
+        }
+        function filterFoods6() {
+            var dropdownlist = $("#CountN6").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[5]'
+                , Nobat: 2
+            };
+        }
+        function filterFoods7() {
+            var dropdownlist = $("#CountN7").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[6]'
+                , Nobat: 2
+            };
+        }
+
+        /////////////////////////////////
+
+        function filterFoodsSH1() {
+            var dropdownlist = $("#CountSH1").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[0]'
+                , Nobat: 3
+            };
+        }
+        function filterFoodsSH2() {
+            var dropdownlist = $("#CountSH2").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[1]'
+                , Nobat: 3
+            };
+        }
+        function filterFoodsSH3() {
+            var dropdownlist = $("#CountSH3").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[2]'
+                , Nobat: 3
+            };
+        }
+        function filterFoodsSH4() {
+            var dropdownlist = $("#CountSH4").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[3]'
+                , Nobat: 3
+            };
+        }
+        function filterFoodsSH5() {
+            var dropdownlist = $("#CountSH5").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[4]'
+                , Nobat: 3
+            };
+        }
+        function filterFoodsSH6() {
+            var dropdownlist = $("#CountSH6").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[5]'
+                , Nobat: 3
+            };
+        }
+        function filterFoodsSH7() {
+            var dropdownlist = $("#CountSH7").data("kendoDropDownList");
+            dropdownlist.enable();
+            dropdownlist.value(1);
+            return {
+                Selef: $("#CboSelf").val()
+                , date: '@ar[6]'
+                , Nobat: 3
+            };
+        }
+
+
+        $(document).ready(function () {
+            $('#next').button();
+            $('#next1').button();
+            $('#next2').button();
+
+            $('#CancelS1').button();
+            $('#CancelS2').button();
+            $('#CancelS3').button();
+            $('#CancelS4').button();
+            $('#CancelS5').button();
+            $('#CancelS6').button();
+            $('#CancelS7').button();
+            /////
+            $('#Cancel1').button();
+            $('#Cancel2').button();
+            $('#Cancel3').button();
+            $('#Cancel4').button();
+            $('#Cancel5').button();
+            $('#Cancel6').button();
+            $('#Cancel7').button();
+            /////
+            $('#CancelSH1').button();
+            $('#CancelSH2').button();
+            $('#CancelSH3').button();
+            $('#CancelSH4').button();
+            $('#CancelSH5').button();
+            $('#CancelSH6').button();
+            $('#CancelSH7').button();
+            $('#Ok').button();
+
+            $('#CancelS1').click(function () {
+                CancelPostForm({ date: '@ar[0]', nobat: 1 }, '/Reserv/Cancel', 1);
+            });
+            $('#CancelS2').click(function () {
+                CancelPostForm({ date: '@ar[1]', nobat: 1 }, '/Reserv/Cancel', 2);
+            });
+            $('#CancelS3').click(function () {
+                CancelPostForm({ date: '@ar[2]', nobat: 1 }, '/Reserv/Cancel', 3);
+            });
+            $('#CancelS4').click(function () {
+                CancelPostForm({ date: '@ar[3]', nobat: 1 }, '/Reserv/Cancel', 4);
+            });
+            $('#CancelS5').click(function () {
+                CancelPostForm({ date: '@ar[4]', nobat: 1 }, '/Reserv/Cancel', 5);
+            });
+            $('#CancelS6').click(function () {
+                CancelPostForm({ date: '@ar[5]', nobat: 1 }, '/Reserv/Cancel', 6);
+            });
+            $('#CancelS7').click(function () {
+                CancelPostForm({ date: '@ar[6]', nobat: 1 }, '/Reserv/Cancel', 7);
+            });
+            ////////
+            $('#Cancel1').click(function () {
+                CancelPostForm({ date: '@ar[0]', nobat: 2 }, '/Reserv/Cancel', 1);
+            });
+            $('#Cancel2').click(function () {
+                CancelPostForm({ date: '@ar[1]', nobat: 2 }, '/Reserv/Cancel', 2);
+            });
+            $('#Cancel3').click(function () {
+                CancelPostForm({ date: '@ar[2]', nobat: 2 }, '/Reserv/Cancel', 3);
+            });
+            $('#Cancel4').click(function () {
+                CancelPostForm({ date: '@ar[3]', nobat: 2 }, '/Reserv/Cancel', 4);
+            });
+            $('#Cancel5').click(function () {
+                CancelPostForm({ date: '@ar[4]', nobat: 2 }, '/Reserv/Cancel', 5);
+            });
+            $('#Cancel6').click(function () {
+                CancelPostForm({ date: '@ar[5]', nobat: 2 }, '/Reserv/Cancel', 6);
+            });
+            $('#Cancel7').click(function () {
+                CancelPostForm({ date: '@ar[6]', nobat: 2 }, '/Reserv/Cancel', 7);
+            });
+            ////////
+            $('#CancelSH1').click(function () {
+                CancelPostForm({ date: '@ar[0]', nobat: 3 }, '/Reserv/Cancel', 1);
+            });
+            $('#CancelSH2').click(function () {
+                CancelPostForm({ date: '@ar[1]', nobat: 3 }, '/Reserv/Cancel', 2);
+            });
+            $('#CancelSH3').click(function () {
+                CancelPostForm({ date: '@ar[2]', nobat: 3 }, '/Reserv/Cancel', 3);
+            });
+            $('#CancelSH4').click(function () {
+                CancelPostForm({ date: '@ar[3]', nobat: 3 }, '/Reserv/Cancel', 4);
+            });
+            $('#CancelSH5').click(function () {
+                CancelPostForm({ date: '@ar[4]', nobat: 3 }, '/Reserv/Cancel', 5);
+            });
+            $('#CancelSH6').click(function () {
+                CancelPostForm({ date: '@ar[5]', nobat: 3 }, '/Reserv/Cancel', 6);
+            });
+            $('#CancelSH7').click(function () {
+                CancelPostForm({ date: '@ar[6]', nobat: 3 }, '/Reserv/Cancel', 7);
+            });
+
+
+            $('#next').click(function () {
+                windows('#Main', '/Reserv/index/1');
+            });
+            $('#next1').click(function () {
+                windows('#Main', '/Reserv/index/2');
+            });
+            $('#next2').click(function () {
+                windows('#Main', '/Reserv/index/3');
+            });
+            $('#CboSelf').change(function () {
+                var array = new Array();
+                array.push('@ar[0]');
+                array.push('@ar[1]');
+                array.push('@ar[2]');
+                array.push('@ar[3]');
+                array.push('@ar[4]');
+                array.push('@ar[5]');
+                array.push('@ar[6]');
+                for (var i = 0; i < 7; i++) {
+                    $.ajax({
+                        type: "get",
+                        url: '@Url.Content("~/Reserv/HaveReserv")',
+                        datatype: "json",
+                        data: { date: array[i], i: i },
+                        success: function (data) {
+                            if (data.haveS == true) {
+                                switch (data.i) {
+                                    case '0':
+                                        $('#CbosS1').attr('style', 'display:none;');
+                                        $('#MsgS1').attr('style', 'display:block;');
+                                        break;
+                                    case '1':
+                                        $('#CbosS2').attr('style', 'display:none;');
+                                        $('#MsgS2').attr('style', 'display:block;');
+                                        break;
+                                    case '2':
+                                        $('#CbosS3').attr('style', 'display:none;');
+                                        $('#MsgS3').attr('style', 'display:block;');
+                                        break;
+                                    case '3':
+                                        $('#CbosS4').attr('style', 'display:none;');
+                                        $('#MsgS4').attr('style', 'display:block;');
+                                        break;
+                                    case '4':
+                                        $('#CbosS5').attr('style', 'display:none;');
+                                        $('#MsgS5').attr('style', 'display:block;');
+                                        break;
+                                    case '5':
+                                        $('#CbosS6').attr('style', 'display:none;');
+                                        $('#MsgS6').attr('style', 'display:block;');
+                                        break;
+                                    case '6':
+                                        $('#CbosS7').attr('style', 'display:none;');
+                                        $('#MsgS7').attr('style', 'display:block;');
+                                        break;
+                                }
+                            }
+                            if (data.haveN == true) {
+                                switch (data.i) {
+                                    case '0':
+                                        $('#CbosN1').attr('style', 'display:none;');
+                                        $('#MsgN1').attr('style', 'display:block;');
+                                        break;
+                                    case '1':
+                                        $('#CbosN2').attr('style', 'display:none;');
+                                        $('#MsgN2').attr('style', 'display:block;');
+                                        break;
+                                    case '2':
+                                        $('#CbosN3').attr('style', 'display:none;');
+                                        $('#MsgN3').attr('style', 'display:block;');
+                                        break;
+                                    case '3':
+                                        $('#CbosN4').attr('style', 'display:none;');
+                                        $('#MsgN4').attr('style', 'display:block;');
+                                        break;
+                                    case '4':
+                                        $('#CbosN5').attr('style', 'display:none;');
+                                        $('#MsgN5').attr('style', 'display:block;');
+                                        break;
+                                    case '5':
+                                        $('#CbosN6').attr('style', 'display:none;');
+                                        $('#MsgN6').attr('style', 'display:block;');
+                                        break;
+                                    case '6':
+                                        $('#CbosN7').attr('style', 'display:none;');
+                                        $('#MsgN7').attr('style', 'display:block;');
+                                        break;
+                                }
+                            }
+
+                            if (data.haveSH == true) {
+                                switch (data.i) {
+                                    case '0':
+                                        $('#CbosSH1').attr('style', 'display:none;');
+                                        $('#MsgSH1').attr('style', 'display:block;');
+                                        break;
+                                    case '1':
+                                        $('#CbosSH2').attr('style', 'display:none;');
+                                        $('#MsgSH2').attr('style', 'display:block;');
+                                        break;
+                                    case '2':
+                                        $('#CbosSH3').attr('style', 'display:none;');
+                                        $('#MsgSH3').attr('style', 'display:block;');
+                                        break;
+                                    case '3':
+                                        $('#CbosSH4').attr('style', 'display:none;');
+                                        $('#MsgSH4').attr('style', 'display:block;');
+                                        break;
+                                    case '4':
+                                        $('#CbosSH5').attr('style', 'display:none;');
+                                        $('#MsgSH5').attr('style', 'display:block;');
+                                        break;
+                                    case '5':
+                                        $('#CbosSH6').attr('style', 'display:none;');
+                                        $('#MsgSH6').attr('style', 'display:block;');
+                                        break;
+                                    case '6':
+                                        $('#CbosSH7').attr('style', 'display:none;');
+                                        $('#MsgSH7').attr('style', 'display:block;');
+                                        break;
+                                }
+
+                            }
+
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+            });
+
+            $('#Ok').click(function () {
+                var Reserv = new Array();
+                if (document.getElementById("ChkS1").checked && $('#CboS1').val() != '') {
+                    Reserv.push({
+                        "fldCount": $('#CountS1').val(),
+                        "fldFoodProgramingID": $('#CboS1').val()
+                    });
+                }
+                if (document.getElementById("ChkS2").checked && $('#CboS2').val() != '') {
+                    Reserv.push({
+                        "fldCount": $('#CountS2').val(),
+                        "fldFoodProgramingID": $('#CboS2').val()
+                    });
+                }
+                if (document.getElementById("ChkS3").checked && $('#CboS3').val() != '') {
+                    Reserv.push({
+                        "fldCount": $('#CountS3').val(),
+                        "fldFoodProgramingID": $('#CboS3').val()
+                    });
+                }
+                if (document.getElementById("ChkS4").checked && $('#CboS4').val() != '') {
+                    Reserv.push({
+                        "fldCount": $('#CountS4').val(),
+                        "fldFoodProgramingID": $('#CboS4').val()
+                    });
+                }
+                if (document.getElementById("ChkS5").checked && $('#CboS5').val() != '') {
+                    Reserv.push({
+                        "fldCount": $('#CountS5').val(),
+                        "fldFoodProgramingID": $('#CboS5').val()
+                    });
+                }
+                if (document.getElementById("ChkS6").checked && $('#CboS6').val() != '') {
+                    Reserv.push({
+                        "fldCount": $('#CountS6').val(),
+                        "fldFoodProgramingID": $('#CboS6').val()
+                    });
+                }
+                if (document.getElementById("ChkS7").checked && $('#CboS7').val() != '') {
+                    Reserv.push({
+                        "fldCount": $('#CountS7').val(),
+                        "fldFoodProgramingID": $('#CboS7').val()
+                    });
+                }
+                ////////
+                if (document.getElementById("ChkN1").checked && $('#CboN1').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountN1').val(),
+                        "fldFoodProgramingID": $('#CboN1').val()
+                    });
+                }
+                if (document.getElementById("ChkN2").checked && $('#CboN2').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountN2').val(),
+                        "fldFoodProgramingID": $('#CboN2').val()
+                    });
+                }
+                if (document.getElementById("ChkN3").checked && $('#CboN3').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountN3').val(),
+                        "fldFoodProgramingID": $('#CboN3').val()
+                    });
+                }
+                if (document.getElementById("ChkN4").checked && $('#CboN4').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountN4').val(),
+                        "fldFoodProgramingID": $('#CboN4').val()
+                    });
+                }
+                if (document.getElementById("ChkN5").checked && $('#CboN5').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountN5').val(),
+                        "fldFoodProgramingID": $('#CboN5').val()
+                    });
+                }
+                if (document.getElementById("ChkN6").checked && $('#CboN6').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountN6').val(),
+                        "fldFoodProgramingID": $('#CboN6').val()
+                    });
+                }
+                if (document.getElementById("ChkN7").checked && $('#CboN7').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountN7').val(),
+                        "fldFoodProgramingID": $('#CboN7').val()
+                    });
+                }
+                ////////
+                if (document.getElementById("ChkSH1").checked && $('#CboSH1').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountSH1').val(),
+                        "fldFoodProgramingID": $('#CboSH1').val()
+                    });
+                }
+                if (document.getElementById("ChkSH2").checked && $('#CboSH2').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountSH2').val(),
+                        "fldFoodProgramingID": $('#CboSH2').val()
+                    });
+                }
+                if (document.getElementById("ChkSH3").checked && $('#CboSH3').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountSH3').val(),
+                        "fldFoodProgramingID": $('#CboSH3').val()
+                    });
+                }
+                if (document.getElementById("ChkSH4").checked && $('#CboSH4').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountSH4').val(),
+                        "fldFoodProgramingID": $('#CboSH4').val()
+                    });
+                }
+                if (document.getElementById("ChkSH5").checked && $('#CboSH5').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountSH5').val(),
+                        "fldFoodProgramingID": $('#CboSH5').val()
+                    });
+                }
+                if (document.getElementById("ChkSH6").checked && $('#CboSH6').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountSH6').val(),
+                        "fldFoodProgramingID": $('#CboSH6').val()
+                    });
+                }
+                if (document.getElementById("ChkSH7").checked && $('#CboSH7').val() != '') {
+                    Reserv.push({ "fldCount": $('#CountSH7').val(),
+                        "fldFoodProgramingID": $('#CboSH7').val()
+                    });
+                }
+
+                if (Reserv != '') {
+                    PostForm(Reserv, '@Url.Content("~/Reserv/Save")', "#win");
+                }
+                else {
+                    alert('لطفا یک غذا را انتخاب کنید');
+                }
+            });
+        });
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                data: JSON3.stringify(sendInfo),
+                contentType: 'application/json',
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/_metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    $('#Lock').hide();
+                    windows('#Main', '/Reserv/index/' + '@ViewBag.State');
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+
+        function CancelPostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                data: sendInfo,
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/_metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            $('#Etebar').html('اعتبار شما: ' + m.Etebar + ' ریال');
+                            if (m.nobat == 1) {
+                                $('#CbosS' + id).attr('style', 'display:block;');
+                                $('#MsgS' + id).attr('style', 'display:none;');
+                            }
+                            if (m.nobat == 2){
+                                $('#CbosN' + id).attr('style', 'display:block;');
+                                $('#MsgN' + id).attr('style', 'display:none;');
+                            }
+                            else if (m.nobat == 3) {
+                                $('#CbosSH' + id).attr('style', 'display:block;');
+                                $('#MsgSH' + id).attr('style', 'display:none;');
+                            }
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+    <center>
+    @using Kendo.Mvc.UI;
+    <br />
+        <table style="width: 400px;">
+            <tr>
+                <td>
+                    @(
+                        Html.Kendo().DropDownList()
+                      .Name("CboSelf")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .OptionLabel("سلف سرویس...")
+                      .DataSource(source => {
+                           source.Read(read => {
+                               read.Action("GetSelfName", "Reserv");
+                           });
+                      })    
+                    )
+                </td>
+                <td>
+                    <span id="Etebar">اعتبار شما: @user.Charge ریال </span>
+                    <span style="color:red">@ss</span>
+                </td>
+            </tr>
+        </table>
+        <br /><br />
+        <table class="tftable" border="1">
+            <tr>
+                <th>
+                </th>
+                <th>
+                    شنبه
+                    <br />                    
+                    <span dir="rtl">@ar[0]</span>
+                </th>
+                <th>
+                    یکشنبه
+                    <br />
+                    <span dir="rtl">@ar[1]</span>
+                </th>
+                <th>
+                    دوشنبه
+                    <br />
+                    <span dir="rtl">@ar[2]</span>
+                </th>
+                <th>
+                    سه شنبه
+                    <br />
+                    <span dir="rtl">@ar[3]</span>
+                </th>
+                <th>
+                    چهارشنبه
+                    <br />
+                     <span dir="rtl">@ar[4]</span>
+                </th>
+                <th>
+                    پنج شنبه
+                    <br />
+                    <span dir="rtl">@ar[5]</span>
+                </th>
+                <th>
+                    جمعه
+                    <br />
+                     <span dir="rtl">@ar[6]</span>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    صبحانه
+                </td>
+                <td>
+                    <div id="CbosS1">
+                        @Html.CheckBox("ChkS1")
+                        @(Html.Kendo().DropDownList()
+                      .Name("CountS1")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                        )
+                        
+                        <br />
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboS1")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsS1");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                        
+                    </div>
+                    <div id="MsgS1" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelS1", "انصراف", "del")
+                    </div>
+                </td>
+                <td>
+                    <div id="CbosS2">
+                        @Html.CheckBox("ChkS2") 
+                        @(Html.Kendo().DropDownList()
+                      .Name("CountS2")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                        )
+                        <br />
+
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboS2")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsS2");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                       
+                    </div>
+                    <div id="MsgS2" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelS2", "انصراف", "del")
+                    </div>
+                </td>
+                <td>
+                    <div id="CbosS3">
+                        @Html.CheckBox("ChkS3")
+
+                        @(Html.Kendo().DropDownList()
+                          .Name("CountS3")
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .OptionLabel("تعداد...")
+                          .HtmlAttributes(new { @style = "width:80px;" })
+                          .BindTo(new List<SelectListItem>() {
+                              new SelectListItem() {
+                                  Text = "یک پرس",
+                                  Value = "1"
+                              }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                        )
+                        <br />
+                        @(Html.Kendo().DropDownList()
+                          .Name("CboS3")
+                          .DataTextField("fldName")
+                          .DataValueField("fldId")
+                          .HtmlAttributes(new { @style = "width:100px;" })
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("GetFoods", "Reserv")
+                                      .Data("filterFoodsS3");
+                              })
+                              .ServerFiltering(true);
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                          .CascadeFrom("CboSelf")
+                        )
+                    </div>
+                    <div id="MsgS3" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelS3", "انصراف", "del")
+                    </div>
+                </td>
+                <td>
+                    <div id="CbosS4">
+                    @Html.CheckBox("ChkS4")
+                    @(Html.Kendo().DropDownList()
+                      .Name("CountS4")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                                )
+                        <br />
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboS4")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsS4");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                    </div>
+                    <div id="MsgS4" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelS4", "انصراف", "del")
+                    </div>
+                </td>
+                <td>
+                    <div id="CbosS5">
+                        @Html.CheckBox("ChkS5")
+                        @(Html.Kendo().DropDownList()
+                      .Name("CountS5")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                                )
+                        <br />
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboS5")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsS5");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                    </div>
+                    <div id="MsgS5" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelS5", "انصراف", "del")
+                    </div>
+                </td>
+                <td>
+                    <div id="CbosS6">
+                    @Html.CheckBox("ChkS6")
+                    @(Html.Kendo().DropDownList()
+                      .Name("CountS6")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                                )
+                        <br />
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboS6")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsS6");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                    </div>
+                    <div id="MsgS6" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelS6", "انصراف", "del")
+                    </div>
+                </td>
+                <td>
+                    <div id="CbosS7">
+                        @Html.CheckBox("ChkS7")
+                        @(Html.Kendo().DropDownList()
+                      .Name("CountS7")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                                )
+                        <br />
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboS7")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsS7");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                    </div>
+                    <div id="MsgS7" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelS7", "انصراف", "del")
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    ناهار
+                </td>
+                <td>                
+                    <div id="CbosN1">
+                    @Html.CheckBox("ChkN1")
+                        @(Html.Kendo().DropDownList()
+                      .Name("CountN1")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                        )
+                        
+                    <br />
+                    @(Html.Kendo().DropDownList()
+                      .Name("CboN1")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoods1");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                     </div>
+                    <div id="MsgN1" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("Cancel1", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosN2">
+                    @Html.CheckBox("ChkN2")
+
+                        @(Html.Kendo().DropDownList()
+                      .Name("CountN2")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                        )
+                  
+                    <br />
+                   @(Html.Kendo().DropDownList()
+                      .Name("CboN2")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoods2");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                     </div>
+                    <div id="MsgN2" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("Cancel2", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosN3">
+                        @Html.CheckBox("ChkN3")
+                        @(Html.Kendo().DropDownList()
+                          .Name("CountN3")
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .OptionLabel("تعداد...")
+                          .HtmlAttributes(new { @style = "width:80px;" })
+                          .BindTo(new List<SelectListItem>() {
+                              new SelectListItem() {
+                                  Text = "یک پرس",
+                                  Value = "1"
+                              }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                        )
+                        
+                        <br />
+                       
+                        @(Html.Kendo().DropDownList()
+                          .Name("CboN3")
+                          .DataTextField("fldName")
+                          .DataValueField("fldId")
+                          .HtmlAttributes(new { @style = "width:100px;" })
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("GetFoods", "Reserv")
+                                      .Data("filterFoods3");
+                              })
+                              .ServerFiltering(true);
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                          .CascadeFrom("CboSelf")
+                        )
+                    </div>
+                    <div id="MsgN3" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("Cancel3", "انصراف", "del")
+                    </div>                    
+                </td>
+                <td>
+                    <div id="CbosN4">
+                    @Html.CheckBox("ChkN4")
+                   
+                   @(Html.Kendo().DropDownList()
+                      .Name("CountN4")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                )
+                    <br />
+                    
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboN4")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoods4");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                     </div>
+                    <div id="MsgN4" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("Cancel4", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosN5">
+                    @Html.CheckBox("ChkN5")
+                  @(Html.Kendo().DropDownList()
+                      .Name("CountN5")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                )
+                    
+                    <br />
+                    
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboN5")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoods5");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                     </div>
+                    <div id="MsgN5" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("Cancel5", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosN6">
+                    @Html.CheckBox("ChkN6")
+                   @(Html.Kendo().DropDownList()
+                      .Name("CountN6")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                )
+                    
+                    <br />
+                    
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboN6")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoods6");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                        )
+                     </div>
+                    <div id="MsgN6" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("Cancel6", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosN7">
+                    @Html.CheckBox("ChkN7")
+                        @(Html.Kendo().DropDownList()
+                      .Name("CountN7")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                        )
+                 
+                    <br />            
+                        @(Html.Kendo().DropDownList()
+                      .Name("CboN7")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source =>
+                      {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoods7");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                   
+                     </div>
+                    <div id="MsgN7" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("Cancel7", "انصراف", "del")
+                    </div> 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    شام
+                </td>
+                <td>                
+                    <div id="CbosSH1">
+                    @Html.CheckBox("ChkSH1")
+                        @(Html.Kendo().DropDownList()
+                              .Name("CountSH1")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                        )
+                    <br />
+                    @(Html.Kendo().DropDownList()
+                              .Name("CboSH1")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source => {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsSH1");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                    
+                     </div>
+                    <div id="MsgSH1" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelSH1", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosSH2">
+                    @Html.CheckBox("ChkSH2")
+                        @(Html.Kendo().DropDownList()
+                              .Name("CountSH2")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                        )
+                    <br />
+                    @(Html.Kendo().DropDownList()
+                              .Name("CboSH2")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source => {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsSH2");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                    
+                     </div>
+                    <div id="MsgSH2" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelSH2", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosSH3">
+                            @Html.CheckBox("ChkSH3")
+                            @(Html.Kendo().DropDownList()
+                                  .Name("CountSH3")
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .OptionLabel("تعداد...")
+                          .HtmlAttributes(new { @style = "width:80px;" })
+                          .BindTo(new List<SelectListItem>() {
+                              new SelectListItem() {
+                                  Text = "یک پرس",
+                                  Value = "1"
+                              }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                                                )
+                        <br />
+                        @(Html.Kendo().DropDownList()
+                                  .Name("CboSH3")
+                          .DataTextField("fldName")
+                          .DataValueField("fldId")
+                          .HtmlAttributes(new { @style = "width:100px;" })
+                          .DataSource(source => {
+                              source.Read(read =>
+                              {
+                                  read.Action("GetFoods", "Reserv")
+                                      .Data("filterFoodsSH3");
+                              })
+                              .ServerFiltering(true);
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                          .CascadeFrom("CboSelf")
+                        )
+                    </div>
+                    <div id="MsgSH3" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelSH3", "انصراف", "del")
+                    </div>                    
+                </td>
+                <td>
+                    <div id="CbosSH4">
+                        @Html.CheckBox("ChkSH4")
+                        @(Html.Kendo().DropDownList()
+                              .Name("CountSH4")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                            )
+                    <br />
+                    @(Html.Kendo().DropDownList()
+                              .Name("CboSH4")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source => {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsSH4");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                     </div>
+                    <div id="MsgSH4" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelSH4", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosSH5">
+                    @Html.CheckBox("ChkSH5")
+                    @(Html.Kendo().DropDownList()
+                              .Name("CountSH5")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                            )
+                    <br />
+                    @(Html.Kendo().DropDownList()
+                              .Name("CboSH5")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source => {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsSH5");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                     </div>
+                    <div id="MsgSH5" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelSH5", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosSH6">
+                    @Html.CheckBox("ChkSH6")
+                    @(Html.Kendo().DropDownList()
+                              .Name("CountSH6")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .OptionLabel("تعداد...")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                            )
+                    <br />
+                    @(Html.Kendo().DropDownList()
+                              .Name("CboSH6")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source => {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsSH6");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                     </div>
+                    <div id="MsgSH6" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelSH6", "انصراف", "del")
+                    </div> 
+                </td>
+                <td>
+                    <div id="CbosSH7">
+                        @Html.CheckBox("ChkSH7")
+                        @(Html.Kendo().DropDownList()
+                              .Name("CountSH7")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new { @style = "width:80px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "یک پرس",
+                              Value = "1"
+                          }/*,
+                          new SelectListItem() {
+                              Text = "دو پرس",
+                              Value = "2"
+                          }*/
+                      })
+                    .Enable(false)
+                    .AutoBind(false)
+                                            )
+                    <br />
+                    @(Html.Kendo().DropDownList()
+                              .Name("CboSH7")
+                      .DataTextField("fldName")
+                      .DataValueField("fldId")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .DataSource(source => {
+                          source.Read(read =>
+                          {
+                              read.Action("GetFoods", "Reserv")
+                                  .Data("filterFoodsSH7");
+                          })
+                          .ServerFiltering(true);
+                      })
+                      .Enable(false)
+                      .AutoBind(false)
+                      .CascadeFrom("CboSelf")
+                    )
+                     </div>
+                    <div id="MsgSH7" style="display:none;">
+                        رزرو شده
+                        <br />
+                        @UniAutomation.Helper.winClass.Buttons("CancelSH7", "انصراف", "del")
+                    </div> 
+                </td>
+            </tr>
+        </table></center>
+        <br />
+        <button id="next" style="font-size:11px;direction:rtl;font-family:tornado tahoma;width: 95px;
+            text-align: left;background-image: url('/Content/images/back.png');
+            background-repeat: no-repeat;background-position-x: 95%;">هفته جاری</button>
+        <button id="next1" style="font-size:11px;direction:rtl;font-family:tornado tahoma;width: 85px;
+            text-align: left;background-image: url('/Content/images/next.png');
+            background-repeat: no-repeat;background-position-x: 95%;">هفته بعد</button>
+            <button id="next2" style="font-size:11px;direction:rtl;font-family:tornado tahoma;width: 100px;
+            text-align: left;background-image: url('/Content/images/next.png');
+            background-repeat: no-repeat;background-position-x: 95%;">دو هفته بعد</button>
+            <br /><br />
+           <center> @UniAutomation.Helper.winClass.Buttons("Ok", "تائید", "yes")</center>
+    
+    
+    
+    
+    
+    <style type="text/css">
+            .tftable
+            {
+                text-align:center;
+                font-size: 12px;
+                color: #333333;
+                width: 100%;
+                border-width: 1px;
+                border-color: #729ea5;
+                border-collapse: collapse;
+            }
+            .tftable th
+            {
+                font-size: 12px;
+                background-color: #acc8cc;
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #729ea5;
+                text-align: center;
+            }
+            .tftable tr
+            {
+                background-color: #d4e3e5;
+            }
+            .tftable td
+            {
+                font-size: 12px;
+                border-width: 1px;
+                padding: 8px;
+                border-style: solid;
+                border-color: #729ea5;
+            }
+            .tftable tr:hover
+            {
+                background-color: #ffffff;
+            }
+        </style>
+</div>

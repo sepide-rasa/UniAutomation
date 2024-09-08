@@ -1,0 +1,109 @@
+﻿@using Kendo.Mvc.UI;
+<div id="RptPrintStudent">
+    @using Kendo.Mvc.UI;
+    <table>
+        <tr>
+            <td align="left">
+                ترم:
+            </td>
+            <td align="right">
+                @(Html.Kendo().DropDownList()
+                                  .Name("cboSemester")
+                                  .OptionLabel("ترم...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetSemester", "RptPrintStudent");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                )
+                <span id="lblSemesterError" style="color: Red;"></span>
+            </td>
+
+            <td align="left">
+               از تاریخ:
+            </td>
+            <td>
+                @Html.TextBox("txtStartDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                <span id="lblStartDateError" style="color: Red;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+                @UniAutomation.Helper.winClass.Buttons("Excel", "اکسل", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "exit")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        var State = '@ViewBag.State';
+        $(document).ready(function () {
+
+            $('#show').button();
+            $('#Excel').button();
+            $('#exit').button();
+
+            $('#txtStartDate').datepicker({
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $('#show').click(function () {
+                //window.open('/faces/RptPrintStudent/PishSabtenam_KhabgahReport?TermId=' + $('#cboSemester').val());
+
+                //var er = false;
+                //if ($("#txtStartDate").val() == '') {
+                //    $("#txtStartDate").addClass("input-validation-error");
+                //    $('#lblStartDateError').html('لطفا تاریخ را وارد کنید.');
+                //    er = true;
+                //}
+                //else {
+                //    $('#lblStartDateError').html('');
+                //    $("#txtStartDate").removeClass("input-validation-error");
+                //}
+
+                //if ($("#cboSemester").val() == '') {
+                //    $("#cboSemester").addClass("input-validation-error");
+                //    $('#lblSemesterError').html('لطفا ترم را انتخاب کنید.');
+                //    er = true;
+                //}
+                //else {
+                //    $('#lblSemesterError').html('');
+                //    $("#cboSemester").removeClass("input-validation-error");
+                //}
+                //if (er)
+                //    return;
+
+                if (State == 1) {
+                    var Trem = 0;
+                    if ($("#cboSemester").val() != '')
+                        Trem=$("#cboSemester").val();
+                    if (isWinOpen == false) {
+                        isWinOpen = true;
+                        windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                        var t = '/faces/RptPrintStudent/StudentTermReport?TermId=' + Trem + '&Date=' + $('#txtStartDate').val();
+                        $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                    }
+                }
+            });
+            $('#Excel').click(function () {
+                var Trem = 0;
+                if ($("#cboSemester").val() != '')
+                    Trem = $("#cboSemester").val();
+                window.location.href = '@Url.Content("/faces/RptPrintStudent/CreateExcel/")' + '?TermId=' + Trem + '&Date=' + $('#txtStartDate').val();
+            });
+            $('#exit').click(function () {
+                $('#RptPrintStudent').remove();
+            });
+
+           
+        });
+    </script>
+</div>

@@ -1,0 +1,297 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="ReciverBook">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+      <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>     
+    <div>    
+        <br />
+          <a href="@Url.Content("~/Helps/تمدید و تحویل کتاب.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+       
+        <center>
+            <table>   
+                  @Html.Hidden("fldId")
+                 <tr>
+                   <td align="left">
+                    بار کد کتاب:
+                    </td>
+                    <td>
+                         @UniAutomation.Helper.winClass.textbox("txtName")
+                       @* @UniAutomation.Helper.winClass.Buttons("btnSearchName", "جستجو", "search")*@
+                    </td> 
+                   
+                    </tr>
+                    <tr>
+                     <td colspan="2">
+                        <span id="lblBookTitle" style="color: Black;"></span> 
+                        <br /> 
+                        <br />
+                        <span id="lblName" style="color: Black;"></span>
+                         <br />
+                         <br />
+                         <span id="lblDiffDay" style="color:red ;"></span>
+                    </td>
+                        
+                    </tr>
+                    <tr>
+                   @*<td align="left">
+                   کد ملی:
+                    </td>
+                    <td>
+                         @UniAutomation.Helper.winClass.textbox("txtMelliCode")
+                         @UniAutomation.Helper.winClass.Buttons("btnSearchMelliCode", "جستجو", "search")
+                    </td> *@
+                    @*<td colspan="2">
+                        <span id="lblMelliCode" style="color: Red;"></span>
+                    </td>*@
+                </tr>
+                 <tr>
+                <td colspan=4 align="center">
+                <span id="lblError" style="color: Red;"></span>  
+                </td>
+                </tr>    
+            </table>
+            <p>
+               
+                @UniAutomation.Helper.winClass.Buttons("Reciver", "تحویل","yes")
+                @UniAutomation.Helper.winClass.Buttons("Trust", "تمدید","yes")
+              @*  @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")*@
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @*@(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "عنوان کتاب" }}, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )*@
+       @* <div class="k-rtl demo-section">
+           @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblL_BookTrustSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldBookTitle).Title("عنوان کتاب");
+                    columns.Bound(p => p.fldStartDate).Title("تاریخ شروع");
+                    columns.Bound(p => p.fldTrustDate).Title("تاریخ پایان");
+                    columns.Bound(p => p.fldFoodCardId).Title("شماره کارت کتابخانه");
+                    columns.Bound(p => p.fldStateBook).Hidden();
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                               // .Read("Fill", "ReciverBook")
+            )
+        )
+        </div>*@
+    </div>
+    <script type="text/javascript">
+        var personid;
+        var isWinOpen = false;
+        var BookStock = 0;
+        var mellicode = 0;
+        var TarikhTahvil;
+        var BookTrusrId = 0;
+        $("document").ready(function () {
+            $("#Reciver").button();
+            $("#Trust").button();
+            //$("#EditLink").button();
+            $("#exit").button();
+            $('#Help').button();
+            //$('#btnSearchName').button();
+            // $('#btnSearchMelliCode').button();
+
+            //            $('#txtName').val('@ViewBag.Name');
+            //            $('#txtMelliCode').val('@ViewBag.MelliCode');
+            //            personid = '@ViewBag.personid';
+
+
+            $("#exit").click(function () {
+                $("#ReciverBook").remove();
+            });
+
+            $('#ReciverBook').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    $('#lblDiffDay').html("");
+                    $('#lblBookTitle').html("");
+                    $('#lblName').html("");
+                    $('#lblError').html("");
+                    if ($('#txtName').val().length > 0) {
+                        var id = $('#txtName').val();
+                        $.ajax({
+                            url: '/ReciverBook/LoadCart',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { rfid: id },
+                            error: function (xhr, status, error) {
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                if (result.Err == "") {
+                                    BookStock = result.BookStockID;
+                                    $('#lblBookTitle').html("نام کتاب:" + result.BookTitle);
+                                    $('#lblName').html("نام و نام خانوادگی:" + result.PersonName);
+                                    if (result.DiffDay > 0)
+                                        $('#lblDiffDay').html("تعداد روز تاخیر:" + result.DiffDay);
+                                    BookTrusrId = result.BookTrustId;
+                                    $('#lblError').html(result.Err);
+                                }
+                                else {
+                                    $('#lblError').html(result.Err);
+                                    
+                                }
+                                
+
+                            }
+                        });
+                    }
+
+                }
+            });
+
+            $('#btnSearchName').click(function () {
+                windowAppend("#ReciverBook", "/faces/SearchFoodCartsIns/index/6");
+            });
+
+            $('#Trust').click(function () {
+                var url='/faces/ReciverBook/Trust?BookTrusrId='+BookTrusrId ;
+                    $.ajax({
+                        url: url,
+                        type: 'get',
+                        datatype: 'json',
+                        error: function (xhr, status, error) {
+                            alert(xhr + status);
+                        },
+                        success: function (result) {
+                            $('#lblError').html(result.Error);
+                            if (result.Error == "") {
+                                if (isWinOpen == false) {
+                                    windowAppend("#ReciverBook", "/faces/L_ExtensionTrust/Index?id=" + BookTrusrId);
+                                    isWinOpen = true;
+
+                                }
+                            }
+
+                        }
+                    });
+            });
+            $("#Reciver").click(function () {
+                TarikhTahvil = '@ViewBag.TarikhTahvil';
+                var data = {
+                    BookTrusrId: BookTrusrId,
+                    TarikhTahvil: TarikhTahvil
+                    
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/ReciverBook/Reciver")', "#win");
+                }
+
+
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "ReciverBook")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+
+            $("#AddLink").click(function () {
+                var er = false;
+
+                if (er)
+                    return;
+
+                var data = {
+                    fldName: BookStock,
+                    fldMelliCode: mellicode,
+                    fldDesc: $("#txtDesc").val(),
+                    fldId: $("#fldId").val()
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/ReciverBook/Save")', "#win");
+                }
+                Clear();
+            });
+
+        });
+        function Clear() {
+            $('#fldId').val(0);
+            $('#txtDesc').val('');
+        }
+
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+//                    var url = '@Url.Action("Reload", "ReciverBook")';
+//                    Reload(url, 'Grid', '2', 0, 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+
+

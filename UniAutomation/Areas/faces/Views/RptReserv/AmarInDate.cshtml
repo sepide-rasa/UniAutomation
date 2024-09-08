@@ -1,0 +1,51 @@
+﻿<div>
+
+    <br /><br />
+    <table>
+        <tr>
+            <td>
+                از تاریخ:
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtStart")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                تا تاریخ:
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtEnd")
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("btnShow", "نمایش", "yes")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        $(document).ready(function () {
+            $('#btnShow').button();
+            $('#txtStart').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtEnd').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+            $('#txtEnd').datepicker({
+                showButtonPanel: true
+            });
+            $('#btnShow').click(function () {
+                // window.open('/faces/RptReserv/RptAmarKoli?Sdate=' + $('#txtStart').val() + '&Edate=' + $('#txtEnd').val());
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/RptReserv/RptAmarInDate?Sdate=' + $('#txtStart').val() + '&Edate=' + $('#txtEnd').val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+        });
+    </script>
+</div>

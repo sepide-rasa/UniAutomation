@@ -1,0 +1,346 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="L_LibraryCard">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    
+
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/تعریف%20کارت%20کنابخانه.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table> 
+            @Html.Hidden("fldID")
+           
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نوع کاربری:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                      .Name("cboType")
+                                      .OptionLabel("نوع کاربری...")
+                                      .BindTo(new List<SelectListItem>() {
+                                                      new SelectListItem() {
+                                                          Text = "دانشجو",
+                                                          Value = "1"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "استاد",
+                                                          Value = "2"
+                                                      },
+                                                        new SelectListItem() {
+                                                          Text = "کارمند",
+                                                          Value = "3"
+                                                      }
+                                                  })                    
+                                    )                       
+                        <span id="lblTypeError" style="color: Red;"></span>
+                    </td>                    
+                     <td align="left">
+                     وضعیت:
+                     </td>
+                     <td>
+                        @(Html.Kendo().DropDownList()
+                                               .Name("cboStatus")
+                                      .OptionLabel("وضعیت...")
+                                      .BindTo(new List<SelectListItem>() {
+                                                      new SelectListItem() {
+                                                          Text = "غیر فعال",
+                                                          Value = "false"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "فعال",
+                                                          Value = "true"
+                                                      }
+                                                  })
+                                                         
+                                    )                       
+                        <span id="lblStatusError" style="color: Red;"></span>
+                    </td>
+    
+                    </tr>
+                
+                   <tr>
+                    
+                    <td align="left">
+                     نام و نام خانوادگی (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+                    <td align="left">
+                        کد ملی:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtMeliCode", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                    </td>
+                     </tr>
+                </table>     
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "کد ملی" }, new { ID = "1", Name = "نام" }, new { ID = "5", Name = "نام خانوادگی" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblL_LibraryCardSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldName).Title("نام شخص");
+                    columns.Bound(p => p.fldFamily).Title("نام و نام خانوادگی");
+                    columns.Bound(p => p.fldMelliCode).Title("کد ملی");
+                    columns.Bound(p => p.fldStatus).Title("وضعیت");
+
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                               .Read("Fill", "L_LibraryCard")
+            )
+        )
+        </div>
+        
+    </div>
+
+    <script type="text/javascript">
+        var Sid;
+        var Pid;
+        var Tid;
+        var Name;
+        var MeliCode;
+        var Famil;
+        var isWinOpen = false;
+        $("document").ready(function () {
+
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+           
+            $("#exit").click(function () {
+                $("#L_LibraryCard").remove();
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "L_LibraryCard")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+            $('#cboType').change(function () {
+                if ($("#cboType").val() == 1) {
+                    $('#txtName').keyup(function () {
+                        if (isWinOpen == false) {
+                            windowAppend("#L_LibraryCard", "/faces/SearchStudentIns/index/1");
+                            isWinOpen = true;
+                        }
+                    });
+                    Pid = null;
+                    Tid = null;
+                    var url = '@Url.Action("Reload", "L_LibraryCard")';
+                    Reload(url, 'Grid', '4', '', 30, 1);
+                }
+                else if ($("#cboType").val() == 2) {
+                    $('#txtName').keyup(function () {
+                        if (isWinOpen == false) {
+                            windowAppend("#L_LibraryCard", "/faces/SearchTeacherIns");
+                            isWinOpen = true;
+                        }
+                    });
+                    Sid = null;
+                    Pid = null;
+                    var url = '@Url.Action("Reload", "L_LibraryCard")';
+                    Reload(url, 'Grid', '3', '', 30, 1);
+                }
+                else if ($("#cboType").val() == 3) {
+                    $('#txtName').keyup(function () {
+                        if (isWinOpen == false) {
+                            windowAppend("#L_LibraryCard", "/faces/SearchPersonelIns");
+                            isWinOpen = true;
+                        }
+                    });
+                    Sid = null;
+                    Tid = null;
+                    var url = '@Url.Action("Reload", "L_LibraryCard")';
+                    Reload(url, 'Grid', '2', '', 30, 1);
+                }
+            });
+
+
+            jQuery("#EditLink").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var URL = '@Url.Content("~/L_LibraryCard/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) { 
+
+                            $('#fldId').val(data.fldId);
+                            var v = $("#cboStatus").data("kendoDropDownList");
+                            v.value(data.fldStatus);
+                            $('#txtName').val(data.fldName);
+                            $('#txtMeliCode').val(data.fldMelliCode);
+
+                            if ((data.fldStudentId) != null) {
+                                var a = $("#cboType").data("kendoDropDownList");
+                                a.value(1);
+                            }
+                            else if ((data.fldTeacherId) != null) {
+                                var a = $("#cboType").data("kendoDropDownList");
+                                a.value(2);
+                            }
+                            else if ((data.fldPersonalId) != null) {
+                                var a = $("#cboType").data("kendoDropDownList");
+                                a.value(3);
+                            }
+
+
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            });
+
+
+            $('#DelLink').click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/L_LibraryCard/Delete")';
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                Clear();
+            });
+
+
+            $("#AddLink").click(function () {
+                var er = false;
+                if ($("#cboStatus").val() == '') {
+                    $("#cboStatus").addClass("input-validation-error");
+                    $('#lblStatusError').html('لطفا وضعیت را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblStatusError').html('');
+                if (er)
+                    return;
+
+                var data = {
+                    fldID: $('#fldID').val(),
+                    fldPersonalId: Pid,
+                    fldStudentId: Sid,
+                    fldTeacherId: Tid,
+                    fldStatus: $('#cboStatus').val()
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/L_LibraryCard/Save")', "#win");
+                }
+                Clear();
+            });
+        });
+        function Clear() {
+            $('#fldId').val(0);
+
+
+        }
+
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "L_LibraryCard")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+

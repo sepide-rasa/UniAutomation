@@ -1,0 +1,577 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="L_Book">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/تعریف%20کتاب.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>   
+                  @Html.Hidden("fldId")
+                 <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نام کتابخانه:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                          .Name("cboLibraryId")
+                                  .OptionLabel("نام کتابخانه...")
+                                          .DataTextField("fldLibraryId")
+                                  .DataValueField("fldId")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetLibraryId", "L_Book");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+                        <span id="lblLibraryIdError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نوع رده بندی کتاب:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                                  .Name("cboCategoryId")
+                                  .OptionLabel("نوع رده بندی...")
+                                               .DataTextField("fldCategoryId")
+                                  .DataValueField("fldId")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetCategoryId", "L_Book");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+                        <span id="lblCategoryIdError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                <td align="left">
+                        <span style="color: Red;">*</span>عنوان کتاب:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtBookTitle")
+                        <span id="lblBookTitleError" style="color: Red;"></span>
+                    </td>
+                     <td align="left">
+                        <span style="color: Red;">*</span>نویسنده:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtAuthor")
+                        <span id="lblAuthorError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                <td align="left">
+                        <span style="color: Red;">*</span>مترجم:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtInterpreter")
+                        <span id="lblInterpreterError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>ناشر:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtPublisher")  
+                        <span id="lblPublisherError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                 <td align="left">
+                        <span style="color: Red;">*</span>نام فارسی:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtPersianName")
+                        <span id="lblPersianNameError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>نام انگلیسی:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtEnglishName")
+                        <span id="lblEnglishNameError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>Isbn:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtIsbn")
+                        <span id="lblIsbnError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>سال انتشار:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtPublicationYear")
+                        <span id="lblPublicationYearError" style="color: Red;"></span>
+                    </td>
+                </tr> 
+                <tr>
+                <td align="left">
+                        <span style="color: Red;">*</span>بارکد:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtBarCode")
+                        <span id="lblBarCodeError" style="color: Red;"></span>
+                    </td>
+                   
+                </tr>   
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "1", Name = "عنوان کتاب" }, new { ID = "2", Name = "نام فارسی" }, new { ID = "3", Name = "نام انگلیسی" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblL_BookSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldBookTitle).Title("عنوان کتاب");
+                    columns.Bound(p => p.fldPersianName).Title("نام فارسی");
+                    columns.Bound(p => p.fldEnglishName).Title("نام انگلیسی");
+                    columns.Bound(p => p.fldAuthor).Title("نویسنده");
+                    columns.Bound(p => p.fldPublisher).Title("ناشر");
+                    columns.Bound(p => p.fldInterpreter).Title("مترجم");     
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                           .Read("Fill", "L_Book")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#L_Book").remove();
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "L_Book")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+            $('#L_Book').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#L_Book').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+            jQuery("#AddLink").click(function () {
+                SaveRecord();
+            });
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            
+            $("#cboLibraryId").keyup(function () {
+                if ($("#cboLibraryId").val() != '') {
+                    $("#cboLibraryId").removeClass("input-validation-error");
+                    $("#lblLibraryIdError").html("");
+                }
+                else {
+                    $("#cboLibraryId").addClass("input-validation-error");
+                    $('#lblLibraryIdError').html('لطفا نام کتابخانه را وارد کنید.');
+                }
+            });
+            $("#cboCategoryId").keyup(function () {
+                if ($("#cboCategoryId").val() != '') {
+                    $("#cboCategoryId").removeClass("input-validation-error");
+                    $("#lblCategoryIdError").html("");
+                }
+                else {
+                    $("#cboCategoryId").addClass("input-validation-error");
+                    $('#lblCategoryIdError').html('لطفا نوع رده بندی را وارد کنید.');
+                }
+            });
+            $("#txtBookTitle").keyup(function () {
+                if ($("#txtBookTitle").val() != '') {
+                    $("#txtBookTitle").removeClass("input-validation-error");
+                    $("#lblBookTitleError").html("");
+                }
+                else {
+                    $("#txtBookTitle").addClass("input-validation-error");
+                    $('#lblBookTitleError').html('لطفا عنوان کتاب را وارد کنید.');
+                }
+            });
+            $("#txtAuthor").keyup(function () {
+                if ($("#txtAuthor").val() != '') {
+                    $("#txtAuthor").removeClass("input-validation-error");
+                    $("#lblAuthorError").html("");
+                }
+                else {
+                    $("#txtAuthor").addClass("input-validation-error");
+                    $('#lblAuthorError').html('لطفا نام نویسنده را وارد کنید.');
+                }
+            });
+            $("#txtInterpreter").keyup(function () {
+                if ($("#txtInterpreter").val() != '') {
+                    $("#txtInterpreter").removeClass("input-validation-error");
+                    $("#lblInterpreterError").html("");
+                }
+                else {
+                    $("#txtInterpreter").addClass("input-validation-error");
+                    $('#lblInterpreterError').html('لطفا نام مترجم را وارد کنید.');
+                }
+            });
+            $("#txtPublisher").keyup(function () {
+                if ($("#txtPublisher").val() != '') {
+                    $("#txtPublisher").removeClass("input-validation-error");
+                    $("#lblPublisherError").html("");
+                }
+                else {
+                    $("#txtPublisher").addClass("input-validation-error");
+                    $('#lblPublisherError').html('لطفا نام ناشر را وارد کنید.');
+                }
+            });
+            $("#txtPersianName").keyup(function () {
+                if ($("#txtPersianName").val() != '') {
+                    $("#txtPersianName").removeClass("input-validation-error");
+                    $("#lblPersianNameError").html("");
+                }
+                else {
+                    $("#txtPersianName").addClass("input-validation-error");
+                    $('#lblPersianNameError').html('لطفا نام فارسی را وارد کنید.');
+                }
+            });
+            $("#txtEnglishName").keyup(function () {
+                if ($("#txtEnglishName").val() != '') {
+                    $("#txtEnglishName").removeClass("input-validation-error");
+                    $("#lblEnglishNameError").html("");
+                }
+                else {
+                    $("#txtEnglishName").addClass("input-validation-error");
+                    $('#lblEnglishNameError').html('لطفا نام انگلیسی را وارد کنید.');
+                }
+            });
+
+            $("#txtIsbn").keyup(function () {
+                if ($("#txtIsbn").val() != '') {
+                    $("#txtIsbn").removeClass("input-validation-error");
+                    $("#lblIsbnError").html("");
+                }
+                else {
+                    $("#txtIsbn").addClass("input-validation-error");
+                    $('#lblIsbnError').html('لطفا Isbn را وار کنید.'); 
+                }
+            });
+
+            $("#txtPublicationYear").keyup(function () {
+                if ($("#txtPublicationYear").val() != '') {
+                    $("#txtPublicationYear").removeClass("input-validation-error");
+                    $("#lblPublicationYearError").html("");
+                }
+                else {
+                    $("#txtPublicationYear").addClass("input-validation-error");
+                    $('#lblPublicationYearError').html('لطفا سال انتشار را وار کنید.');
+                }
+            });
+
+            $("#txtBarCode").keyup(function () {
+                if ($("#txtBarCode").val() != '') {
+                    $("#txtBarCode").removeClass("input-validation-error");
+                    $("#lblBarCodeError").html("");
+                }
+                else {
+                    $("#txtBarCode").addClass("input-validation-error");
+                    $('#lblBarCodeError').html('لطفا بارکد را وار کنید.');
+                }
+            });
+
+        }); 
+        function Clear() {
+            $('#txtBookTitle').val('');
+            $('#txtAuthor').val('');
+            $('#txtInterpreter').val('');
+            $('#txtPublisher').val('');
+            $('#txtPersianName').val('');
+            $('#txtEnglishName').val('');
+            $('#txtIsbn').val('');
+            $('#txtPublicationYear').val('');
+            $('#txtBarCode').val('');
+            $('#fldId').val(0);
+            $('#txtDesc').val('');
+        }
+          
+            function DeleteRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/L_Book/Delete")';
+                    if (MetroDialogOpen == false) {
+                        MetroDialogOpen = true;
+                        windowAppend("body", URL);
+                        $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                    }
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                Clear();
+            }
+          function SaveRecord() {
+                var er = false;
+                if ($("#cboLibraryId").val() == '') {
+                    $("#cboLibraryId").addClass("input-validation-error");
+                    $('#lblLibraryIdError').html('لطفا نام کتابخانه را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblLibraryIdError').html('');
+                if ($("#cboCategoryId").val() == '') {
+                    $("#cboCategoryId").addClass("input-validation-error");
+                    $('#lblCategoryIdError').html('لطفا نوع رده بندی را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblCategoryIdError').html('');
+                if ($("#txtBookTitle").val() == '') {
+                    $("#txtBookTitle").addClass("input-validation-error");
+                    $('#lblBookTitleError').html('لطفا عنوان کتاب را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblBookTitleError').html('');
+
+                if ($("#txtAuthor").val() == '') {
+                    $("#txtAuthor").addClass("input-validation-error");
+                    $('#lblAuthorError').html('لطفا نام نویسنده را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblAuthorError').html('');
+
+                if ($("#txtInterpreter").val() == '') {
+                    $("#txtInterpreter").addClass("input-validation-error");
+                    $('#lblInterpreterError').html('لطفا نام مترجم را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblInterpreterError').html('');
+
+                if ($("#txtPublisher").val() == '') {
+                    $("#txtPublisher").addClass("input-validation-error");
+                    $('#lblPublisherError').html('لطفا نام ناشر را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblPublisherError').html('');
+
+                if ($("#txtPersianName").val() == '') {
+                    $("#txtPersianName").addClass("input-validation-error");
+                    $('#lblPersianNameError').html('لطفا نام فارسی را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblPersianNameError').html('');
+
+                if ($("#txtEnglishName").val() == '') {
+                    $("#txtEnglishName").addClass("input-validation-error");
+                    $('#lblEnglishNameError').html('لطفا نام انگلیسی را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblEnglishNameError').html('');
+
+                if ($("#txtIsbn").val() == '') {
+                    $("#txtIsbn").addClass("input-validation-error");
+                    $('#lblIsbnError').html('لطفا Isbn را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblIsbnError').html('');
+
+                if ($("#txtPublicationYear").val() == '') {
+                    $("#txtPublicationYear").addClass("input-validation-error");
+                    $('#lblPublicationYearError').html('لطفا سال انتشار را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblPublicationYearError').html('');
+                    if ($("#txtBarCode").val() == '') {
+                    $("#txtBarCode").addClass("input-validation-error");
+                    $('#lblBarCodeError').html('لطفا بارکد را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblBarCodeError').html('');
+     
+                if (er)
+                    return;
+
+                var data = {
+                    fldLibraryId: $("#cboLibraryId").val(),
+                    fldCategoryId: $("#cboCategoryId").val(),
+                    fldBookTitle: $("#txtBookTitle").val(),
+                    fldAuthor: $("#txtAuthor").val(),
+                    fldInterpreter: $("#txtInterpreter").val(),
+                    fldPublisher: $("#txtPublisher").val(),
+                    fldPersianName: $("#txtPersianName").val(),
+                    fldEnglishName: $("#txtEnglishName").val(),
+                    fldIsbn: $("#txtIsbn").val(),
+                    fldPublicationYear: $("#txtPublicationYear").val(),
+                    fldBarCode: $("#txtBarCode").val(),
+                    fldDesc: $("#txtDesc").val(),
+                    fldId: $("#fldId").val(),
+                    
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/L_Book/Save")', "#win");
+                }
+                Clear();
+            }
+            function EditRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var URL = '@Url.Content("~/L_Book/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            var v = $("#cboLibraryId").data("kendoDropDownList");
+                            v.value(data.fldLibraryId);
+                            var j = $("#cboCategoryId").data("kendoDropDownList");
+                            j.value(data.fldCategoryId);
+                            $('#txtBookTitle').val(data.fldBookTitle);
+                            $('#txtAuthor').val(data.fldAuthor);
+                            $('#txtInterpreter ').val(data.fldInterpreter);
+                            $('#txtPublisher ').val(data.fldPublisher);
+                            $('#txtPersianName ').val(data.fldPersianName);
+                            $('#txtEnglishName ').val(data.fldEnglishName);
+                            $('#txtIsbn ').val(data.fldIsbn);
+                            $('#txtPublicationYear').val(data.fldPublicationYear);
+                            $('#txtBarCode').val(data.fldBarCode);
+                            $('#fldId').val(data.fldId);
+                            
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "L_Book")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+

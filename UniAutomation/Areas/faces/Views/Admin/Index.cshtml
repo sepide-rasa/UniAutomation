@@ -1,0 +1,738 @@
+﻿<div id="Home">   
+@using Kendo.Mvc.UI;
+     <script src="@Url.Content("~/Scripts/kendo.treeview.min.js")" type="text/javascript"></script>
+    <link href="@Url.Content("~/Content/style.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Content/jQueryRotate.2.2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    <style scoped="scoped">
+        .treeview-back
+        {
+            float: left;
+            width: 220px;
+            margin: 30px;
+            padding: 20px;
+            -moz-box-shadow: 0 1px 2px rgba(0,0,0,0.45), inset 0 0 30px rgba(0,0,0,0.07);
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.45), inset 0 0 30px rgba(0,0,0,0.07);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.45), inner 0 0 30px rgba(0,0,0,0.07);
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+        }
+    </style>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        var angleSec = 0;
+        var angleMin = 0;
+        var angleHour = 0;
+        var min, hor;
+        setInterval(function () {
+            angleSec = ((angleSec / 6 + 1) * 6);
+            $("#seconds").rotate(angleSec);
+            if (angleSec >= 360) {
+
+                angleMin = (angleMin / 6 + 1) * 6;
+                $("#minutes").rotate(angleMin);
+                angleSec = 0;
+            }
+            if (angleMin >= 360) {
+                angleMin = 0;
+            }
+
+        }, 1000);
+        var Nodeid;
+        $(document).ready(function () {
+            var datetime = '@ViewBag.time';
+            angleHour = datetime.substring(0, 2);
+            angleMin = datetime.substring(3, 5);
+            angleSec = datetime.substring(6, 8);
+            angleSec = angleSec * 6;
+            angleMin = angleMin * 6;
+            angleHour = (angleHour * 5 + (angleMin / 6) / 12) * 6;
+            $("#seconds").rotate(angleSec);
+            $("#minutes").rotate(angleMin);
+            $("#hours").rotate(angleHour);
+
+            $('#Student').click(function () {
+                windows('#Main', '/faces/Student');
+            });
+            $('#EducationGroup').click(function () {
+                windows('#Main', '/faces/EducationGroup');
+            });
+            $('#Cource').click(function () {
+                windows('#Main', '/faces/Course');
+            });
+            $('#Section').click(function () {
+                windows('#Main', '/faces/Section');
+            });
+            $('#Status').click(function () {
+                windows('#Main', '/faces/Status');
+            });
+            $('#Personal').click(function () {
+                windows('#Main', '/faces/Personel');
+            });
+            $('#Teachers').click(function () {
+                windows('#Main', '/faces/Teachers');
+            });
+            $('#Selfs').click(function () {
+                windows('#Main', '/faces/Selfs');
+            });
+            $('#FoodCarts').click(function () {
+                windows('#Main', '/faces/FoodCarts');
+            });
+            $('#FoodInfo').click(function () {
+                windows('#Main', '/faces/FoodInfo');
+            });
+            $('#Limited').click(function () {
+                windows('#Main', '/faces/Limited');
+            });
+            $('#L_BookCategory').click(function () {
+                windows('#Main', '/faces/L_BookCategory');
+            });
+            $('#L_Library').click(function () {
+                windows('#Main', '/faces/L_Library');
+            });
+            $('#L_Book').click(function () {
+                windows('#Main', '/faces/L_Book');
+            });
+            $('#FoodPrograming').click(function () {
+                windows('#Main', '/faces/FoodPrograming');
+            });
+            $('#Charge').click(function () {
+                windows('#Main', '/faces/Charge');
+            });
+            $('#Tariff').click(function () {
+                windows('#Main', '/faces/Tariff');
+            }); 
+            $('#DarsadTakhfif').click(function () {
+                windows('#Main', '/faces/DarsadTakhfif');
+            });
+            $('#SharjGoruhi').click(function () {
+                windows('#Main', '/faces/SharjGoruhi');
+            });
+            $('#Eating').click(function () {
+                windows('#Main', '/faces/Eating');
+            });
+            $('#L_LibraryCard').click(function () {
+                windows('#Main', '/faces/L_LibraryCard');
+            });
+            $('#L_BookStock').click(function () {
+                windows('#Main', '/faces/SearchBook/index/2');
+            }); 
+            $('#SelectedBookBarcode').click(function () {
+                windows('#Main', '/faces/SearchBookSelect/index/1');
+            });
+            $('#L_BookTrust').click(function () {
+                windows('#Main', '/faces/L_BookTrust');
+            }); 
+            $('#ReciverBook').click(function () {
+                windows('#Main', '/faces/ReciverBook');
+            }); 
+            $('#B_tblBuildingNewDorm').click(function () {
+                windows('#Main', '/faces/B_tblBuildingNewDorm');
+            }); 
+            $('#B_tblResponsibilitis').click(function () {
+                windows('#Main', '/faces/B_tblResponsibilitis');
+            });
+            $('#BuildRoom').click(function () {
+                windows('#Main', '/faces/BuildRoom');
+            });
+            $('#PeriodAuthorized').click(function () {
+                windows('#Main', '/faces/PeriodAuthorized');
+            });
+            $('#entryExtDrm').click(function () {
+                windows('#Main', '/faces/entryExtDrm');
+            });
+            $('#CallRegister_Section').click(function () {
+                windows('#Main', '/faces/CallRegister_Section');
+            });
+            $('#CallRegister_Term').click(function () {
+                windows('#Main', '/faces/CallRegister_Term');
+            });
+            $('#B_tblAllocationResponsibilitis').click(function () {
+                windows('#Main', '/faces/B_tblAllocationResponsibilitis');
+            });
+            $('#B_tblEnterDorm_Sarbarg').click(function () {
+                windows('#Main', '/faces/B_tblEnterDorm_Sarbarg');
+            });
+            $('#B_tblStatusDorm').click(function () {
+                windows('#Main', '/faces/B_tblStatusDorm');
+            }); 
+            $('#B_tblSectionEducation').click(function () {
+                windows('#Main', '/faces/B_tblSectionEducation');
+            }); 
+            $('#B_tblCostStaying').click(function () {
+                windows('#Main', '/faces/B_tblCostStaying');
+            }); 
+            $('#B_tblSettlementsTime').click(function () {
+                windows('#Main', '/faces/B_tblSettlementsTime');
+            }); 
+            $('#B_tblFinesSection').click(function () {
+                windows('#Main', '/faces/B_tblFinesSection');
+            }); 
+            $('#B_tblFinesTerm').click(function () {
+                windows('#Main', '/faces/B_tblFinesTerm');
+            }); 
+            $('#B_tblCoefficient').click(function () {
+                windows('#Main', '/faces/B_tblCoefficient');
+            }); 
+            $('#B_tblEquimpmentRoom').click(function () {
+                windows('#Main', '/faces/B_tblEquimpmentRoom');
+            }); 
+            $('#B_tblPeriodDormitory').click(function () {
+                windows('#Main', '/faces/B_tblPeriodDormitory');
+            }); 
+            $('#B_tblRegistrationEvent').click(function () {
+                windows('#Main', '/faces/B_tblRegistrationEvent');
+            }); 
+            $('#B_tblRegulations').click(function () {
+                windows('#Main', '/faces/B_tblRegulations');
+            }); 
+            $('#B_tblDamagePerson').click(function () {
+                windows('#Main', '/faces/B_tblDamagePerson');
+            });
+            $('#B_tblCallRegister_Status').click(function () {
+                windows('#Main', '/faces/B_tblCallRegister_Status');
+            });
+            $('#User').click(function () {
+                windows('#Main', '/faces/User');
+            });
+            $('#AppPart').click(function () {
+                windows('#Main', '/faces/ApplicationPart');
+            });
+            $('#Permission').click(function () {
+                windows('#Main', '/faces/Permission');
+            });
+            $('#Groups').click(function () {
+                windows('#Main', '/faces/UserGroups');
+            });
+            $('#RptReserv').click(function () {
+                windows('#Main', '/faces/RptReserv');
+            });
+            $('#RptHistoryReserv').click(function () {
+                windows('#Main', '/faces/RptReserv/History');
+            });
+            $('#RptChaj').click(function () {
+                windows('#Main', '/faces/RptReserv/rptMande');
+            });
+            $('#FoodServ').click(function () {
+                windows('#Main', '/faces/FoodServe');
+            });
+            $('#ChangePass').click(function () {
+                windows('#Main', '/faces/ChangePass');
+            });
+            $('#RptNotEat').click(function () {
+                windows('#Main', '/faces/RptReserv/NotEat');
+            });
+            $('#RptEtebar').click(function () {
+                windows('#Main', '/faces/RptEtebar');
+            });
+            $('#GroupBarCodeBookStock').click(function () {
+                // window.open('/faces/GroupBarCodeBookStock');
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/GroupBarCodeBookStock';
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+            $('#RptAmar').click(function () {
+                windows('#Main', '/faces/RptReserv/Amar');
+            }); 
+            $('#RptAmarInDate').click(function () {
+                windows('#Main', '/faces/RptReserv/AmarInDate');
+            });
+            $('#Setting').click(function () {
+                windows('#Main', '/faces/Setting');
+            });
+            $('#OnlinePay').click(function () {
+                windows('#Main', '/faces/RptOnlinePay');
+            });
+            $('#RptAmarKoli').click(function () {
+                windows('#Main', '/faces/RptReserv/AmarKoli');
+            });
+            $('#RptEnterDorm').click(function () {
+                windows('#Main', '/faces/RptEnterDorm');
+            });
+            $('#RptDamage').click(function () {
+                windows('#Main', '/faces/RptDamage');
+            });
+            $('#Holiday').click(function () {
+                windows('#Main', '/faces/Holiday');
+            });
+            $('#CovertStudentInfo').click(function () {
+                windows('#Main', '/faces/CovertStudentInfo');
+            }); 
+            $('#CovertPersonelInfo').click(function () {
+                windows('#Main', '/faces/CovertPersonelInfo');
+            });
+            $('#VorudBeKhabgah').click(function () {
+                windows('#Main', '/faces/VorudBeKhabgah');
+            });
+            $('#B_tblTerms').click(function () {
+                windows('#Main', '/faces/B_tblTerms');
+            });
+            $('#Morakhasi').click(function () {
+                windows('#Main', '/faces/SearchEnterDorm_Sarbarg/index/1');
+            }); 
+            $('#PayOff').click(function () {
+                windows('#Main', '/faces/PayOff');
+            }); 
+            $('#RptBook_Takhir').click(function () {
+                windows('#Main', '/faces/RptBook_Takhir');
+            }); 
+            $('#RptPishSabtenam_Khabgah').click(function () {
+                windows('#Main', '/faces/RptPishSabtenam_Khabgah/Index?State=1');
+            });
+            $('#RptStudentTerm').click(function () {
+                windows('#Main', '/faces/RptPrintStudent/Index?State=1');
+            });
+            $('#RptGozareshBookLibrary').click(function () {
+                windows('#Main', '/faces/RptGozareshBookLibrary');
+            }); 
+            $('#RptVorudBeKhabgah').click(function () {
+                windows('#Main', '/faces/RptVorudBeKhabgah');
+            });
+            $('#RptTahvilGhaza').click(function () {
+                windows('#Main', '/faces/RptTahvilGhaza');
+            });
+            $('#SearchBookStock').click(function () {
+                windows('#Main', '/faces/SearchBookStock');
+            });
+            $('#ParametrHay_Dargah_Pardakht').click(function () {
+                windows('#Main', '/faces/ParametrHay_Dargah_Pardakht');
+            });
+            $('#Dargah_Pardakht').click(function () {
+                windows('#Main', '/faces/Dargah_Pardakht');
+            });
+            $('#Dargah_Pardakht_Info').click(function () {
+                windows('#Main', '/faces/Dargah_Pardakht_Info');
+            });
+            $('#Etelaeye').click(function () {
+                windows('#Main', '/faces/Etelaeye');
+            });
+            $('#RptEtebar_Date').click(function () {
+                windows('#Main', '/faces/RptEtebar_Date/Index?State=1');
+            });
+            $('#RptTrustBook').click(function () {
+                windows('#Main', '/faces/RptEtebar_Date/Index?State=2');
+            });
+            $('#Hash').click(function () {
+                windows('#Main', '/faces/Hash');
+            });
+            $('#EatFood_Date').click(function () {
+                windows('#Main', '/faces/EatFood_Date');
+            });
+            $('#PrintMadrak').click(function () {
+                windows('#Main', '/faces/SearchStudent/index/2');
+            });
+            $('#Equipment').click(function () {
+                windows('#Main', '/faces/Equipment');
+            });
+            $('#SharjGoruhiPersonel').click(function () {
+                windows('#Main', '/faces/SharjGoruhiPersonel/index?state=Personel');
+            });
+            $('#SharjGoruhiTeacher').click(function () {
+                windows('#Main', '/faces/SharjGoruhiPersonel/index?state=Teacher');
+            });
+            $('#RezervGoruhi').click(function () {
+                windows('#Main', '/faces/RezervGoruhi');
+            });
+            $('#RezervGoruhiPersonel').click(function () {
+                windows('#Main', '/faces/RezervGoruhiPersonel/index?state=Personel');
+            });
+            $('#RezervGoruhiTeacher').click(function () {
+                windows('#Main', '/faces/RezervGoruhiPersonel/index?state=Teacher');
+            });
+            $('#PrintKartGoruhi').click(function () {
+                windows('#Main', '/faces/PrintKartGoruhi');
+            });
+            
+        }); 
+        
+    </script>
+    <div class="k-rtl" dir="rtl">
+        @(Html.Kendo().TabStrip()
+          .Name("tabstrip")
+          .SelectedIndex(0)
+          .Items(tabstrip =>
+          {
+              tabstrip.Add().Text("صفحه اصلی")
+                  .Selected(true)
+                  .Content(Html.Kendo().Splitter()
+                  .Name("MainPage")
+                  .Orientation(SplitterOrientation.Horizontal)
+                  .HtmlAttributes(new { @style = "height:600px", @Class = "k-rtl", @dir = "rtl" })
+                    .Panes(p =>
+                    {
+                        p.Add().Content(@<div>
+                            <div id="Main">
+                            </div>
+                        </div>);
+                        p.Add().Size("220px").Content(@<div dir="rtl">
+                           @Html.Kendo().PanelBar().Name("Admin").ExpandMode(PanelBarExpandMode.Single).Items(it =>
+                                 {
+                                     it.Add().Text("اطلاعات پایه")                                         
+                                         .Items(items =>
+                                         {
+                                             items.Add().Text("تعریف ترم")
+                                                  .ImageUrl(Url.Content("~/content/images/Network-Status-Medium-connection-icon.png"))
+                                                 .HtmlAttributes(new { @id = "B_tblTerms" });
+                                             items.Add().Text("تعریف مقطع تحصیلی")
+                                                  .ImageUrl(Url.Content("~/content/images/Network-Status-Medium-connection-icon.png"))
+                                                 .HtmlAttributes(new { @id = "Section" });
+                                             items.Add().Text("تعریف وضعیت ها")
+                                                  .ImageUrl(Url.Content("~/content/images/10-128.png"))
+                                                 .HtmlAttributes(new { @id = "Status" });
+                                             items.Add().Text("تعریف گروه آموزشی")
+                                                  .ImageUrl(Url.Content("~/content/images/Department.png"))
+                                                 .HtmlAttributes(new { @id = "EducationGroup" });
+                                             items.Add().Text("تعریف رشته های درسی")
+                                                .ImageUrl(Url.Content("~/content/images/binary-tree.png"))
+                                                .HtmlAttributes(new { @id = "Cource" });
+                                             items.Add().Text("تعریف دانشجو")
+                                                 .ImageUrl(Url.Content("~/content/images/graduated-icon.png"))
+                                                 .HtmlAttributes(new { @id = "Student" });
+                                             items.Add().Text("تبدیل اطلاعات دانشجویان")
+                                                 .ImageUrl(Url.Content("~/content/images/graduated-icon.png"))
+                                                 .HtmlAttributes(new { @id = "CovertStudentInfo" });
+                                             /* items.Add().Text("تبدیل اطلاعات اساتید")
+                                                  .ImageUrl(Url.Content("~/content/images/graduated-icon.png"))
+                                                  .HtmlAttributes(new { @id = "CovertPersonelInfo" });*/
+                                             items.Add().Text("تعریف کارمندان")
+                                                 .ImageUrl(Url.Content("~/content/images/Admin-icon.png"))
+                                                 .HtmlAttributes(new { @id = "Personal" });
+                                             items.Add().Text("تعریف اساتید")
+                                                  .ImageUrl(Url.Content("~/content/images/Manager-icon.png"))
+                                                 .HtmlAttributes(new { @id = "Teachers" });
+                                             items.Add().Text("تعریف سلف سرویس")
+                                                  .ImageUrl(Url.Content("~/content/images/table-128.png"))
+                                                 .HtmlAttributes(new { @id = "Selfs" });
+                                             items.Add().Text("تعریف محدودیت")
+                                                 .ImageUrl(Url.Content("~/content/images/abort-128.png"))
+                                                 .HtmlAttributes(new { @id = "Limited" });
+                                             items.Add().Text("رده بندی کتب")
+                                                 .ImageUrl(Url.Content("~/content/images/address-book.png"))
+                                                 .HtmlAttributes(new { @id = "L_BookCategory" });
+                                             items.Add().Text("تعریف کتابخانه")
+                                                 .ImageUrl(Url.Content("~/content/images/library-icon.png"))
+                                                .HtmlAttributes(new { @id = "L_Library" });
+                                             items.Add().Text("تعریف کتاب")
+                                                 .ImageUrl(Url.Content("~/content/images/Book-icon.png"))
+                                                .HtmlAttributes(new { @id = "L_Book" });
+                                             items.Add().Text("ثبت تعطیلات رسمی")
+                                               .ImageUrl(Url.Content("~/content/images/calendar_bars.png"))
+                                               .HtmlAttributes(new { @id = "Holiday" });
+                                             items.Add().Text("تسویه حساب دانشجویان")
+                                               .ImageUrl(Url.Content("~/content/images/payment.png"))
+                                               .HtmlAttributes(new { @id = "PayOff" });
+                                             items.Add().Text("ثبت اطلاعیه")
+                                               .ImageUrl(Url.Content("~/content/images/Untitled6.png"))
+                                               .HtmlAttributes(new { @id = "Etelaeye" });
+                                         });
+                                     it.Add().Text("امور تغذیه")
+                                         .Expanded(true)
+                                         .Items(items =>
+                                         {
+                                             items.Add().Text("تعریف کارت تغذیه")
+                                                 .ImageUrl(Url.Content("~/content/images/food-icon%20(1).png"))
+                                                .HtmlAttributes(new { @id = "FoodCarts" });
+                                             items.Add().Text("تعریف انواع غذا")
+                                                 .ImageUrl(Url.Content("~/content/images/food-icon.png"))
+                                                 .HtmlAttributes(new { @id = "FoodInfo" }); 
+                                             items.Add().Text("تعریف برنامه غذایی")
+                                                 .ImageUrl(Url.Content("~/content/images/food1.png"))
+                                                 .HtmlAttributes(new { @id = "FoodPrograming" }); 
+                                             items.Add().Text("تعریف تعرفه ژتون")
+                                                 .ImageUrl(Url.Content("~/content/images/Dollars.png"))
+                                                 .HtmlAttributes(new { @id = "Tariff" });
+                                             items.Add().Text("تعریف درصد تخفیف")
+                                                 .ImageUrl(Url.Content("~/content/images/Dollars.png"))
+                                                 .HtmlAttributes(new { @id = "DarsadTakhfif" });
+                                             items.Add().Text("افزایش اعتبار")
+                                                 .ImageUrl(Url.Content("~/content/images/pay_card-128.png"))
+                                                 .HtmlAttributes(new { @id = "Charge" });
+                                             items.Add().Text("افزایش اعتبار گروهی")
+                                                 .ImageUrl(Url.Content("~/content/images/credit-card-icon.png"))
+                                                 .HtmlAttributes(new { @id = "SharjGoruhi" });
+                                             items.Add().Text("افزایش اعتبار گروهی کارمندان")
+                                                 .ImageUrl(Url.Content("~/content/images/credit-card-icon.png"))
+                                                 .HtmlAttributes(new { @id = "SharjGoruhiPersonel" });
+                                             items.Add().Text("افزایش اعتبار گروهی اساتید")
+                                                 .ImageUrl(Url.Content("~/content/images/credit-card-icon.png"))
+                                                 .HtmlAttributes(new { @id = "SharjGoruhiTeacher" });
+                                             items.Add().Text("رزرو گروهی")
+                                                 .ImageUrl(Url.Content("~/content/images/meeting_group_team_table_people-128.png"))
+                                                 .HtmlAttributes(new { @id = "RezervGoruhi" });
+                                             items.Add().Text("رزرو گروهی کارمندان")
+                                                 .ImageUrl(Url.Content("~/content/images/meeting_group_team_table_people-128.png"))
+                                                 .HtmlAttributes(new { @id = "RezervGoruhiPersonel" });
+                                             items.Add().Text("رزرو گروهی اساتید")
+                                                 .ImageUrl(Url.Content("~/content/images/meeting_group_team_table_people-128.png"))
+                                                 .HtmlAttributes(new { @id = "RezervGoruhiTeacher" });
+                                             items.Add().Text("تعریف محدودیت سرو")
+                                                  .ImageUrl(Url.Content("~/content/images/Time.png"))
+                                                 .HtmlAttributes(new { @id = "FoodServ" });
+                                             items.Add().Text("تحویل غذا")
+                                                   .ImageUrl(Url.Content("~/content/images/burger.png"))
+                                                 .HtmlAttributes(new { @id = "Eating" });
+                                             items.Add().Text("تحویل غذا خارج از سیستم")
+                                                   .ImageUrl(Url.Content("~/content/images/burger.png"))
+                                                 .HtmlAttributes(new { @id = "EatFood_Date" });
+                                         });
+                                     it.Add().Text("کتابخانه")
+                                        .Expanded(true)
+                                        .Items(items =>
+                                        {
+                                            items.Add().Text("جستجوی کتاب")
+                                                .ImageUrl(Url.Content("~/content/images/book-next-icon.png"))
+                                              .HtmlAttributes(new { @id = "SearchBookStock" });
+                                            items.Add().Text("تعریف موجودی کتاب")
+                                                .ImageUrl(Url.Content("~/content/images/books-icon.png"))
+                                               .HtmlAttributes(new { @id = "L_BookStock" });
+                                            items.Add().Text("چاپ بارکد چند کتاب")
+                                                .ImageUrl(Url.Content("~/content/images/books-icon.png"))
+                                               .HtmlAttributes(new { @id = "SelectedBookBarcode" });
+                                            items.Add().Text("امانت کتاب")
+                                                 .ImageUrl(Url.Content("~/content/images/book-previous-icon.png"))
+                                              .HtmlAttributes(new { @id = "L_BookTrust" });
+                                            items.Add().Text("تمدید و تحویل کتاب")
+                                                .ImageUrl(Url.Content("~/content/images/book-next-icon.png"))
+                                              .HtmlAttributes(new { @id = "ReciverBook" });
+                                           
+                                           
+                                        });
+                                     it.Add().Text("خوابگاه")
+                                       .Expanded(true)
+                                       .Items(items =>
+                                       {
+                                           items.Add().Text("ثبت نام ورود به خوابگاه")
+                                                  .ImageUrl(Url.Content("~/content/images/gnome_application_exit.png"))
+                                                  .HtmlAttributes(new { @id = "B_tblEnterDorm_Sarbarg" });
+                                           items.Add().Text("تعریف وضعیت خوابگاه")
+                                                  .ImageUrl(Url.Content("~/content/images/614361-buttery_charging-128.png"))
+                                             .HtmlAttributes(new { @id = "B_tblStatusDorm" });
+                                           items.Add().Text("تعریف ساختمان جدید خوابگاه")
+                                               .ImageUrl(Url.Content("~/content/images/1-Normal-Home-icon.png"))
+                                              .HtmlAttributes(new { @id = "B_tblBuildingNewDorm" });
+                                           items.Add().Text("تعریف مسئولیت های خوابگاه")
+                                               .ImageUrl(Url.Content("~/content/images/policeman_user_woman_police_constable-128.png"))
+                                              .HtmlAttributes(new { @id = "B_tblResponsibilitis" });
+                                           items.Add().Text("اتاق های خوابگاه")
+                                               .ImageUrl(Url.Content("~/content/images/27793.png"))
+                                              .HtmlAttributes(new { @id = "BuildRoom" });
+
+                                           items.Add().Text("تعریف تجهیزات")
+                                         .ImageUrl(Url.Content("~/content/images/Old-Messenger-icon.png"))
+                                        .HtmlAttributes(new { @id = "Equipment" });
+
+                                           items.Add().Text("اختصاص تجهیزات به اتاق")
+                                          .ImageUrl(Url.Content("~/content/images/Old-Messenger-icon.png"))
+                                         .HtmlAttributes(new { @id = "B_tblEquimpmentRoom" });
+
+                                           items.Add().Text("تخصیص مسئولیت")
+                                                .ImageUrl(Url.Content("~/content/images/stock_task-assigned-to.png"))
+                                             .HtmlAttributes(new { @id = "B_tblAllocationResponsibilitis" });
+                                           items.Add().Text("تعریف مقطع تحصیلی")
+                                               .ImageUrl(Url.Content("~/content/images/520822-stairs-128.png"))
+                                                 .HtmlAttributes(new { @id = "B_tblSectionEducation" });
+
+                                           items.Add().Text("تعریف مدت مجاز برای هر مقطع")
+                                                .ImageUrl(Url.Content("~/content/images/Apps-preferences-system-time-icon.png"))
+                                             .HtmlAttributes(new { @id = "PeriodAuthorized" });
+
+                                           items.Add().Text("هزینه ی اقامت هر ترم تحصیلی")
+                                               .ImageUrl(Url.Content("~/content/images/1398074005_total_plan_cost.png"))
+                                             .HtmlAttributes(new { @id = "B_tblCostStaying" });
+
+
+                                           //items.Add().Text("تعریف مدت اسکان")
+                                           // .ImageUrl(Url.Content("~/content/images/Untitled6.png")) 
+                                           // .HtmlAttributes(new { @id = "B_tblSettlementsTime" });
+
+                                           items.Add().Text("تعریف ساعت ورودوخروج خوابگاه")
+                                               .ImageUrl(Url.Content("~/content/images/user_time_man_clock-128.png"))
+                                             .HtmlAttributes(new { @id = "entryExtDrm" });
+
+                                           //  items.Add().Text("تعریف جریمه بر اساس مقطع تحصیلی")
+                                           //    .ImageUrl(Url.Content("~/content/images/checkout.png"))
+                                           //   .HtmlAttributes(new { @id = "B_tblFinesSection" });
+
+                                           //  items.Add().Text("تعریف جریمه بر اساس ترم تحصیلی")
+                                           //   .ImageUrl(Url.Content("~/content/images/checkout.png"))
+                                           //  .HtmlAttributes(new { @id = "B_tblFinesTerm" });
+
+                                           //  items.Add().Text("تعریف جریمه در مقاطع و ترم های مختلف")
+                                           //.ImageUrl(Url.Content("~/content/images/checkout.png"))
+                                           // .HtmlAttributes(new { @id = "B_tblCoefficient" });
+
+                                         //  items.Add().Text("تعریف فراخوان پیش ثبت نام بر اساس سال ورود")
+                                         //  .ImageUrl(Url.Content("~/content/images/Gavel-Law-icon.png"))
+                                         //.HtmlAttributes(new { @id = "CallRegister_Term" });
+                                           
+                                          @* items.Add().Text("تعریف فراخوان پیش ثبت نام بر اساس جنسیت")
+                                          .ImageUrl(Url.Content("~/content/images/users-128.png"))
+                                         .HtmlAttributes(new { @id = "B_tblCallRegister_Status" });*@
+                                           
+                                           items.Add().Text("تعریف فراخوان پیش ثبت نام بر اساس مقطع تحصیلی ، وضعیت و ترم")
+                                         .ImageUrl(Url.Content("~/content/images/Gavel-Law-icon.png"))
+                                        .HtmlAttributes(new { @id = "CallRegister_Section" });
+
+
+                                           items.Add().Text("تعریف دوره خوابگاهی")
+                                          .ImageUrl(Url.Content("~/content/images/Untitled4.png"))
+                                         .HtmlAttributes(new { @id = "B_tblPeriodDormitory" });
+
+                                           items.Add().Text("ثبت وقایع خوابگاه")
+                                          .ImageUrl(Url.Content("~/content/images/Apps-basket-icon.png"))
+                                         .HtmlAttributes(new { @id = "B_tblRegistrationEvent" });
+
+                                           items.Add().Text("ثبت آئین نامه")
+                                           .ImageUrl(Url.Content("~/content/images/Gavel-Law-icon.png"))
+                                         .HtmlAttributes(new { @id = "B_tblRegulations" });
+
+                                           items.Add().Text("ثبت خسارت جمعی و فردی")
+                                          .ImageUrl(Url.Content("~/content/images/khesarat.png"))
+                                          .HtmlAttributes(new { @id = "B_tblDamagePerson" });
+                                          
+                                          items.Add().Text("مرخصی")
+                                              .ImageUrl(Url.Content("~/content/images/graduated-icon.png"))
+                                          .HtmlAttributes(new { @id = "Morakhasi" });
+
+                                           items.Add().Text("ورود به خوابگاه")
+                                               .ImageUrl(Url.Content("~/content/images/graduated-icon.png"))
+                                                .HtmlAttributes(new { @id = "VorudBeKhabgah" });
+
+                                       });
+                                     it.Add().Text("امکانات")
+                                         .Expanded(true)
+                                         .Items(items =>
+                                         {
+                                             items.Add().Text("تعریف گروه های کاربری")
+                                                 .ImageUrl(Url.Content("~/content/images/crowd_team-128%20copy.png"))
+                                               .HtmlAttributes(new { @id = "Groups" });
+                                             items.Add().Text("تعریف منوها")
+                                                   .ImageUrl(Url.Content("~/content/images/Actions-view-list-details-icon.png"))
+                                                .HtmlAttributes(new { @id = "AppPart" });                                             
+                                             items.Add().Text("تعریف سطوح دسترسی")
+                                                 .ImageUrl(Url.Content("~/content/images/basic1-111_user_security-128.png"))
+                                                .HtmlAttributes(new { @id = "Permission" });
+                                             items.Add().Text("تعریف کاربر")
+                                                 .ImageUrl(Url.Content("~/content/images/administrator-icon.png"))
+                                                .HtmlAttributes(new { @id = "User" });
+                                             items.Add().Text("تغییر رمز عبور")
+                                                  .ImageUrl(Url.Content("~/content/images/Login.png"))
+                                                .HtmlAttributes(new { @id = "ChangePass" });
+                                             items.Add().Text("تنظیمات")
+                                                 .ImageUrl(Url.Content("~/content/images/155-128.png"))
+                                                .HtmlAttributes(new { @id = "Setting" });
+                                             items.Add().Text("تعریف پارامترهای درگاه پرداخت")
+                                                 .ImageUrl(Url.Content("~/content/images/155-128.png"))
+                                                .HtmlAttributes(new { @id = "ParametrHay_Dargah_Pardakht" });
+                                             items.Add().Text("تعریف درگاه پرداخت")
+                                                 .ImageUrl(Url.Content("~/content/images/155-128.png"))
+                                                .HtmlAttributes(new { @id = "Dargah_Pardakht" });
+                                             items.Add().Text("اطلاعات درگاه پرداخت")
+                                                 .ImageUrl(Url.Content("~/content/images/155-128.png"))
+                                                .HtmlAttributes(new { @id = "Dargah_Pardakht_Info" });
+                                             //items.Add().Text("Hash")
+                                             //    .ImageUrl(Url.Content("~/content/images/155-128.png"))
+                                             //   .HtmlAttributes(new { @id = "Hash" });            
+                                         });
+                                     it.Add().Text("گزارشات")  
+                                         .Expanded(true)
+                                         .Items(items =>
+                                         {
+                                             items.Add().Text("چاپ مدرک تحصیلی دانشجویان")
+                                                 .ImageUrl(Url.Content("~/content/images/graduated-icon.png"))
+                                               .HtmlAttributes(new { @id = "PrintMadrak" });
+                                             items.Add().Text("چاپ کارت دانشجویان")
+                                                 .ImageUrl(Url.Content("~/content/images/graduated-icon.png"))
+                                               .HtmlAttributes(new { @id = "PrintKartGoruhi" });
+                                             items.Add().Text("گزارش غذاهای رزرو شده")
+                                                  .ImageUrl(Url.Content("~/content/images/634483-SEO_Audit-512.png"))
+                                               .HtmlAttributes(new { @id = "RptReserv" });
+                                             items.Add().Text("تاریخچه رزرو غذا")
+                                                  .ImageUrl(Url.Content("~/content/images/634483-SEO_Audit-512.png"))
+                                               .HtmlAttributes(new { @id = "RptHistoryReserv" });
+                                             items.Add().Text("گزارش مانده حساب افراد")
+                                                   .ImageUrl(Url.Content("~/content/images/Abacus.png"))
+                                                .HtmlAttributes(new { @id = "RptChaj" });
+                                             items.Add().Text("گزارش رزرو شده وتحویل نگرفته")
+                                                  .ImageUrl(Url.Content("~/content/images/634483-SEO_Audit-512.png"))
+                                                .HtmlAttributes(new { @id = "RptNotEat" });
+                                             items.Add().Text("گزارش تاریخچه اعتبارات شخص")
+                                                  .ImageUrl(Url.Content("~/content/images/time_sheduled-128.png"))
+                                                .HtmlAttributes(new { @id = "RptEtebar" });
+                                             items.Add().Text("گزارش واریزی ها")
+                                                  .ImageUrl(Url.Content("~/content/images/time_sheduled-128.png"))
+                                                .HtmlAttributes(new { @id = "RptEtebar_Date" });
+                                             items.Add().Text("چاپ بارکد گروهی کتاب")
+                                                  .ImageUrl(Url.Content("~/content/images/basic3-085_barcode_search_scan-128.png"))
+                                                .HtmlAttributes(new { @id = "GroupBarCodeBookStock" });
+                                             items.Add().Text("گزارش آمار کل")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                                .HtmlAttributes(new { @id = "RptAmar" });
+                                             items.Add().Text("گزارش آمار کل بازه ای")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                                .HtmlAttributes(new { @id = "RptAmarInDate" });
+                                             items.Add().Text("گزارش آمار بازه ای(مبلغ)")
+                                                .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                               .HtmlAttributes(new { @id = "RptAmarKoli" });
+                                             items.Add().Text("گزارش پرداخت اینترنتی")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                                .HtmlAttributes(new { @id = "OnlinePay" });
+                                             items.Add().Text("گزارش ثبت نام ورود به خوابگاه")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                                .HtmlAttributes(new { @id = "RptEnterDorm" });
+                                             items.Add().Text("گزارش خسارت به اقلام تحویلی خوابگاه ")
+                                              .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                             .HtmlAttributes(new { @id = "RptDamage" });
+                                             items.Add().Text("گزارش دانشجویانی که در تحویل کتاب تاخیر دارند ")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                             .HtmlAttributes(new { @id = "RptBook_Takhir" });
+                                             items.Add().Text("گزارش پیش ثبت نام شده ها در خوابگاه ")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                             .HtmlAttributes(new { @id = "RptPishSabtenam_Khabgah" });
+                                             items.Add().Text("گزارش کتاب های کتابخانه بر اساس گروه ")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                             .HtmlAttributes(new { @id = "RptGozareshBookLibrary" });
+                                             items.Add().Text("گزارش ورود و خروج خوابگاه ")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                            .HtmlAttributes(new { @id = "RptVorudBeKhabgah" });
+                                             items.Add().Text("گزارش غذاهای تحویل داده شده در یک وعده غذایی ")
+                                                 .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                            .HtmlAttributes(new { @id = "RptTahvilGhaza" });
+                                             items.Add().Text("گزارش دانشجویان ثبت نام شده ")
+                                                .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                            .HtmlAttributes(new { @id = "RptStudentTerm" });
+                                             items.Add().Text("گزارش کتاب های امانت داده شده ")
+                                               .ImageUrl(Url.Content("~/content/images/Conversion-optimization-128.png"))
+                                           .HtmlAttributes(new { @id = "RptTrustBook" });
+                                         });
+                                     it.Add().Text("خروج").Action("LogOff", "Account");
+                                 }
+                                 )
+                           
+                            <br />
+                            <center dir="rtl">
+                                <br />
+                                <img alt="" src="@Url.Content("~/admin/image/" + Session["UserId"].ToString())" width="90px" height="120px" style=" border-color: #2E4796; border-radius: 6px 6px 6px 6px; border-style: solid;border-width:2px;" />                                
+                                <div id="container">
+                                    <div class="rotatingHands">
+                                        <img alt="" id="hours" src="@Url.Content("~/Content/images/hours.png")" /></div>
+                                    <div class="rotatingHands">
+                                        <img alt="" id="minutes" src="@Url.Content("~/Content/images/minutes.png")" /></div>
+                                    <div class="rotatingHands">
+                                        <img alt="" id="seconds" src="@Url.Content("~/Content/images/seconds.png")" /></div>
+                                    <div class="glass">
+                                        <img alt="" src="@Url.Content("~/Content/images/glass.png")" /></div>
+                                    <img alt="" src="@Url.Content("~/Content/images/clock.png")" />
+                                </div>
+                            </center>
+                        </div>);
+                    }).ToHtmlString()
+
+                  );
+     }))
+    </div>
+</div>

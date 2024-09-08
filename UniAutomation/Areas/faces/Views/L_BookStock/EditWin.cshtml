@@ -1,0 +1,167 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="EditWin">
+    @UniAutomation.Helper.winClass.windowHeader("", "تعریف موجودی کتاب", 500, 250)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />
+        <table>
+            <tr>
+                <td align="left">
+                    <input type="checkbox" name="Active_Deactive" id="Active_Deactive" />
+                </td>
+                <td>
+                    فعال
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                   مشخصات نشر:
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtName")
+                </td> 
+                <td align="left">
+                    شماره کتابخانه ای:
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtRadeBandi_Kongere")
+                </td> 
+            </tr>
+            <tr>
+                <td align="left">
+                    تیراژ:
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtTirazh")
+                </td>
+                <td align="left">
+                    نوبت چاپ:
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtNobateChap")
+                </td>
+            </tr>
+        </table>
+        
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("exit2", "خروج", "Exit")
+            </p>
+        </center>
+        
+    </div>
+    <script type="text/javascript">
+    var bookid;
+    var Count;
+    $("document").ready(function () {
+        $("#AddLink").button();
+        $("#exit2").button();
+
+        id = '@ViewBag.id';
+        bookid = '@ViewBag.fldBookId';
+        $('#txtNashr').val('@ViewBag.fldNashr');
+        $('#txtRadeBandi_Kongere').val('@ViewBag.fldRadeBandi_Kongere');
+        $('#txtTirazh').val('@ViewBag.fldTirazh');
+        $('#txtNobateChap').val('@ViewBag.fldNobateChap');
+        if ('@ViewBag.fldActive_Deactive' == "False")
+            Active_Deactive.checked = false;
+        else
+            Active_Deactive.checked = true;
+
+        $(document).keyup(function (event) {
+            if (event.which == 119) {
+                SaveRecord();
+            }
+            else if (event.which == 113) {
+                EditRecord();
+            }
+            else if (event.which == 115) {
+                DeleteRecord();
+            }
+        });
+        $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+
+        $("#AddLink").click(function () {
+            SaveRecord();
+        });
+
+        $('#EditWin #btnClose').click(function () {
+            $("#EditWin").remove();
+            isWinOpen = false;
+        });
+        $("#exit2").click(function () {
+            isWinOpen = false;
+            $("#EditWin").remove();
+        });
+
+
+
+    });
+    function SaveRecord() {
+
+
+        var data = {
+            fldId: id,
+            fldBookId: bookid,
+            fldNashr: $('#txtNashr').val(),
+            fldRadeBandi_Kongere: $("#txtRadeBandi_Kongere").val(),
+            fldTirazh: $("#txtTirazh").val(),
+            fldNobateChap: $("#txtNobateChap").val(),
+            fldActive_Deactive: Active_Deactive.checked
+        };
+        if (data != '') {
+            PostForm(data, '@Url.Content("~/L_BookStock/Save")', "#win");
+        }
+        $("#EditWin").remove();
+    }
+
+
+
+    function Reload2(Url, gridname) {
+        var grid = $('#' + gridname).data('kendoGrid');
+        $.ajax({
+            url: Url,
+            type: 'get',
+            error: function (xhr, status, error) {
+                alert(xhr + status);
+            },
+            success: function (result) {
+                $("#" + gridname).data("kendoGrid").dataSource.data(result);
+            }
+
+        });
+    }
+
+    function PostForm(datas, url, id) {
+        var sendInfo = datas;
+        $('#Lock').show();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: sendInfo,
+            datatype: "json",
+            success: function (data) {
+                var m = data;
+                windowAppend("body", "/faces/metro/error");
+                $("#message").html(m.data);
+                switch (m.state) {
+                    case 0:
+                        $("#error .wintitle").html("ذخیره موفق");
+                        break;
+                    case 1:
+                        $("#error .wintitle").html("خطا");
+                        break;
+                }
+                var url = '@Url.Action("Reload", "L_BookStock")';
+                Reload(url, 'Grid', '1', bookid, 30, 2);
+                $('#Lock').hide();
+            },
+            failure: function (data) {
+                alert(data.data);
+            }
+        });
+    }
+</script>
+    @UniAutomation.Helper.winClass.windowFother();
+</div>

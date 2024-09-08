@@ -1,0 +1,90 @@
+﻿<div>
+
+    <br /><br />
+    <table>
+        <tr>
+            <td>
+                از :
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtStart")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                تا :
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtEnd")
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("btnShow", "ریست رمز کارت تغذیه", "yes")
+                                @UniAutomation.Helper.winClass.Buttons("btnShow2", "ریست رمز کاربران", "yes")
+                                @UniAutomation.Helper.winClass.Buttons("btnShow3", "ثبت کارت تغذیه دانشجویان", "yes")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+    var isWinOpen = false;
+    $(document).ready(function () {
+        $('#btnShow').button();
+        $('#btnShow2').button();
+        $('#btnShow3').button();
+
+        $('#btnShow').click(function () {
+            var URL = '@Url.Content("~/faces/Hash/Set")';
+            $.ajax({
+                url: URL,
+                type: 'get',
+                datatype: 'json',
+                data: { Start: $('#txtStart').val(), End: $('#txtEnd').val() },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    alert("ریست رمز کارت تغذیه انجام شد.");
+
+                }
+
+            });
+        });
+        $('#btnShow2').click(function () {
+            var URL = '@Url.Content("~/faces/Hash/SetUserPass")';
+                $.ajax({
+                    url: URL,
+                    type: 'get',
+                    datatype: 'json',
+                    data: { Start: $('#txtStart').val(), End: $('#txtEnd').val() },
+                    error: function (xhr, status, error) {
+                        alert(xhr + status);
+                    },
+                    success: function (result) {
+                        alert("ریست رمزعبور کاربران انجام شد.");
+
+                    }
+
+                });
+            });
+        $('#btnShow3').click(function () {
+                var URL = '@Url.Content("~/faces/Hash/SetFoodCart")';
+                $.ajax({
+                    url: URL,
+                    type: 'get',
+                    datatype: 'json',
+                    data: { Start: $('#txtStart').val(), End: $('#txtEnd').val() },
+                    error: function (xhr, status, error) {
+                        alert(xhr + status);
+                    },
+                    success: function (result) {
+                        alert("ثبت کار تغذیه دانشجویان انجام شد.");
+
+                    }
+
+                });
+            });
+            
+        });
+    </script>
+</div>

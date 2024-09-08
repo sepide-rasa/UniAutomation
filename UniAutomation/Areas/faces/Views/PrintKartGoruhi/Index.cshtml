@@ -1,0 +1,195 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="PrintKartGoruhi">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/accounting.js")" type="text/javascript"></script>
+
+    <div>
+        <br />
+        <a href="@Url.Content("~/Helps/افزایش%20اعتبار%20گروهی.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            @(Html.Kendo().DropDownList()
+                              .Name("cboGroup")
+                              .OptionLabel("گروه آموزشی...")
+                                .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetGroups", "PrintKartGoruhi");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+            )
+            @(Html.Kendo().DropDownList()
+                              .Name("cboTerms")
+                              .OptionLabel("ترم ورودی...")
+                                .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetTerms", "PrintKartGoruhi");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+            )
+
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Print", "چاپ", "Next")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @*@(Html.Kendo().PanelBar()
+            .Name("panelbar-images")
+            .Items(panelbar =>
+            {
+                panelbar.Add().Text("جستجو")
+                    .ImageUrl(Url.Content("~/Content/images/search.png"))
+                    .Content(@<div>
+                        <table>
+                            <tr>
+                                <td>
+                                    فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = " کد پرسنلی" }, new { ID = "1", Name = "نام خانوادگی" }},"ID", "Name"))
+                                </td>
+                                <td>
+                                    نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                                </td>
+                                <td>
+                        <br />
+                                    نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                                </td>
+                            </tr>
+                        </table>
+                    </div>);
+            })
+            )*@
+        <script type="text/javascript">
+
+        </script>
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblStudentSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Template(@<text></text>).ClientTemplate("<input type='checkbox' value='#=fldID#' name='selected'/>").Width(35).HeaderTemplate(@<input type="checkbox" id="selectAll" />);
+                    columns.Bound(p => p.fldID).Title("کد").Hidden();
+                    columns.Bound(p => p.fldName).Title("نام");
+                    columns.Bound(p => p.fldFamily).Title("نام خانوادگی");
+                    columns.Bound(p => p.fldStudentNumber).Title("شماره دانشجویی");
+                    columns.Bound(p => p.fldMelliCode).Title("کدملی");
+                    columns.Bound(p => p.fldTermName).Title("ورودی");
+                    columns.Bound(p => p.fldCourseName).Title("رشته");
+                    columns.Bound(p => p.fldSectionName).Title("مقطع");
+
+                })
+                    .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+
+                            .Scrollable(m => m.Virtual(true).Height("380px"))
+                    .DataSource(data =>
+                        data.Ajax()
+                        .PageSize(100000)
+                                                   //     .Read("Fill", "SearchBookSelect")
+                    )
+            )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var StdId = "";
+        var isWinOpen = false;
+        $("document").ready(function () {
+
+
+        $("#exit").button();
+        $('#Print').button();
+
+        $("#exit").click(function () {
+            $("#PrintKartGoruhi").remove();
+        });
+
+        $('#cboGroup').change(function () {
+            Reload('@Url.Action("Reload", "PrintKartGoruhi")', 'Grid', $('#cboGroup').val(), $('#cboTerms').val());
+        });
+        $('#cboTerms').change(function () {
+            Reload('@Url.Action("Reload", "PrintKartGoruhi")', 'Grid', $('#cboGroup').val(), $('#cboTerms').val());
+        });
+            $('#selectAll').click(function () {
+                $("#Grid tbody input:checkbox").attr("checked", this.checked);
+            });
+
+        $('#Print').click(function () {
+           /* var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            var row = entityGrid.items();
+
+            var t = $('input[type=checkbox]');
+            for (var i = 0; i < t.length - 1; i++) {
+                id = row[i].cells[1].innerText;
+                if (t.valueOf()[i + 1].checked)
+                    StdId = StdId + id + ',';
+            }*/
+            if (isWinOpen == false) {
+                windowAppend("#PrintKartGoruhi", "/faces/Student/PrintKartWin/0");
+                isWinOpen = true;
+                StdId = "";
+            }
+        });
+
+
+    });
+       
+        function Reload(Url, gridname, value, Term) {
+        var grid = $('#' + gridname).data('kendoGrid');
+        $.ajax({
+            url: Url,
+            type: 'get',
+            datatype: 'json',
+            data: { id: value, Term: Term },
+            error: function (xhr, status, error) {
+                alert(xhr + status);
+            },
+            success: function (result) {
+                $("#" + gridname).data("kendoGrid").dataSource.data(result);
+            }
+
+        });
+    }
+
+    function PostForm(datas, url, id) {
+        var sendInfo = datas;
+        $('#Lock').show();
+        $.ajax({
+            type: "POST",
+            url: url,
+            datatype: "json",
+            data: JSON3.stringify(sendInfo),
+            contentType: 'application/json',
+            success: function (data) {
+                var m = data;
+                windowAppend("body", "/faces/metro/error");
+                $("#message").html(m.data);
+                switch (m.state) {
+                    case 0:
+                        $("#error .wintitle").html("ذخیره موفق");
+                        break;
+                    case 1:
+                        $("#error .wintitle").html("خطا");
+                        break;
+                }
+                Reload('@Url.Action("Reload", "PrintKartGoruhi")', 'Grid', $('#cboGroup').val(), $('#cboTerms').val());
+                $('#Lock').hide();
+            },
+            failure: function (data) {
+                alert(data.data);
+            }
+        });
+    }
+    </script>
+</div>
+
+
+

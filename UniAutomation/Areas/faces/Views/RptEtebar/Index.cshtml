@@ -1,0 +1,68 @@
+﻿<div class="modal" id="RptEtebar">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+        <center>
+            <table>   
+                <tr>
+                <td align="left"> 
+                       <span style="color: Red;">*</span> نام دارنده کارت (Ins):
+                    </td>
+                    <td>
+                    @Html.TextBox("txtName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                      @*  @UniAutomation.Helper.winClass.textbox("txtName")*@
+                        <span id="lblNameError" style="color: Red;"></span>
+                    </td>
+                    <td align="left"> 
+                       <span style="color: Red;">*</span> کارت ملی:
+                    </td>
+                    <td>
+                    @Html.TextBox("txtMeliCode", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                       @* @UniAutomation.Helper.winClass.textbox("txtMeliCode")*@
+                        <span id="lblMeliCodeError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                    
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Preview", "نمایش", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+   
+    </div>
+    <script type="text/javascript">
+        var Cid = 0 ;
+        var Name;
+        var MeliCode;
+        var Famil;
+        var WinOpen = false;
+        var isWinOpen = false;
+        $("document").ready(function () {
+            $("#Preview").button();
+            $("#exit").button();
+
+            $("#exit").click(function () {
+                $("#RptEtebar").remove();
+            });
+
+            $('#txtName').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#RptEtebar", "/faces/SearchFoodCartsIns/index/3");
+                   // isWinOpen = true;
+                }
+            });
+            $("#Preview").click(function () {
+                // window.open('/faces/RptEtebar/rptEtebar/' + Cid);
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/RptEtebar/rptEtebar/' + Cid;
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+
+        });
+  
+    </script>
+</div>

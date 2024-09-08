@@ -1,0 +1,406 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="RezervGoruhi">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/accounting.js")" type="text/javascript"></script>
+    <div>
+        <br />
+         <a href="@Url.Content("~/Helps/رزرو%20گروهی.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>
+                @Html.Hidden("fldID")
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تاریخ:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblDateError" style="color: Red;"></span>
+                    </td>
+                    <td>
+                        <span id="lblFoodName" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> سلف سرویس:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                  .Name("cboSelfService")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .OptionLabel("سلف سرویس...")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetSelfService", "RezervGoruhi");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+                        <span id="lblSelfServiceError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                       <span style="color: Red;">*</span> وعده:
+                    </td>
+                    <td>
+                    @(Html.Kendo().DropDownList()
+                              .Name("cboVade")
+                              .OptionLabel("وعده...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "صبحانه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "ناهار",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "شام",
+                                                          Value = "3"
+                                                      }                                                   
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                                    )
+                     <span id="lblVadeError" style="color: Red;"></span>
+                </tr>
+                <tr>
+                    <td align="left">
+                       <span style="color: Red;">*</span> گروه آموزشی:
+                    </td>
+                    <td>
+                    @(Html.Kendo().DropDownList()
+                              .Name("cboGroup")
+                              .OptionLabel("گروه آموزشی...")
+                                .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetGroups", "RezervGoruhi");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+                    <span id="lblGroupError" style="color: Red;"></span>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> ترم
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                .Name("cboTerm")
+                                .OptionLabel("ترم...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetTerm", "Student");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                        )
+                        <span id="lblTermError" style="color: Red;"></span>
+                    </td>
+                 </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+               @* @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")*@
+                @*@UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")*@
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @*@(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = " کد پرسنلی" }, new { ID = "1", Name = "نام خانوادگی" }},"ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                    <br />
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                </div>);
+        })
+        )*@
+        <script type="text/javascript">
+            
+        </script>
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_ReservGroupSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldCartId).Title("کد").Hidden(true);
+                    columns.Bound(p => p.fldPeronName).Title("نام و نام خانوادگی");
+                    columns.Bound(p => p.Tedad).Title("تعداد");
+                    columns.Bound(p => p.fldReservId).Title("کد رزرو").Hidden(true);
+                })
+            .Editable(editable => editable.Mode(GridEditMode.InCell))
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Scrollable(m => m.Virtual(true))
+            .Navigatable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(100000)
+                    //.Read(read => read.Action("Fill", "RezervGoruhi"))
+                .Model(m =>
+                    {
+                        m.Id(p => p.fldCartId);
+                        m.Field(p => p.fldPeronName).Editable(false);
+                    }
+                )
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("document").ready(function () {
+
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+
+            $("#exit").click(function () {
+                $("#SharjGoruhi").remove();
+            });
+
+            $('#txtDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $('#cboSelfService').change(function () {
+                if ($("#txtDate").val() != '' && $("#cboVade").val() != '' && $("#cboGroup").val() != '' && $("#cboTerm").val() != '') {
+                    var url = '@Url.Action("Reload", "RezervGoruhi")';
+                    Reload(url, 'Grid', $("#cboSelfService").val(), $("#txtDate").val(), $("#cboVade").val(), $("#cboGroup").val(), $("#cboTerm").val());
+                }
+            });
+            $('#cboVade').change(function () {  
+                if ($("#txtDate").val() != '' && $("#cboVade").val() != '' && $("#cboGroup").val() != '' && $("#cboTerm").val() != '') {
+                    var url = '@Url.Action("Reload", "RezervGoruhi")';
+                    Reload(url, 'Grid', $("#cboSelfService").val(), $("#txtDate").val(), $("#cboVade").val(), $("#cboGroup").val(), $("#cboTerm").val());
+                }
+            });
+            $('#cboGroup').change(function () {
+                if ($("#txtDate").val() != '' && $("#cboVade").val() != '' && $("#cboGroup").val() != '' && $("#cboTerm").val() != '') {
+                    var url = '@Url.Action("Reload", "RezervGoruhi")';
+                    Reload(url, 'Grid', $("#cboSelfService").val(), $("#txtDate").val(), $("#cboVade").val(), $("#cboGroup").val(), $("#cboTerm").val());
+                }
+            });
+            $('#txtDate').change(function () {
+                if ($("#txtDate").val() != '' && $("#cboVade").val() != '' && $("#cboGroup").val() != '' && $("#cboTerm").val() != '') {
+                    var url = '@Url.Action("Reload", "RezervGoruhi")';
+                    Reload(url, 'Grid', $("#cboSelfService").val(), $("#txtDate").val(), $("#cboVade").val(), $("#cboGroup").val(), $("#cboTerm").val());
+                }
+            });
+            $('#cboTerm').change(function () {
+                if ($("#txtDate").val() != '' && $("#cboVade").val() != '' && $("#cboGroup").val() != '' && $("#cboTerm").val() != '') {
+                    var url = '@Url.Action("Reload", "RezervGoruhi")';
+                    Reload(url, 'Grid', $("#cboSelfService").val(), $("#txtDate").val(), $("#cboVade").val(), $("#cboGroup").val(), $("#cboTerm").val());
+                }
+            });
+            $('#RezervGoruhi').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#RezervGoruhi').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            }); 
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+        });
+        function Clear() {
+            $('#fldID').val(0);
+            $('#txtDesc').val('');
+        }
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldID;
+                var URL = '@Url.Content("~/RezervGoruhi/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+
+                        $('#fldID').val(data.fldID);
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+
+        function SaveRecord() {
+            var er = false;
+
+            if ($("#txtDate").val() == '') {
+                $("#txtDate").addClass("input-validation-error");
+                $('#lblDateError').html('لطفا تاریخ را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblDateError').html('');      
+
+            if ($("#cboSelfService").val() == '') {
+                $("#cboSelfService").addClass("input-validation-error");
+                $('#lblSelfServiceError').html('لطفا سلف سرویس را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblSelfServiceError').html('');
+
+            if ($("#cboVade").val() == '') {
+                $("#cboVade").addClass("input-validation-error");
+                $('#lblVadeError').html('لطفا وعده غذایی را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblVadeError').html('');
+
+            if ($("#cboGroup").val() == '') {
+                $("#cboGroup").addClass("input-validation-error");
+                $('#lblGroupError').html('لطفا گروه آموزشی را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblGroupError').html('');
+
+            if ($("#cboTerm").val() == '') {
+                $("#cboTerm").addClass("input-validation-error");
+                $('#lblTermError').html('لطفا ترم را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblTermError').html('');
+
+            if (er)
+                return;
+
+            var RezervG = new Array();
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var row = entityGrid.items();
+            var Id;
+            var Tedad;
+            for (var i = 0; i < row.length; i++) {
+                Id = row[i].cells[0].textContent;
+                Tedad = row[i].cells[2].textContent;
+                ReservId = row[i].cells[3].textContent;
+                if (parseInt(Tedad) > 0) {
+                    RezervG.push({
+                        'fldFoodCartsID': parseInt(Id),
+                        'fldFoodProgramingID': foodid,
+                        'fldCount': parseInt(Tedad),
+                        'fldReservId': parseInt(ReservId)
+                    });
+                }
+            }
+
+            //if (data != '') {
+            PostForm(RezervG, '@Url.Content("~/RezervGoruhi/Save")', "#win");
+            //}
+            //Clear();
+        }
+        var foodid;
+        function Reload(Url, gridname, self, date, nobat, Group, TermId) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { self: self, date: date, nobat: nobat, Group: Group, TermId: TermId },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result.data);
+                    foodid = result.foodid;
+                    if (foodid == 0) {
+                        alert('برنامه غذایی تعریف نشده است.');
+                    }
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                data: JSON3.stringify(sendInfo),
+                contentType: 'application/json',
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    if (data.ch == '')
+                        $("#message").html(m.data);
+                    else
+                        $("#message").html(m.data + ' افراد بدون اعتبار:' + data.ch);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "RezervGoruhi")';
+                    Reload(url, 'Grid', $("#cboSelfService").val(), $("#txtDate").val(), $("#cboVade").val(), $("#cboGroup").val(), $("#cboTerm").val());
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

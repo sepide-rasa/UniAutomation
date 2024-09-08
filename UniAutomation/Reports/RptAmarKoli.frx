@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/12/2014 13:39:21" ReportInfo.Modified="10/12/2019 09:37:13" ReportInfo.CreatorVersion="2015.1.2.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+   
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="sp_AmarKoli" ReferenceName="uniAutomationDataSet.sp_AmarKoli" DataType="System.Int32" Enabled="true">
+      <Column Name="fooddate" DataType="System.String"/>
+      <Column Name="studentprice" DataType="System.Int32"/>
+      <Column Name="teacherprice" DataType="System.Int32"/>
+      <Column Name="personelprice" DataType="System.Int32"/>
+      <Column Name="azadprice" DataType="System.Int32"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <Parameter Name="OrganName" DataType="System.String"/>
+    <Parameter Name="date" DataType="System.String"/>
+    <Parameter Name="time" DataType="System.String"/>
+    <Total Name="student" Expression="[sp_AmarKoli.studentprice]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="ostad" Expression="[sp_AmarKoli.teacherprice]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="personel" Expression="[sp_AmarKoli.personelprice]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="azad" Expression="[sp_AmarKoli.azadprice]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+    <Total Name="Total" Expression="([sp_AmarKoli.studentprice]+[sp_AmarKoli.teacherprice]+[sp_AmarKoli.personelprice]+[sp_AmarKoli.azadprice])" Evaluator="Data1"/>
+  </Dictionary>
+  <ReportPage Name="Page1" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0">
+    <ReportTitleBand Name="ReportTitle1" Width="793.8"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="793.8" Height="145.5">
+      <TableObject Name="Table1" Left="129.56" Top="118.11" Width="534.68" Height="27.39">
+        <TableColumn Name="Column1" Width="90.71"/>
+        <TableColumn Name="Column2" Width="87.88"/>
+        <TableColumn Name="Column3" Width="85.04"/>
+        <TableColumn Name="Column4" Width="86"/>
+        <TableColumn Name="Column5" Width="86.61"/>
+        <TableColumn Name="Column6" Width="98.44"/>
+        <TableRow Name="Row1" Height="27.39">
+          <TableCell Name="Cell1" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="جمع کل" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell2" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="آزاد" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="پرسنل" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell4" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="استاد" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell5" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="دانشجو" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell6" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تاریخ" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table3" Left="12.02" Top="4.7" Width="769.76" Height="94.14">
+        <TableColumn Name="Column10" Width="198.75"/>
+        <TableColumn Name="Column11" Width="323.8"/>
+        <TableColumn Name="Column12" Width="247.21"/>
+        <TableRow Name="Row3" Height="94.14">
+          <TableCell Name="Cell10" Text="تاریخ چاپ :[date]&#13;&#10;ساعت چاپ:[time]&#13;&#10;صفحه:[Page#] از [TotalPages#]" VertAlign="Center" RightToLeft="true" Font="Tahoma, 10pt"/>
+          <TableCell Name="Cell11" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tahoma, 12pt, style=Bold"/>
+          <TableCell Name="Cell12" HorzAlign="Center" VertAlign="Center" RightToLeft="true">
+            <PictureObject Name="Picture1" Left="92.61" Top="7.56" Width="75.6" Height="75.6" DataColumn="sp_tblSettingSelect.fldImage"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="153.5" Width="793.8" Height="27.39" AfterDataEvent="Data1_AfterData" DataSource="sp_AmarKoli">
+      <TableObject Name="Table4" Left="129.6" Width="534.59" Height="27.39">
+        <TableColumn Name="Column13" Width="90.71"/>
+        <TableColumn Name="Column14" Width="87.88"/>
+        <TableColumn Name="Column15" Width="85.04"/>
+        <TableColumn Name="Column16" Width="86"/>
+        <TableColumn Name="Column17" Width="86.52"/>
+        <TableColumn Name="Column18" Width="98.44"/>
+        <TableRow Name="Row4" Height="27.39">
+          <TableCell Name="Cell13" Border.Lines="All" Text="[[sp_AmarKoli.studentprice]+[sp_AmarKoli.teacherprice]+[sp_AmarKoli.personelprice]+[sp_AmarKoli.azadprice]]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell14" Border.Lines="All" Text="[sp_AmarKoli.azadprice]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell15" Border.Lines="All" Text="[sp_AmarKoli.personelprice]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell16" Border.Lines="All" Text="[sp_AmarKoli.teacherprice]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell17" Border.Lines="All" Text="[sp_AmarKoli.studentprice]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell18" Border.Lines="All" Text="[sp_AmarKoli.fooddate]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="184.89" Width="793.8" Height="27.39">
+      <TableObject Name="Table5" Left="129.6" Width="534.59" Height="27.39">
+        <TableColumn Name="Column19" Width="90.71"/>
+        <TableColumn Name="Column20" Width="87.88"/>
+        <TableColumn Name="Column21" Width="85.04"/>
+        <TableColumn Name="Column22" Width="86"/>
+        <TableColumn Name="Column23" Width="86.52"/>
+        <TableColumn Name="Column24" Width="98.44"/>
+        <TableRow Name="Row5" Height="27.39">
+          <TableCell Name="Cell19" Border.Lines="All" Text="[Total]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell20" Border.Lines="All" Text="[azad]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell21" Border.Lines="All" Text="[personel]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell22" Border.Lines="All" Text="[ostad]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell23" Border.Lines="All" Text="[student]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell24" Border.Lines="All" Text="جمع کل" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </ReportSummaryBand>
+    <PageFooterBand Name="PageFooter1" Top="216.28" Width="793.8" Height="38.74"/>
+  </ReportPage>
+</Report>

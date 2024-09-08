@@ -1,0 +1,330 @@
+﻿@using Kendo.Mvc.UI;
+<div id="SearchFoodCartsIns">
+    @UniAutomation.Helper.winClass.windowHeader("", "منو غذاهای آزاد", 300, 250)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Select1", "انتخاب", "Next")
+                @*@UniAutomation.Helper.winClass.Buttons("New1", "جدید", "yes")*@
+                @UniAutomation.Helper.winClass.Buttons("exit1", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblFoodServeSelect>()
+                .Name("Grid1")
+                            .HtmlAttributes(new { @style = "height:150px;" })
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldID).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldFoodPrograminID).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldFoodName).Title("نام غذا");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                 .Read("FillAzadMenu", "Eating")
+            )
+            )
+        </div>
+    </div>
+    <script type="text/javascript">
+       
+        $("document").ready(function () {
+            $("#Select1").button();
+            $("#exit1").button();
+            $("#New1").button();
+         
+            $("#exit1").click(function () {
+                isWinOpen = false;
+                $("#SearchFoodCartsIns").remove();
+            });
+            $('#SearchFoodCartsIns #btnClose').click(function () {
+                $("#SearchFoodCartsIns").remove();
+                isWinOpen = false;
+            });
+
+            $('#txtSearch1').keyup(function () {
+                var url = '@Url.Action("Reload", "SearchFoodCartsIns")';
+                Reload1(url, 'Grid1', $("#cboSearchFiald1").val(), $("#txtSearch1").val(), $("#txtTop1").val(), $("#cboSearchType1").val());
+            });
+
+            $('#Select1').click(function () { DblClick(); });
+
+            $('#SearchFoodCartsIns #Grid1 table tr').live('dblclick', function () { DblClick(); });
+
+        });
+        function DblClick() {
+            var entityGrid = $("#Grid1").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+
+                id = selectedItem.fldID;
+                fldFoodPrograminID = selectedItem.fldFoodPrograminID;
+                fldFoodName = selectedItem.fldFoodName;
+               
+                    if (id != 0) {
+                        $.ajax({
+                            url: '/Eating/SaveSelectAzadMenu',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { foodcartId: '@ViewBag.foodcartId', AzadProgrammingId: fldFoodPrograminID, AzadServeId: id },
+                            error: function (xhr, status, error) {
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                $("#EatingGrid").data("kendoGrid").dataSource.data(result.Eating);
+                                $("#RGrid").data("kendoGrid").dataSource.data(result.data);
+                                $("#AmarGrid").data("kendoGrid").dataSource.data(result.Amar);
+                                $('#PersonName').html(result.PersonName);
+                                $('#Count').html(result.Count);
+                                var g = '@Url.Content("~/faces/Eating/image/")' + id;
+                                $('#image').attr('src', g);
+
+                                var audioElement = document.getElementById('audio');
+                                if (result.Count > 0) {
+                                    audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                    $('#HaveFood').html('شما غذا رزرو کرده اید.');
+                                    $('#HaveFood').attr('style', 'background-color: green;font-size: x-large;');
+                                }
+                                else {
+                                    if (result.havesharj == true) {
+                                        if (result.Azadcount > 0) {
+                                            audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                            $('#HaveFood').html('شما غذا ' + fldFoodName + ' به نرخ آزاد گرفته اید.');
+                                            $('#HaveFood').attr('style', 'background-color: green;font-size: x-large;');
+                                        } else {
+                                            audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                            $('#HaveFood').html(' شما غذا رزرو نکرده اید <br/> یا آن را قبلا دریافت کرده اید.');
+                                            $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+                                        }
+                                    } else {
+                                        audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                        $('#HaveFood').html('اعتبار شما برای دریافت غذا کافی نیست.');
+                                        $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+                                    }
+                                }
+                                audioElement.play();
+                                $('#txtShCart').val('');
+                            }
+                        });
+                }
+               
+                $("#SearchFoodCartsIns").remove();
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            $('#SearchFoodCartsIns').remove();
+        }
+
+
+        @*$('#Select1').click(function () {
+                var entityGrid = $("#Grid1").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    id = selectedItem.fldID;
+                    RFID = selectedItem.fldRFID;
+                    Name = selectedItem.fldName;
+                    Famil = selectedItem.fldFamily;
+                    MeliCode = selectedItem.fldMelliCode;
+                    if (state == 1) {
+                        $('#txtName').val(Name + " " + Famil);
+                        $('#txtMeliCode').val(MeliCode);
+                        isWinOpen = false;
+                        var url = '@Url.Action("Reload", "Charge")';
+                        Reload(url, 'Grid', 1, id, 30, 0);
+                    }
+                    if (state == 3) {
+                        Cid = id;
+                        $('#txtName').val(Name + " " + Famil);
+                        $('#txtMeliCode').val(MeliCode);
+                    }
+                    if (state == 4) {
+                        $('#txtName').val(Name + " " + Famil);
+                        isWinOpen = false;
+                        var url = '@Url.Action("Reload", "L_BookTrust")';
+                        Reload(url, 'Grid', 1, id, 30);
+                    }
+                    else if (state == 2) {
+                        $('#txtShCart').val(RFID);
+                        if (id != 0) {
+                            $.ajax({
+                                url: '/Eating/ReservReload',
+                                type: 'get',
+                                datatype: 'json',
+                                data: { rfid: RFID },
+                                error: function (xhr, status, error) {
+                                    alert(xhr + status);
+                                },
+                                success: function (result) {
+                                    $("#EatingGrid").data("kendoGrid").dataSource.data(result.Eating);
+                                    $("#RGrid").data("kendoGrid").dataSource.data(result.data);
+                                    $("#AmarGrid").data("kendoGrid").dataSource.data(result.Amar);
+                                    $('#PersonName').html(result.PersonName);
+                                    $('#Count').html(result.Count);
+                                    var g = '@Url.Content("~/faces/Eating/image/")' + id;
+                                    $('#image').attr('src', g);
+
+                                    var audioElement = document.getElementById('audio');
+                                    if (result.Count > 0) {
+                                        audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                        $('#HaveFood').html('شما غذا رزرو کرده اید.');
+                                        $('#HaveFood').attr('style', 'background-color: green;font-size: x-large;');
+                                    }
+                                    else {
+                                        if (result.havesharj == true) {
+                                            if (result.Azadcount > 0) {
+                                                audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                                $('#HaveFood').html('شما غذا به نرخ آزاد گرفته اید.');
+                                                $('#HaveFood').attr('style', 'background-color: green;font-size: x-large;');
+                                            } else {
+                                                audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                                $('#HaveFood').html(' شما غذا رزرو نکرده اید <br/> یا آن را قبلا دریافت کرده اید.');
+                                                $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+                                            }
+                                        } else {
+                                            audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                            $('#HaveFood').html('اعتبار شما برای دریافت غذا کافی نیست.');
+                                            $('#HaveFood').attr('style', 'background-color: red;font-size: x-large;');
+                                        }
+                                    }
+                                    audioElement.play();
+                                    $('#txtShCart').val('');
+                                }
+                            });
+                        }
+                    }
+                    else if (state == 5) {
+                        $('#txtName').val(RFID);
+                        $.ajax({
+                            url: '/L_BookTrust/LoadCart',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { rfid: RFID, TaTarikh:TaTarikh },
+                            error: function (xhr, status, error) {
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                foodcart = result.foodcartID;
+                                $('#lblName').html(result.PersonName);
+                                $('#lblError').html(result.Error);
+                                $('#txtEndDate').val(result.TaTarikh);
+                                var url = '@Url.Action("Reload", "L_BookTrust")';
+                                Reload(url, 'Grid', '1', result.foodcartID, 30, 2);
+                            }
+                        });
+                    }
+                    else if (state == 6) {
+                        $('#txtName').val(RFID);
+                        $('#txtMeliCode').val(MeliCode);
+                        $.ajax({
+                            url: '/ReciverBook/LoadCart',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { rfid: RFID },
+                            error: function (xhr, status, error) {
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                foodcart = result.foodcartID;
+                                $('#lblName').html(result.PersonName);
+                                $('#lblMelliCode').html(result.mellicode);
+                                var url = '@Url.Action("Reload", "ReciverBook")';
+                                Reload(url, 'Grid', '1', result.foodcartID, 30, 2);
+                            }
+                        });
+                    }
+                    else if (state == 7) {
+                        var id = $('#txtShCart').val(RFID);
+                        $.ajax({
+                            url: '/VorudBeKhabgah/VorudReload',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { rfid: RFID },
+                            error: function (xhr, status, error) {
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                $("#VorudGrid").data("kendoGrid").dataSource.data(result.Vorud);
+                                $('#PersonName').html(result.PersonName);
+                                $('#Khabgah').html(result.Khabgah);
+                                $('#Otagh').html(result.Otagh);
+                                var g = '@Url.Content("~/faces/VorudBeKhabgah/image/")' + result.foodcartID;
+                                $('#image').attr('src', g);
+
+                                var audioElement = document.getElementById('audio');
+
+                                if (result.havekhabgah == false) {
+                                    audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                                    $('#HaveKhabgah').html('شما مجاز به ورود به خوابگاه نیستید.');
+                                    $('#HaveKhabgah').attr('style', 'background-color: red;font-size: x-large;');
+
+                                } else {
+                                    audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                                    $('#HaveKhabgah').html('شما مجاز به ورود به خوابگاه هستید.');
+                                    $('#HaveKhabgah').attr('style', 'background-color: green;font-size: x-large;');
+                                }
+
+                                audioElement.play();
+
+                                $('#txtShCart').val('');
+                            }
+                        });
+
+                    }
+                    else if (state == 8) {
+                        var id = $('#txtName').val(RFID);
+                        $.ajax({
+                            url: '/PayOff/LoadCart',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { rfid: RFID },
+                            error: function (xhr, status, error) {
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                foodcart = result.foodcartID;
+                                $('#lblName').html(result.PersonName);
+                                $('#lblCharge').html(result.Charge);
+                                $('#txtTasvie').val(0 - result.Charge);
+                                $('#lblError').html(result.Error);
+                            }
+                        });
+
+                    }
+                    $("#SearchFoodCartsIns").remove();
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                $('#SearchFoodCartsIns').remove();
+            });*@
+
+
+
+        function Reload1(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+
+    </script>
+    @UniAutomation.Helper.winClass.windowFother()
+</div>

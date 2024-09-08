@@ -1,0 +1,119 @@
+﻿<div id="chPass">
+    <center>
+        <br />
+        <br />
+        <table>
+            <tr>
+                <td>
+                    رمز فعلی:
+                </td>
+                <td>
+                    @Html.Password("CurentPass")
+                    <span id="lblCurentPassError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    رمز جدید:
+                </td>
+                <td>
+                    @Html.Password("NewPass")
+                    <span id="lblNewPassError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    تکرار رمز جدید:
+                </td>
+                <td>
+                    @Html.Password("ConfirmPass")
+                    <span id="lblConfirmPassError" style="color: Red;"></span>
+                </td>
+            </tr>
+        </table>
+        @UniAutomation.Helper.winClass.Buttons("Save", "ذخیره", "save")
+    </center>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Save').button();
+            $('#Save').click(function () {
+                var er = false;
+                if ($('#CurentPass').val() == '') {
+                    er = true;
+                    $("#CurentPass").addClass("input-validation-error");
+                    $('#lblCurentPassError').html('لطفا رمز فعلی را وارد کنید.');
+                }
+                else {
+                    $('#lblCurentPassError').html('');
+                    $("#CurentPass").removeClass("input-validation-error");
+                }
+                if ($('#NewPass').val() == '') {
+                    er = true;
+                    $("#NewPass").addClass("input-validation-error");
+                    $('#lblNewPassError').html('لطفا رمز جدید را وارد کنید.');
+                }
+                else {
+                    $('#lblNewPassError').html('');
+                    $("#NewPass").removeClass("input-validation-error");
+                }
+                if ($('#ConfirmPass').val() == '') {
+                    er = true;
+                    $("#ConfirmPass").addClass("input-validation-error");
+                    $('#lblConfirmPassError').html('لطفا تکرار رمز جدید را وارد کنید.');
+                }
+                else {
+                    $('#lblConfirmPassError').html('');
+                    $("#ConfirmPass").removeClass("input-validation-error");
+                }
+
+                if ($('#ConfirmPass').val() != $('#NewPass').val()) {
+                    er = true;
+                    $("#ConfirmPass").addClass("input-validation-error");
+                    $('#lblConfirmPassError').html('رمز جدید و تکرار آن یکسان نیست.');
+                }
+                else {
+                    $('#lblConfirmPassError').html('');
+                    $("#ConfirmPass").removeClass("input-validation-error");
+                }
+
+                if (er)
+                    return;
+                var data;
+                data = {
+                    cuPass: $('#CurentPass').val(),
+                    NewPass: $('#NewPass').val(),
+                    ConfNewPass: $('#ConfirmPass').val()
+                };
+                PostForm(data, '/ChPass/Save');
+            });
+        });
+
+        function PostForm(datas, url) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                data: sendInfo,
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/_metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

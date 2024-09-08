@@ -1,0 +1,139 @@
+﻿<div id="chPass">
+    <center>
+        <br />
+        <br />
+          <a href="@Url.Content("~/Helps/تغییر%20رمز%20عبور.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <table>
+            <tr>
+                <td>
+                    رمز فعلی:
+                </td>
+                <td>
+                    @Html.Password("CurentPass")
+                    <span id="lblCurentPassError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    رمز جدید:
+                </td>
+                <td>
+                    @Html.Password("NewPass")
+                    <span id="lblNewPassError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    تکرار رمز جدید:
+                </td>
+                <td>
+                    @Html.Password("ConfirmPass")
+                    <span id="lblConfirmPassError" style="color: Red;"></span>
+                </td>
+            </tr>
+        </table>
+        @UniAutomation.Helper.winClass.Buttons("Save", "ذخیره", "save")
+    </center>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Save').button();
+            $('#Help').button();
+
+            $('#chPass').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#chPass').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                
+            });
+            $('#Save').attr('title', 'کلید میانبر (F8)'); //119
+
+            $("#Save").click(function () {
+                SaveRecord();
+            });
+       
+        });
+        function SaveRecord() {
+            var er = false;
+            if ($('#CurentPass').val() == '') {
+                er = true;
+                $("#CurentPass").addClass("input-validation-error");
+                $('#lblCurentPassError').html('لطفا رمز فعلی را وارد کنید.');
+            }
+            else {
+                $('#lblCurentPassError').html('');
+                $("#CurentPass").removeClass("input-validation-error");
+            }
+            if ($('#NewPass').val() == '') {
+                er = true;
+                $("#NewPass").addClass("input-validation-error");
+                $('#lblNewPassError').html('لطفا رمز جدید را وارد کنید.');
+            }
+            else {
+                $('#lblNewPassError').html('');
+                $("#NewPass").removeClass("input-validation-error");
+            }
+            if ($('#ConfirmPass').val() == '') {
+                er = true;
+                $("#ConfirmPass").addClass("input-validation-error");
+                $('#lblConfirmPassError').html('لطفا تکرار رمز جدید را وارد کنید.');
+            }
+            else {
+                $('#lblConfirmPassError').html('');
+                $("#ConfirmPass").removeClass("input-validation-error");
+            }
+
+            if ($('#ConfirmPass').val() != $('#NewPass').val()) {
+                er = true;
+                $("#ConfirmPass").addClass("input-validation-error");
+                $('#lblConfirmPassError').html('رمز جدید و تکرار آن یکسان نیست.');
+            }
+            else {
+                $('#lblConfirmPassError').html('');
+                $("#ConfirmPass").removeClass("input-validation-error");
+            }
+
+            if (er)
+                return;
+            var data;
+            data = {
+                cuPass: $('#CurentPass').val(),
+                NewPass: $('#NewPass').val(),
+                ConfNewPass: $('#ConfirmPass').val()
+            };
+            PostForm(data, '@Url.Content("~/ChangePass/Save")');
+        }
+        function PostForm(datas, url) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                data: sendInfo,
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

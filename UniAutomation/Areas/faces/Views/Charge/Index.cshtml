@@ -1,0 +1,346 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="Charge">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/افزایش%20اعتبار.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>   
+             @Html.Hidden("fldID")              
+                <tr>
+                <td align="left"> 
+                       <span style="color: Red;">*</span> نام دارنده کارت (Ins):
+                    </td>
+                    <td>
+                    @Html.TextBox("txtName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                      @*  @UniAutomation.Helper.winClass.textbox("txtName")*@
+                        <span id="lblNameError" style="color: Red;"></span>
+                    </td>
+                    <td align="left"> 
+                       کد ملی:
+                    </td>
+                    <td>
+                     @Html.TextBox("txtMeliCode", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                      @*  @UniAutomation.Helper.winClass.textbox("txtMeliCode")*@
+                        <span id="lblMeliCodeError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                 
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> مبلغ شارژ:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtPrice")
+                        <span id="lblPriceError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نوع شارژ:
+                    </td>
+                    <td>  
+                        @(Html.Kendo().DropDownList()
+                                              .Name("cboChargeType")
+                                      .BindTo(new List<SelectListItem>() {
+                                                      new SelectListItem() {
+                                                          Text = "آفلاین",
+                                                          Value = "1"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "اینترنتی",
+                                                          Value = "2"
+                                                      }
+                                                  })                    
+                                    )                       
+                        <span id="lblChargeTypeError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                 
+                    <tr>
+                    
+                    <td align="left">
+                        توضیحات:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)
+                    </td>
+                </tr>    
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+     @*   @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "عنوان رشته" }, new { ID = "1", Name = "عنوان گروه" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )*@
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblChargeSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldID).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldChargeTypeName).Title("نوع شارژ");
+                    columns.Bound(p => p.fldPrice).Title("مبلغ شارژ");
+                    columns.Bound(p => p.fldFoodCartsID).Title("ش. کارت");
+                    columns.Bound(p => p.PersonName).Title("نام دارنده کارت");
+                    columns.Bound(p => p.fldDate).Title("تاریخ");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                        .Read("Fill", "Charge")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var SId = 0;
+        var Name;
+        var MeliCode;
+        var Famil;
+        var isWinOpen = false;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button(); 
+            $("#exit").button();
+            $("#Help").button();
+
+            $("#exit").click(function () {
+                $("#Charge").remove();
+            });
+
+            $('#txtName').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#Charge", "/faces/SearchFoodCartsIns/index/1");
+                    isWinOpen = true;
+                }
+            });
+            $('#Charge').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#Charge').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+          
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "Charge")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+          
+            $("#txtPrice").keyup(function () {
+                if ($("#txtPrice").val() != '') {
+                    $("#txtPrice").removeClass("input-validation-error");
+                    $("#lblPriceError").html("");
+                }
+                else {
+                    $("#txtPrice").addClass("input-validation-error");
+                    $('#lblPriceError').html('لطفا مبلغ شارژ را وارد کنید.');
+                }
+            });
+        });
+        function Clear() {
+            $('#txtPrice').val('');
+            $('#fldID').val(0);
+            $('#txtDesc').val('');
+        }
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldID;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/Charge/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+
+        function SaveRecord() {
+            var er = false;
+            if ($("#txtPrice").val() == '') {
+                $("#txtPrice").addClass("input-validation-error");
+                $('#lblPriceError').html('لطفا مبلغ شارژ را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblPriceError').html('');
+
+            if (SId == 0) {
+                $("#txtName").addClass("input-validation-error");
+                $('#lblNameError').html('لطفا نام دارنده کارت را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblNameError').html('');
+
+            if ($("#cboChargeType").val() == '') {
+                $("#cboChargeType").addClass("input-validation-error");
+                $('#lblChargeTypeError').html('لطفا نوع شارژ را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblChargeTypeError').html('');
+
+
+
+            if (er)
+                return;
+
+            var data = {
+                fldPrice: $("#txtPrice").val(),
+                fldDesc: $("#txtDesc").val(),
+                fldID: $("#fldID").val(),
+                fldChargeType: $('#cboChargeType').val(),
+                fldFoodCartsID: SId
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/Charge/Save")', "#win");
+
+            }
+            Clear();
+        }
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldID;
+                var URL = '@Url.Content("~/Charge/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        $('#txtPrice').val(data.fldPrice);
+                        $('#fldID').val(data.fldID);
+                        $('#txtDesc').val(data.fldDesc);
+                        $('#txtName').val(data.PersonName);
+                        $('#txtMeliCode').val(data.PersonMelliCode);
+                        var model = $("#cboChargeType").data("kendoDropDownList");
+                        model.value(data.fldChargeType);
+                        SId = data.fldFoodCartsID;
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+            });
+        }
+
+        function PostForm(datas, url, _id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "Charge")';
+                    Reload(url, 'Grid', '1', SId, 30, 0);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

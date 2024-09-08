@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/12/2014 13:39:21" ReportInfo.Modified="02/26/2014 16:16:58" ReportInfo.CreatorVersion="2013.2.5.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+   
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="sp_rptGroupBarCode" ReferenceName="uniAutomationDataSet.sp_rptGroupBarCode" DataType="System.Int32" Enabled="true">
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldFamily" DataType="System.String"/>
+      <Column Name="fldStudentNumber" DataType="System.String"/>
+      <Column Name="fldSystemNumber" DataType="System.Int16"/>
+      <Column Name="fldID" DataType="System.Int64"/>
+    </TableDataSource>
+    <Parameter Name="p" DataType="System.Int32"/>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="148.08" PaperHeight="150.06" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0" FirstPageSource="15" OtherPagesSource="15">
+    <ReportTitleBand Name="ReportTitle1" Top="20" Width="559.74"/>
+    <PageHeaderBand Name="PageHeader1" Top="40" Width="559.74"/>
+    <DataBand Name="Data1" Top="60" Width="559.74" Height="151.17" AfterDataEvent="Data1_AfterData" DataSource="sp_rptGroupBarCode">
+      <BarcodeObject Name="Barcode1" Left="235.39" Top="37.44" Width="85" Height="45.74" AfterDataEvent="Barcode1_AfterData" DataColumn="sp_rptGroupBarCode.fldID" Text="100001" ShowText="false" Barcode="Code128" Barcode.AutoEncode="true"/>
+      <TextObject Name="Text1" Left="147.55" Top="87.57" Width="264.63" Height="43.89" AfterDataEvent="Barcode1_AfterData" Text="[sp_rptGroupBarCode.fldName]_[sp_rptGroupBarCode.fldFamily]&#13;&#10;[sp_rptGroupBarCode.fldSystemNumber]/[sp_rptGroupBarCode.fldStudentNumber]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="B Zar, 10pt, style=Bold"/>
+      <Sort>
+        <Sort Expression="[sp_rptGroupBarCode.fldFamily]"/>
+        <Sort Expression="[sp_rptGroupBarCode.fldName]"/>
+      </Sort>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="231.17" Width="559.74"/>
+  </ReportPage>
+</Report>

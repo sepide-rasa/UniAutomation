@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="11/06/2014 11:56:27" ReportInfo.Modified="03/04/2017 12:33:33" ReportInfo.CreatorVersion="2016.1.0.0">
+  <Dictionary>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_B_RptVorudBeKhabgah_FoodCart" ReferenceName="uniAutomationDataSet.sp_B_RptVorudBeKhabgah_FoodCart" DataType="System.Int32" Enabled="true">
+      <Column Name="fldStatusTitle" Enabled="false" DataType="System.String"/>
+      <Column Name="fldTarikh" Enabled="false" DataType="System.String"/>
+      <Column Name="fldTime" Enabled="false" DataType="System.TimeSpan"/>
+      <Column Name="fldStatusTitle" DataType="System.String" PropName="Column"/>
+      <Column Name="fldTarikh" DataType="System.String" PropName="Column"/>
+      <Column Name="fldTime" DataType="System.String" PropName="Column"/>
+      <Column Name="Id" DataType="System.Int32" PropName="Column"/>
+      <Column Name="NameStudent" DataType="System.String"/>
+      <Column Name="Sh_Student" DataType="System.String"/>
+      <Column Name="HostName" DataType="System.String"/>
+      <Column Name="Nesbat" DataType="System.String"/>
+      <Column Name="fldAddress" DataType="System.String"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" RawPaperSize="9" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0">
+    <ReportTitleBand Name="ReportTitle1" Width="793.8"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="793.8" Height="201.26">
+      <TableObject Name="Table1" Left="16.08" Top="160.65" Width="761.64" Height="40.61" Border.Lines="Left, Right, Top">
+        <TableColumn Name="Column1" Width="282.08"/>
+        <TableColumn Name="Column2" Width="90.25"/>
+        <TableColumn Name="Column3" Width="97.81"/>
+        <TableColumn Name="Column4" Width="118.61"/>
+        <TableColumn Name="Column5" Width="81.69"/>
+        <TableColumn Name="Column6" Width="91.2"/>
+        <TableRow Name="Row1" Height="40.61">
+          <TableCell Name="Cell1" Border.Lines="Right, Top, Bottom" Fill.Color="Gainsboro" Text="آدرس" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell2" Border.Lines="Right, Top, Bottom" Fill.Color="Gainsboro" Text="نسبت" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="Right, Top, Bottom" Fill.Color="Gainsboro" Text="منزل" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell4" Border.Lines="Right, Top, Bottom" Fill.Color="Gainsboro" Text="وضعیت" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell5" Border.Lines="Right, Top, Bottom" Fill.Color="Gainsboro" Text="ساعت" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+          <TableCell Name="Cell26" Border.Lines="Right, Top, Bottom" Fill.Color="Gainsboro" Text="تاریخ" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text1" Left="307.22" Top="51.95" Width="179.36" Height="29.3" Text="گزارش ورود و خروج خوابگاه" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+      <TextObject Name="Text2" Left="248.03" Top="10.39" Width="297.74" Height="40.62" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+      <PictureObject Name="Picture1" Left="695.05" Top="11.34" Width="75.6" Height="60.49" DataColumn="sp_tblSettingSelect.fldImage"/>
+      <TextObject Name="Text3" Left="249.95" Top="94.5" Width="519.75" Height="28.35" Text="نام دانشجو: [sp_B_RptVorudBeKhabgah_FoodCart.NameStudent]" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt"/>
+      <TextObject Name="Text4" Left="249.95" Top="122.85" Width="519.75" Height="28.35" Text="شماره دانشجویی: [sp_B_RptVorudBeKhabgah_FoodCart.Sh_Student]" RightToLeft="true" Font="RasaFont, 12pt"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="209.26" Width="793.8" Height="40.61" DataSource="sp_B_RptVorudBeKhabgah_FoodCart">
+      <TableObject Name="Table2" Left="16.08" Width="761.64" Height="40.61" Border.Lines="Left, Right, Bottom">
+        <TableColumn Name="Column7" Width="282.08"/>
+        <TableColumn Name="Column8" Width="90.25"/>
+        <TableColumn Name="Column9" Width="97.81"/>
+        <TableColumn Name="Column10" Width="118.61"/>
+        <TableColumn Name="Column11" Width="81.69"/>
+        <TableColumn Name="Column12" Width="91.2"/>
+        <TableRow Name="Row2" Height="40.61">
+          <TableCell Name="Cell27" Border.Lines="Right, Bottom" Text="[sp_B_RptVorudBeKhabgah_FoodCart.fldAddress]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell28" Border.Lines="Right, Bottom" Text="[sp_B_RptVorudBeKhabgah_FoodCart.Nesbat]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell29" Border.Lines="Right, Bottom" Text="[sp_B_RptVorudBeKhabgah_FoodCart.HostName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell30" Border.Lines="Right, Bottom" Text="[sp_B_RptVorudBeKhabgah_FoodCart.fldStatusTitle]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+          <TableCell Name="Cell31" Border.Lines="Right, Bottom" Text="[sp_B_RptVorudBeKhabgah_FoodCart.fldTime]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt"/>
+          <TableCell Name="Cell32" Border.Lines="Bottom" Text="[sp_B_RptVorudBeKhabgah_FoodCart.fldTarikh]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+  </ReportPage>
+</Report>

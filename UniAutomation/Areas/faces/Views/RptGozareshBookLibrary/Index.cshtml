@@ -1,0 +1,68 @@
+﻿@using Kendo.Mvc.UI;
+<div id="RptGozareshBookLibrary">
+    @using Kendo.Mvc.UI;
+    <table>
+        <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>نوع رده بندی:
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                                  .Name("cboCategoryId")
+                                  .OptionLabel("...")
+                                               .DataTextField("fldCategoryId")
+                                  .DataValueField("fldId")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetCategoryId", "RptGozareshBookLibrary");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+                        <span id="lblCategoryIdError" style="color: Red;"></span>
+                    </td>
+                </tr>    
+       
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+                @UniAutomation.Helper.winClass.Buttons("Excel", "خروجی اکسل", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "exit")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        $(document).ready(function () {
+            $('#show').button();
+            $('#Excel').button();
+            $('#exit').button();
+            $('#show').click(function () {
+                //window.open('/faces/RptGozareshBookLibrary/GozareshBookLibraryReport?CategoryId=' + $('#cboCategoryId').val());
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/RptGozareshBookLibrary/GozareshBookLibraryReport?CategoryId=' + $('#cboCategoryId').val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+            $('#Excel').click(function () {
+                window.location.href = '@Url.Content("/faces/RptGozareshBookLibrary/ExcelBookLibrary?CategoryId=")' + $('#cboCategoryId').val();
+              
+            });
+            $('#exit').click(function () {
+                $('#RptGozareshBookLibrary').remove();
+            });
+
+            $('#txtStart').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtEnd').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+            $('#txtEnd').datepicker({
+                showButtonPanel: true
+            });
+        });
+    </script>
+</div>

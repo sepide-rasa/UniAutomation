@@ -1,0 +1,152 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="RptDamage">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />
+        <table>
+            <tr>
+                <td>
+                    جستجو بر اساس:
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                        دانشجو @Html.RadioButton("Type", "0", true, new { @id = "One" })
+                    </label>
+                </td>
+                <td align="left">
+                    دانشجو (Ins):
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtStudentNumber")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>
+                      تاریخ  @Html.RadioButton("Type", "1", new { @id = "Two" })
+                    </label>
+                </td>
+                <td align="left">
+                    تاریخ:
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtDamageDate")
+                </td>
+            </tr>
+        </table>
+        <br />
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("print", "چاپ", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+            <br />
+        </center>
+    </div>
+    <script type="text/javascript">
+        var value;
+        var type;
+        var isWinOpen = false;
+        var Sid;
+        $("document").ready(function () {
+            $("#print").button();
+            $("#exit").button();
+            $('#txtDamageDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $("#txtDamageDate").attr("disabled", true);
+            $(':radio[Type]').change(function () {
+                var url = '@Url.Action("Reload", "RptDamage")';
+
+                if (One.checked) {
+                    $("#txtStudentNumber").attr("disabled", false);
+                    $("#txtDamageDate").attr("disabled", true);
+                    $("#txtDamageDate").val('');
+                }
+                else if (Two.checked) {
+                    $("#txtStudentNumber").attr("disabled", true);
+                    $("#txtDamageDate").attr("disabled", false);
+                    $("#txtStudentNumber").val('');
+                }
+            });
+
+            $('#txtStudentNumber').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#RptDamage", "/faces/SearchStudentIns/index/1");
+                    isWinOpen = true;
+                }
+            });
+
+            $("#print").click(function () {
+                if (One.checked) {
+                    value = Sid;
+                    type = 0;
+                }
+                else if (Two.checked) {
+                    value = $("#txtDamageDate").val();
+                    type = 1;
+                }
+                //window.open("/faces/RptDamage/_RptDamage?type=" + type + "&value=" + value);
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/RptDamage/_RptDamage?type=' + type + '&value=' + value;
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+
+            });
+            $("#exit").click(function () {
+                $("#RptDamage").remove();
+            });
+        });
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "RptDamage")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

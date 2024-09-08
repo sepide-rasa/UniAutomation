@@ -1,0 +1,28 @@
+﻿<div>
+    <center>
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        @ViewBag.Result
+                        <br />
+                        کد پیگیری: @Session["referenceId"]
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @UniAutomation.Helper.winClass.Buttons("Back", "بازگشت", "back")
+                </td>
+            </tr>
+        </table>
+    </center>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#Back').button();
+            $('#Back').click(function () {
+                window.location.href = '/home';
+            });
+        });
+    </script>
+</div>

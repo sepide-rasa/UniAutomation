@@ -1,0 +1,84 @@
+﻿<div>
+@using Kendo.Mvc.UI;
+@*<center>*@
+    <table>
+        <tr>
+            <td align="left">
+                نوع کاربر:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboType")
+                              .OptionLabel(" ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "دانشجویان",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "اساتید",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "کارمندان",
+                                                          Value = "3"
+                                                      }
+
+                                                  }).HtmlAttributes(new { @style = "width:169px;" })
+
+                )
+
+            </td>
+        </tr>
+
+        <tr id="group">
+            <td align="left">
+                گروه آموزشی:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                .Name("cboGroup")
+                .DataTextField("fldName")
+                    .DataValueField("fldID")
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetGroups", "RptReserv");
+                        });
+                    }).HtmlAttributes(new { @style = "width:169px;" })
+                )
+
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("ok", "نمایش", "yes")
+            </td>
+        </tr>
+    </table>
+@*</center>*@
+<script type="text/javascript">
+    var isWinOpen = false;
+    $(document).ready(function () {
+        $('#ok').button();
+        $('#ok').click(function () {
+            //window.open('/faces/RptReserv/rptMandeHesab/'+$('#cboGroup').val());
+            if (isWinOpen == false) {
+                isWinOpen = true;
+                windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                var t = '/faces/RptReserv/rptMandeHesab?GroupId=' + $('#cboGroup').val() + "&Type=" + $('#cboType').val();
+                $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+            }
+        });
+        $('#cboType').change(function () {
+            if ($('#cboType').val() == "2" || $('#cboType').val() == "3")
+                $('#group').hide();
+            else
+                $('#group').show();
+        });
+    });
+</script>
+</div>

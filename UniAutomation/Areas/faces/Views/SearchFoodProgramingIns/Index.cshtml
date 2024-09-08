@@ -1,0 +1,146 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="SearchFoodProgramingIns">
+@UniAutomation.Helper.winClass.windowHeader("", "جستجو برنامه غذایی", 900, 550)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />        
+        <div>
+            <table>
+                <tr>
+                    <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald5", new SelectList(new[] { new { ID = "0", Name = "نام" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType5", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch5")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop5", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                </tr>
+            </table>
+            <br />
+        </div>
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("Select5", "انتخاب", "Next")
+                @UniAutomation.Helper.winClass.Buttons("New5", "جدید", "yes")                
+                @UniAutomation.Helper.winClass.Buttons("exit5", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+           @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblFoodProgramingSelect>()
+                .Name("Grid5")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldID).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldFoodDate).Title("تاریخ");
+                    columns.Bound(p => p.fldFoodName).Title("نام غذا");
+                    columns.Bound(p => p.fldSelfServiceName).Title("نام سلف");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                })
+                    .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+                    .Pageable()
+                    .Scrollable()
+                    .DataSource(data =>
+                        data.Ajax()
+                        .PageSize(10)
+                                                        .Read("Fill", "SearchFoodProgramingIns")
+                    )
+                )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var state;
+        $("document").ready(function () {
+            $("#Select5").button();
+            $("#New5").button();
+            $("#exit5").button();
+            state = '@ViewBag.state';
+         
+            });
+            $('#New5').click(function () {
+                windows("#FoodServe", "/faces/FoodInfo");
+            });
+            $("#exit5").click(function () {
+                $("#SearchFoodProgramingIns").remove();
+            });
+
+            $('#txtSearch5').keyup(function () {
+                var url = '@Url.Action("Reload", "SearchFoodProgramingIns")';
+                Reload5(url, 'Grid5', $("#cboSearchFiald5").val(), $("#txtSearch5").val(), $("#txtTop5").val(), $("#cboSearchType5").val());
+            });
+            $('#SearchFoodProgramingIns #btnClose').click(function () {
+                $("#SearchFoodProgramingIns").remove();
+                isWinOpen = false;
+            });
+            $('#SearchFoodProgramingIns').dblclick(function () { DblClick(); });
+
+            $('#SearchFoodProgramingIns #Grid5 table tr').live('dblclick', function () { DblClick(); });
+      
+        function DblClick() {
+            var entityGrid = $("#Grid5").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    id = selectedItem.fldID;
+                    Name = selectedItem.fldFoodName;
+                    Self = selectedItem.fldSelfServiceName;
+                    $('#txtFoodName').val(Name);
+                    $('#txtSelfName').val(Self);
+                    var url = '@Url.Action("Reload", "FoodServe")';
+                    Reload(url, 'Grid', '1', id, 30, 2);
+                    isWinOpen = false;
+                    $('#SearchFoodProgramingIns').remove();
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                
+            }
+
+            $('#Select5').click(function () {
+                var entityGrid = $("#Grid5").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    id = selectedItem.fldID;
+                    Name = selectedItem.fldFoodName;
+                    Self = selectedItem.fldSelfServiceName;
+                    $('#txtFoodName').val(Name);
+                    $('#txtSelfName').val(Self);
+                    var url = '@Url.Action("Reload", "FoodServe")';
+                    Reload(url, 'Grid', '1', id, 30, 2);
+                    isWinOpen = false;
+                    $('#SearchFoodProgramingIns').remove();
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                
+            });
+       
+
+        function Reload5(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        
+    </script>
+     @UniAutomation.Helper.winClass.windowFother();
+</div>

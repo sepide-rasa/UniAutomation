@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="10/30/2014 12:01:12" ReportInfo.Modified="05/21/2015 10:09:18" ReportInfo.CreatorVersion="2013.2.5.0">
+  <Dictionary>
+    <TableDataSource Name="sp_tblPishSabtenam_KhabgahSelect" ReferenceName="uniAutomationDataSet.sp_tblPishSabtenam_KhabgahSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldTermId" DataType="System.Int32"/>
+      <Column Name="fldFoodCartId" DataType="System.Int64"/>
+      <Column Name="fldDate" DataType="System.DateTime"/>
+      <Column Name="fldUserId" DataType="System.Int32"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="fldTermName" DataType="System.String"/>
+      <Column Name="fldStudent" DataType="System.String"/>
+      <Column Name="fldStudentNumber" DataType="System.String"/>
+      <Column Name="fldCourseName" DataType="System.String"/>
+      <Column Name="fldMelliCode" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="718.2" Height="153.08">
+      <TableObject Name="Table1" Left="54.8" Top="116.25" Width="608.61" Height="36.83" Border.Lines="All">
+        <TableColumn Name="Column1" Width="163.45"/>
+        <TableColumn Name="Column2" Width="149.35"/>
+        <TableColumn Name="Column3" Width="139.87"/>
+        <TableColumn Name="Column4" Width="155.94"/>
+        <TableRow Name="Row1" Height="36.83">
+          <TableCell Name="Cell1" Border.Lines="All" Text="رشته تحصیلی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+          <TableCell Name="Cell2" Border.Lines="All" Text="شماره دانشجویی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" Text="شماره ملی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+          <TableCell Name="Cell4" Border.Lines="All" Text="نام و نام خانوادگی" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text1" Left="231.42" Top="65.22" Width="255.35" Height="46.3" Text="گزارش پیش ثبت نام شده ها در خوابگاه ترم:[sp_tblPishSabtenam_KhabgahSelect.fldTermName]" HorzAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+      <PictureObject Name="Picture1" Left="636.93" Top="1.89" Width="75.6" Height="62.38" DataColumn="sp_tblSettingSelect.fldImage"/>
+      <TextObject Name="Text2" Left="203.98" Top="5.67" Width="310.24" Height="36.84" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="161.08" Width="718.2" Height="36.83" DataSource="sp_tblPishSabtenam_KhabgahSelect">
+      <TableObject Name="Table2" Left="54.8" Width="608.61" Height="36.83" Border.Lines="All">
+        <TableColumn Name="Column5" Width="163.45"/>
+        <TableColumn Name="Column6" Width="149.35"/>
+        <TableColumn Name="Column7" Width="139.87"/>
+        <TableColumn Name="Column8" Width="155.94"/>
+        <TableRow Name="Row2" Height="36.83">
+          <TableCell Name="Cell5" Border.Lines="All" Text="[sp_tblPishSabtenam_KhabgahSelect.fldCourseName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell6" Border.Lines="All" Text="[sp_tblPishSabtenam_KhabgahSelect.fldStudentNumber]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell7" Border.Lines="All" Text="[sp_tblPishSabtenam_KhabgahSelect.fldMelliCode]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt"/>
+          <TableCell Name="Cell8" Border.Lines="All" Text="[sp_tblPishSabtenam_KhabgahSelect.fldStudent]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 12pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="201.91" Width="718.2"/>
+  </ReportPage>
+</Report>

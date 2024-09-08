@@ -1,0 +1,558 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblEnterDorm">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    
+
+    <div>    
+        <br />
+       <center>
+            <table> 
+            @Html.Hidden("fldId")
+            <tr>           
+                    <td align="left">
+                     نام و نام خانوادگی (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+
+                    <td align="left">
+                        شماره دانشجویی:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtStudentNumber", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                    </td>
+                   </tr>
+                   <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>رشته:
+                    </td> 
+                    <td>
+                        @Html.TextBox("txtCourse", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                     </td>
+
+                    <td align="left">
+                        <span style="color: Red;">*</span>مقطع:
+                    </td>
+                   
+                    <td>
+                        @Html.TextBox("txtSection", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);",@readonly = "true" })
+                   </td>
+                    </tr>
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>نوبت:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtStatus", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);",@readonly = "true" })
+                   </td>
+
+                    <td align="left">
+                        <span style="color: Red;">*</span> ترم:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtSemester", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                        @*@UniAutomation.Helper.winClass.textbox("txtSemester")*@
+                        <span id="lblSemesterError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                     <td align="left">
+                    <span style="color: Red;">*</span> نام خوابگاه :
+                    </td>
+                      <td>
+                        @(Html.Kendo().DropDownList()
+                                  .Name("cboBuildingCodeId")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetDorm", "B_tblEnterDorm");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                                  )
+                    <span id="lblBuildingCodeIdError" style="color: Red;"></span>
+                    </td>
+                
+                    <td align="left">
+                     <span style="color: Red;">*</span>نام اتاق (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtBuildingRoomsId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                        <span id="lblBuildingRoomsIdError" style="color: Red;"></span>
+                    </td> 
+                  
+                    <td align="left">
+                        <span style="color: Red;"></span> شماره تخت:
+                    </td>
+
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtBedNo")
+                        <span id="lblBedNoError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>مبلغ ودیعه (ریال): 
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtTrustCharge")
+                        <span id="lblTrustChargeError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span> شماره فیش واریزی:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtFicheNo")
+                        <span id="lblFicheNoError" style="color: Red;"></span>
+                    </td>
+                   </tr>
+                   <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تاریخ ورود به خوابگاه:
+                    </td>
+                    <td>  @UniAutomation.Helper.winClass.textbox("txtDate")
+                        <span id="lblDateError" style="color: Red;"></span>
+                    </td>
+                    
+                 @*   <td align="left">
+                        <span style="color: Red;">*</span> استفاده از خوابگاه با احتساب ترم جاری:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtPassword")
+                        <span id="lblPasswordError" style="color: Red;"></span>
+                    </td>*@
+                     <td align="left">
+                        <span style="color: Red;"></span> شهر محل سکونت:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtCity", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);",@readonly = "true" })
+                   
+                        <span id="lblCityError" style="color: Red;"></span>
+                    </td>
+                     </tr>
+                    <tr>
+                     <td align="left">
+                        <span style="color: Red;"></span> شماره همراه:
+                    </td>
+                    <td>
+                    
+                        @Html.TextBox("txtMobile", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);",@readonly = "true" })
+                   
+                        <span id="lblTelephoneError" style="color: Red;"></span>
+                    </td>
+                     <td align="left">
+                        <span style="color: Red;"></span> شماره ثابت:
+                    </td>
+                    <td>
+                     @Html.TextBox("txtTelephone", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" }) 
+                        <span id="lblPasswordError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                     <td align="left">
+                        <span style="color: Red;"></span> شماره همراه ولی:
+                    </td>
+                    <td>
+                     @Html.TextBox("txtParentPhone", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })             
+                        <span id="lblParentPhoneError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                </table>     
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نام دانشجو" }, new { ID = "1", Name = "شماره دانشجویی" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblEnterDormSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldStudentName).Title("نام");
+                    columns.Bound(p => p.fldStudentNumber).Title("شماره دانشجویی");
+                    columns.Bound(p => p.fldCourseName).Title("رشته");
+                    columns.Bound(p => p.fldBuildingName).Title("خوابگاه");
+                    columns.Bound(p => p.fldNameRoom).Title("شماره اتاق");
+                    columns.Bound(p => p.fldMobile).Title("شماره همراه");
+                    
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                               .Read("Fill", "B_tblEnterDorm")
+            )
+        )
+        </div>
+     </div>
+
+    <script type="text/javascript">
+    
+        var Name;
+        var MeliCode;
+        var Famil;
+        var isWinOpen = false;
+        var Sid;
+        var BuildingCodeId;
+        var SarbargId;
+        var roomcodeid=0;
+
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $("#Help").button();
+
+            SarbargId = '@ViewBag.SarbargId';
+            termId = '@ViewBag.termId';
+            termName = '@ViewBag.termName';
+            $('#txtSemester').val(termName);
+
+            $('#txtBuildingRoomsId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#B_tblEnterDorm", "/faces/SearchRoom3?BuildingId=" + $('#cboBuildingCodeId').val() + "&termId=" + termId);
+                    isWinOpen = true;
+                }
+            });
+            $('#B_tblEnterDorm').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblEnterDorm').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+            $("#Next").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    windows('#Main', '/faces/Barcode/index/' + id);
+                } else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            });
+            $('#txtDate').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtDate').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+            $('#txtName').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#B_tblEnterDorm", "/faces/SearchStudentIns/index/3");
+                    isWinOpen = true;
+
+                }
+            });
+            $("#exit").click(function () {
+                $("#B_tblEnterDorm").remove();
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblEnterDorm")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), SarbargId, $("#txtTop").val(), $("#cboSearchType").val(), roomcodeid);
+            });
+
+            $('#txtBuildingRoomsId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("body", "faces/SearchRoom3");
+                    isWinOpen = true;
+                }
+            });
+
+            $("#txtName").keyup(function () {
+                if ($("#txtName").val() != '') {
+                    $("#txtName").removeClass("input-validation-error");
+                    $("#lblNameError").html("");
+                }
+                else {
+                    $("#txtName").addClass("input-validation-error");
+                    $('#lblNameError').html('لطفا نام دانشجو را انتخاب کنید.');
+                }
+            });
+            $("#txtTrustCharge").keyup(function () {
+                if ($("#txtTrustCharge").val() != '') {
+                    $("#txtTrustCharge").removeClass("input-validation-error");
+                    $("#lblTrustChargeError").html("");
+                }
+                else {
+                    $("#txtTrustCharge").addClass("input-validation-error");
+                    $('#lblTrustChargeError').html('لطفا مبلغ ودیعه را انتخاب کنید.');
+                }
+            });
+            $("#txtFicheNo").keyup(function () {
+                if ($("#txtFicheNo").val() != '') {
+                    $("#txtFicheNo").removeClass("input-validation-error");
+                    $("#lblFicheNoError").html("");
+                }
+                else {
+                    $("#txtFicheNo").addClass("input-validation-error");
+                    $('#lblFicheNoError').html('لطفا شماره فیش را انتخاب کنید.');
+                }
+            });
+            $("#txtBuildingRooms").keyup(function () {
+                if ($("#txtBuildingRooms").val() != '') {
+                    $("#txtBuildingRooms").removeClass("input-validation-error");
+                    $("#lblBuildingRoomsError").html("");
+                }
+                else {
+                    $("#txtBuildingRooms").addClass("input-validation-error");
+                    $('#lblBuildingRoomsError').html('لطفا شماره اتاق را انتخاب کنید.');
+                }
+            });
+        });  
+        function Clear() {
+            $('#fldId').val(0);
+            $('#txtPassword').val('');
+            $('#txtName').val(''),
+            $('#txtStudentNumber').val(''),
+            $('#txtCourse').val(''),
+            $('#txtSection').val(''),
+            $('#txtStatus').val(''),
+            /*$('#txtSemester').val(''),*/
+            $('#txtBuildingRoomsId').val(''),
+            $('#txtBedNo').val(''),
+            $('#txtTrustCharge').val(''),
+            $('#txtFicheNo').val(''),
+            $('#txtDate').val(''),
+            $('#txtCity').val(''),
+            $('#txtMobile').val(''),
+            $('#txtTelephone').val(''),
+            $('#txtParentPhone').val(''),
+            roomcodeid = 0
+
+        }
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblEnterDorm/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+            function SaveRecord() {
+                var er = false;
+                if ($("#txtName").val() == '') {
+                    $("#txtName").addClass("input-validation-error");
+                    $('#lblNameError').html('لطفا نام دانشجو را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblNameError').html('');
+
+                if ($("#txtTrustCharge").val() == '') {
+                    $("#txtTrustCharge").addClass("input-validation-error");
+                    $('#lblTrustChargeError').html('لطفا مبلغ ودیعه را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblTrustChargeError').html('');
+
+                if ($("#txtFicheNo").val() == '') {
+                    $("#txtFicheNo").addClass("input-validation-error");
+                    $('#lblFicheNoError').html('لطفا شماره فیش واریزی را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblFicheNoError').html('');
+
+                if ($("#txtBuildingRooms").val() == '') {
+                    $("#txtBuildingRooms").addClass("input-validation-error");
+                    $('#lblBuildingRoomsError').html('لطفا شماره اتاق را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblBuildingRoomsError').html('');
+
+                if (er)
+                    return;
+
+                var data = {
+                    fldStudentId: Sid,
+                    fldBuildingCodeId: $('#cboBuildingcodeid#').val,
+                    fldBuildingRoomsId: BuildingCodeId,
+                    fldSarbargId: SarbargId,
+                    fldId: $('#fldId').val(),
+                    fldSemester: termId,
+                    fldBedNo: $('#txtBedNo').val(),
+                    fldTrustCharge: $('#txtTrustCharge').val(),
+                    fldFicheNo: $('#txtFicheNo').val(),
+                    fldEnterDate: $('#txtDate').val()
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/B_tblEnterDorm/Save")', "#win");
+                }
+                Clear();
+            }
+            function EditRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var URL = '@Url.Content("~/B_tblEnterDorm/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            $('#fldId').val(data.fldId);
+                            $('#txtName').val(data.fldName);
+                            $('#txtMobile').val(data.fldMobile);
+                            $('#txtCourse').val(data.fldCourse);
+                            $('#txtSection').val(data.fldSection);
+                            $('#txtStatus').val(data.fldStatus);
+                            $('#txtMeliCode').val(data.fldMelliCode);
+                            $('#txtTelephone').val(data.fldTelephone);
+                            $('#txtParentPhone').val(data.fldParentPhone);
+                            $('#txtBuildingCodeId').val(data.fldBuildingName);
+                            $('#txtCity').val(data.fldCity);
+                            //$('#txtSemester').val(data.fldSemester);
+                            $('#txtFishNo').val(data.fldCity);
+                            $('#txtDate').val(data.fldEnterDate);
+                            $('#txtBedNo').val(data.fldBedNo);
+                            $('#txtFicheNo').val(data.fldFicheNo);
+                            $('#txtTrustCharge').val(data.fldTrustCharge);
+                            $('#txtParentPhone').val(data.fldParentPhone);
+                            $('#txtStudentNumber').val(data.fldStudentNumber);
+                            roomcodeid = data.fldBuildingRooms;
+                            $('#txtBuildingRoomsId').val(data.fldNameRoom);
+                            var model2 = $("#cboBuildingCodeId").data("kendoDropDownList");
+                            model2.value(data.fldBuildingCodeId);
+                            BuildingCodeId = data.fldBuildingRooms;
+
+                            Sid = data.fldStudentId;
+                            SarbargId = data.fldSarbargId;
+
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            }
+
+        function Reload(Url, gridname, field, value,value2, top, searchType, RoomId) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, value2: value2, top: top, searchtype: searchType, RoomId: RoomId },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblEnterDorm")';
+                    Reload(url, 'Grid', '2', SarbargId, '', 30, 2, roomcodeid);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

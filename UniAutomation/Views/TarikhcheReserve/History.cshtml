@@ -1,0 +1,119 @@
+﻿<div id="rptReserv">
+    <center>
+        @using Kendo.Mvc.UI;
+        <table>
+            <tr>
+                <td>
+                    <span style="color: Red;">*</span>از تاریخ:
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtStart")
+                    <span id="lblStartError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="color: Red;">*</span> تا تاریخ
+                </td>
+                <td>
+                    @UniAutomation.Helper.winClass.textbox("txtEnd")
+                    <span id="lblEndError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="color: Red;">*</span> وعده:
+                </td>
+                <td>
+                    @(Html.Kendo().DropDownList()
+                              .Name("cboVade")
+                              .OptionLabel("وعده ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "صبحانه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "ناهار",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "شام",
+                                                          Value = "3"
+                                                      }
+
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                    )
+                    <span id="lblVadeError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+                </td>
+            </tr>
+        </table>
+    </center>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        var Cid = 0;
+        $(document).ready(function () {
+            $('#show').button();
+            $('#show1').button();
+            $('#rptReserv').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#rptReserv').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $('#show').click(function () {
+                var er = false;
+
+                if ($("#txtStart").val() == '') {
+                    $("#txtStart").addClass("input-validation-error");
+                    $('#lblStartError').html('لطفا تاریخ شروع را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblStartError').html('');
+
+                if ($("#txtEnd").val() == '') {
+                    $("#txtEnd").addClass("input-validation-error");
+                    $('#lblEndError').html('لطفا تاریخ پایان را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblEndError').html('');
+
+                if ($("#cboVade").val() == '') {
+                    $("#cboVade").addClass("input-validation-error");
+                    $('#lblVadeError').html('لطفا وعده را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblVadeError').html('');
+
+                if (er)
+                    return;
+                //window.open('/faces/RptReserv/rptReserv?Sdate=' + $('#txtStart').val() + '&Edate=' + $('#txtEnd').val() + '&nobat=' + $('#cboVade').val());
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/TarikhcheReserve/rptHistoryReserv?Sdate=' + $('#txtStart').val() + '&Edate=' + $('#txtEnd').val() + '&nobat=' + $('#cboVade').val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+
+            $('#txtStart').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtEnd').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+            $('#txtEnd').datepicker({
+                showButtonPanel: true
+            });
+        });
+    </script>
+</div>

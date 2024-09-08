@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="02/12/2014 13:39:21" ReportInfo.Modified="10/06/2019 09:43:04" ReportInfo.CreatorVersion="2013.2.5.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+   
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="sp_AmarSelect" ReferenceName="uniAutomationDataSet.sp_AmarSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="total" DataType="System.Int32"/>
+      <Column Name="fldFoodProgramingID" DataType="System.Int32"/>
+      <Column Name="Eating" DataType="System.Int32"/>
+      <Column Name="fldFoodName" DataType="System.String"/>
+      <Column Name="Mande" DataType="System.Int32"/>
+      <Column Name="fldNobat" DataType="System.String"/>
+      <Column Name="AzadCount" DataType="System.Int32"/>
+      <Column Name="Azad_Eating" DataType="System.Int32"/>
+      <Column Name="Azad_Mande" DataType="System.Int32"/>
+      <Column Name="AzadOstad" DataType="System.Int32"/>
+      <Column Name="TahvilOstad" DataType="System.Int32"/>
+      <Column Name="TotalOstad" DataType="System.Int32"/>
+      <Column Name="TotalStudent" DataType="System.Int32"/>
+      <Column Name="TotalKarmand" DataType="System.Int32"/>
+      <Column Name="TahvilKarmand" DataType="System.Int32"/>
+      <Column Name="TahvilStudent" DataType="System.Int32"/>
+      <Column Name="Ostad" DataType="System.String"/>
+      <Column Name="Karmand" DataType="System.String"/>
+      <Column Name="Student" DataType="System.String"/>
+      <Column Name="Azad" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <Parameter Name="OrganName" DataType="System.String"/>
+    <Parameter Name="date" DataType="System.String"/>
+    <Parameter Name="time" DataType="System.String"/>
+  </Dictionary>
+  <ReportPage Name="Page1" RawPaperSize="9" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0">
+    <ReportTitleBand Name="ReportTitle1" Width="793.8"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="793.8" Height="145.5">
+      <TableObject Name="Table1" Left="24.1" Top="118.11" Width="745.6" Height="27.39">
+        <TableColumn Name="Column1" Width="71.81"/>
+        <TableColumn Name="Column2" Width="68.98"/>
+        <TableColumn Name="Column3" Width="75.59"/>
+        <TableColumn Name="Column4" Width="67.1"/>
+        <TableColumn Name="Column5" Width="78.46"/>
+        <TableColumn Name="Column6" Width="81.26"/>
+        <TableColumn Name="Column19"/>
+        <TableColumn Name="Column20" Width="170.1"/>
+        <TableColumn Name="Column21"/>
+        <TableRow Name="Row1" Height="27.39">
+          <TableCell Name="Cell1" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تحویل کارمند" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell2" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تحویل استاد" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تحویل دانشجو" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell4" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="فروش آزاد" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell5" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="باقی مانده" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell6" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="تحویل شده" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell19" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="رزرو شده" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell20" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نام غذا" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell21" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="وعده" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table3" Left="12.02" Top="4.7" Width="769.76" Height="94.14">
+        <TableColumn Name="Column10" Width="198.75"/>
+        <TableColumn Name="Column11" Width="323.8"/>
+        <TableColumn Name="Column12" Width="247.21"/>
+        <TableRow Name="Row3" Height="94.14">
+          <TableCell Name="Cell10" Text="تاریخ چاپ :[date]&#13;&#10;ساعت چاپ:[time]&#13;&#10;صفحه:[Page#] از [TotalPages#]" VertAlign="Center" RightToLeft="true" Font="Tahoma, 10pt"/>
+          <TableCell Name="Cell11" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Tahoma, 12pt, style=Bold"/>
+          <TableCell Name="Cell12" HorzAlign="Center" VertAlign="Center" RightToLeft="true">
+            <PictureObject Name="Picture1" Left="92.61" Top="8.51" Width="75.6" Height="75.6" DataColumn="sp_tblSettingSelect.fldImage"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="153.5" Width="793.8" Height="27.39" AfterDataEvent="Data1_AfterData" DataSource="sp_AmarSelect">
+      <TableObject Name="Table5" Left="24.1" Width="745.6" Height="27.39">
+        <TableColumn Name="Column22" Width="71.81"/>
+        <TableColumn Name="Column23" Width="68.98"/>
+        <TableColumn Name="Column24" Width="75.59"/>
+        <TableColumn Name="Column25" Width="67.1"/>
+        <TableColumn Name="Column26" Width="78.46"/>
+        <TableColumn Name="Column27" Width="81.26"/>
+        <TableColumn Name="Column28"/>
+        <TableColumn Name="Column29" Width="170.1"/>
+        <TableColumn Name="Column30"/>
+        <TableRow Name="Row5" Height="27.39">
+          <TableCell Name="Cell22" Border.Lines="All" Text="[sp_AmarSelect.Karmand]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell23" Border.Lines="All" Text="[sp_AmarSelect.Ostad]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell24" Border.Lines="All" Text="[sp_AmarSelect.Student]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell25" Border.Lines="All" Text="[sp_AmarSelect.Azad]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell26" Border.Lines="All" Text="[sp_AmarSelect.Mande]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell27" Border.Lines="All" Text="[sp_AmarSelect.Eating]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell28" Border.Lines="All" Text="[sp_AmarSelect.total]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell29" Border.Lines="All" Text="[sp_AmarSelect.fldFoodName]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+          <TableCell Name="Cell30" Border.Lines="All" Text="[sp_AmarSelect.fldNobat]" HorzAlign="Center" VertAlign="Center" Font="Microsoft Sans Serif, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="184.89" Width="793.8" Height="35.87"/>
+  </ReportPage>
+</Report>

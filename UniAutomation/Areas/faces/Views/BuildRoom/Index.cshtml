@@ -1,0 +1,332 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="BuildRoom">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/تعریف اتاق های خوابگاه.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table> 
+            @Html.Hidden("fldRoomCode")
+                   <tr> 
+                    <td align="left">
+                      <span style="color: Red;">*</span> نام خوابگاه (Ins):
+                    
+                    </td>
+                    <td>
+                        @Html.TextBox("txtBuildingCodeId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+
+                    <td align="left">
+                       <span style="color: Red;">*</span>نام اتاق:
+                    </td>               
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtNameRoom")
+                        <span id="lblNameRoomError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+
+                   <tr>   
+                     <td align="left">
+                        <span style="color: Red;">*</span>مقطع تحصیلی:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                        .Name("cboSection")
+                                          .OptionLabel("مقطع تحصیلی...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetSection", "Student");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                                  )
+                        <span id="lblSectionError" style="color: Red;"></span>
+                    </td>
+
+                    <td align="left">
+                      <span style="color: Red;">*</span> ظرفیت:    
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtCapacity")
+                        <span id="lblCapacityError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td align="left">
+                    توضیحات:    
+                    </td>
+                    <td>
+                         @UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)
+                    </td>
+                     </tr>
+                    
+                </table>                      
+            
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نام خوابگاه" }, new { ID = "1", Name = "نام اتاق" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblBuildingRoomsSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldRoomCode).Title("کد اتاق").Visible(false);
+                    columns.Bound(p => p.fldBuildingName).Title("نام  خوابگاه");
+                    columns.Bound(p => p.fldNameRoom).Title("نام  اتاق");
+                    columns.Bound(p => p.fldCapacity).Title("ظرفیت ");
+                    columns.Bound(p => p.fldName).Title("مقطع تحصیلی");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                               .Read("Fill", "BuildRoom")
+            )
+        )
+        </div>
+        
+    </div>
+
+    <script type="text/javascript">
+        var iBuildingCodeId;
+        var isWinOpen = false;
+        $("document").ready(function () {
+
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $("#Help").button();
+
+            $("#exit").click(function () {
+                $("#BuildRoom").remove();
+            });
+            $('#txtBuildingCodeId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("body", "faces/SearchRoom");
+                    isWinOpen = true;
+                }
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "BuildRoom")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+            $('#BuildRoom').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#BuildRoom').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+        });
+        function Clear() {
+            $('#fldRoomCode').val(0);
+            $("#txtNameRoom").val('');
+            $("#txtCapacity").val('');
+            $("#txtDesc").val('');
+        }
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldRoomCode;
+                var URL = '@Url.Content("~/BuildRoom/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        iBuildingCodeId = data.fldBuildingCodeId;
+                        $('#fldRoomCode').val(data.fldRoomCode);
+                        $('#txtBuildingCodeId').val(data.fldBuildingName);
+                        $('#txtNameRoom').val(data.fldNameRoom);
+                        $('#txtCapacity').val(data.fldCapacity);
+                        $('#txtDesc').val(data.fldDesc); 
+                        var model2 = $("#cboSection").data("kendoDropDownList");
+                        model2.value(data.fldSectionId);
+
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        } 
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldRoomCode;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/BuildRoom/Delete")';
+                windowAppend("body", URL);
+                $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+
+        function SaveRecord() {
+            var er = false;
+            if ($("#txtNameRoom").val() == '') {
+                $("#txtNameRoom").addClass("input-validation-error");
+                $('#lblNameRoomError').html('لطفا نام اتاق را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblNameRoomError').html('');
+
+            if ($("#txtCapacity").val() == '') {
+                $("#txtCapacity").addClass("input-validation-error");
+                $('#lblCapacityError').html('لطفاظرفیت  اتاق را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblCapacityError').html('');
+
+            if ($("#cboSection").val() == '') {
+                $("#cboSection").addClass("input-validation-error");
+                $('#lblSectionError').html('لطفا مقطع تحصیلی را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblSectionError').html('');
+
+            if (er)
+                return;
+
+            var data = {
+                fldBuildingCodeId: iBuildingCodeId,
+                fldNameRoom: $("#txtNameRoom").val(),
+                fldCapacity: $("#txtCapacity").val(),
+                fldSectionId: $("#cboSection").val(),
+                fldDesc: $("#txtDesc").val(),
+                fldRoomCode: $("#fldRoomCode").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/BuildRoom/Save")', "#win");
+            }
+            Clear();
+        }
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "BuildRoom")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

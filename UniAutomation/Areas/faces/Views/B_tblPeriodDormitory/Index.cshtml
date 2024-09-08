@@ -1,0 +1,483 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblPeriodDormitory">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script> 
+     <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/تعریف%20دوره%20خوابگاهی.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>   
+                  @Html.Hidden("fldPeriodCode")
+                
+                <tr>
+                <td align="left">
+                        <span style="color: Red;">*</span>نام دوره (ترم):
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtPeriodName")
+                        <span id="lblPeriodNameError" style="color: Red;"></span>
+                    </td>
+                     <td align="left">
+                        <span style="color: Red;">*</span>سال:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtYear")
+                        <span id="lblYearError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>شهریه مهمان (هرشب):
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtGuestFees")
+                        <span id="lblGuestFeesError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                 <tr>
+                    <td align="left">
+                  
+                        <span style="color: Red;">*</span>تاریخ شروع:
+                    </td>
+                    <td>
+                     @Html.TextBox("txtStartDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblStartDateError" style="color: Red;"></span>
+                    </td>
+                     <td align="left">  
+                  
+                        <span style="color: Red;">*</span>تاریخ پایان:
+                    </td>
+                    <td>
+                    @Html.TextBox("txtEndDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblEndDateError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                 <tr>
+                    <td align="left">
+                        از ساعت:
+                    </td>
+                    <td align="right">
+                        @Html.TextBox("txtTLPTSTM", null, new { @style = "width:30px;height: 23px;" })
+                        : @Html.TextBox("txtTLPTSTH", null, new { @style = "width:30px;height: 23px;" })
+                        <span id="lblTLPTSTMError" style="color: Red;"></span>
+                        <span id="lblTLPTSTHError" style="color: Red;"></span>
+                    </td>
+               
+                    <td align="left">
+                        تا ساعت:
+                    </td>
+                    <td align="right">
+                        @Html.TextBox("txtTLPTETM", null, new { @style = "width:30px;height: 23px;" })
+                        : @Html.TextBox("txtTLPTETH", null, new { @style = "width:30px;height: 23px;" })
+                        <span id="lblTLPTETMError" style="color: Red;"></span>
+                        <span id="lblTLPTETHError" style="color: Red;"></span>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نام دوره" }, new { ID = "1", Name = "سال" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblPeriodDormitorySelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldPeriodCode).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldPeriodName).Title("نام دوره (ترم)");
+                    columns.Bound(p => p.fldYear).Title("سال");
+                    columns.Bound(p => p.fldGuestFees).Title("شهریه مهمان (هرشب)");    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                   .Read("Fill", "B_tblPeriodDormitory")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#B_tblPeriodDormitory").remove();
+            });
+
+            $('#txtStartDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $('#txtEndDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblPeriodDormitory")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+            $('#B_tblPeriodDormitory').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblPeriodDormitory').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+           
+
+            $("#txtPeriodName").keyup(function () {
+                if ($("#txtPeriodName").val() != '') {
+                    $("#txtPeriodName").removeClass("input-validation-error");
+                    $("#lblPeriodNameError").html("");
+                }
+                else {
+                    $("#txtPeriodName").addClass("input-validation-error");
+                    $('#lblPeriodNameError').html('لطفا نام دوره را وارد کنید.');
+                }
+            });
+            $("#txtYear").keyup(function () {
+                if ($("#txtYear").val() != '') {
+                    $("#txtYear").removeClass("input-validation-error");
+                    $("#lblYearError").html("");
+                }
+                else {
+                    $("#txtYear").addClass("input-validation-error");
+                    $('#lblYearError').html('لطفا سال را وارد کنید.');
+                }
+            });
+            $("#txtGuestFees").keyup(function () {
+                if ($("#txtGuestFees").val() != '') {
+                    $("#txtGuestFees").removeClass("input-validation-error");
+                    $("#lblGuestFeesError").html("");
+                }
+                else {
+                    $("#txtGuestFees").addClass("input-validation-error");
+                    $('#lblGuestFeesError').html('لطفا شهریه مهمان را وارد کنید.');
+                }
+            });
+            $("#txtStartDate").keyup(function () {
+                if ($("#txtStartDate").val() != '') {
+                    $("#txtStartDate").removeClass("input-validation-error");
+                    $("#lblStartDateError").html("");
+                }
+                else {
+                    $("#txtStartDate").addClass("input-validation-error");
+                    $('#lblStartDateError').html('لطفا تاریخ شروع را وارد کنید.');
+                }
+            });
+            $("#txtEndDate").keyup(function () {
+                if ($("#txtEndDate").val() != '') {
+                    $("#txtEndDate").removeClass("input-validation-error");
+                    $("#lbltxtEndDateError").html("");
+                }
+                else {
+                    $("#txtInterpreter ").addClass("input-validation-error");
+                    $('#lblInterpreter Error').html('لطفا تاریخ پایان را وارد کنید.');
+                }
+            });
+            $("#txtTLPTSTM").keyup(function () {
+                if ($("#txtTLPTSTM").val() != '') {
+                    $("#txtTLPTSTM").removeClass("input-validation-error");
+                    $("#lblTLPTSTMError").html("");
+                }
+                else {
+                    $("#txtTLPTSTM").addClass("input-validation-error");
+                    $('#lblTLPTSTMError').html('');
+                }
+            });
+            $("#txtTLPTSTH").keyup(function () {
+                if ($("#txtTLPTSTH").val() != '') {
+                    $("#txtTLPTSTH").removeClass("input-validation-error");
+                    $("#lblTLPTSTHError").html("");
+                }
+                else {
+                    $("#txtTLPTSTH").addClass("input-validation-error");
+                    $('#lblTLPTSTHError').html('لطفا ساعت شروع را وارد کنید.');
+                }
+            });
+            $("#txtTLPTETM").keyup(function () {
+                if ($("#txtTLPTETM").val() != '') {
+                    $("#txtTLPTETM").removeClass("input-validation-error");
+                    $("#lblTLPTETMError").html("");
+                }
+                else {
+                    $("#txtTLPTETM").addClass("input-validation-error");
+                    $('#lblTLPTETMError').html('');
+                }
+            });
+            $("#txtTLPTETH").keyup(function () {
+                if ($("#txtTLPTETH").val() != '') {
+                    $("#txtTLPTETH").removeClass("input-validation-error");
+                    $("#lblTLPTETHError").html("");
+                }
+                else {
+                    $("#txtTLPTETH").addClass("input-validation-error");
+                    $('#lblTLPTETHError').html('لطفا ساعت پایان را وارد کنید.');
+                }
+            });
+            
+        });
+        function Clear() {
+            $('#txtPeriodName').val('');
+            $('#txtYear').val('');
+            $('#txtGuestFees').val('');
+            $('#txtStartDate').val('');
+            $('#txtEndDate').val('');
+            $('#txtTLPTSTM').val('');
+            $('#txtTLPTSTH').val('');
+            $('#txtTLPTETM').val('');
+            $('#txtTLPTETH').val('');
+            $('#fldPeriodCode').val(0);
+            $('#txtDesc').val('');
+        }
+        function SaveRecord() {
+            var er = false;
+            if ($("#txtPeriodName").val() == '') {
+                $("#txtPeriodName").addClass("input-validation-error");
+                $('#lblPeriodNameError').html('لطفا نام دوره را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblPeriodNameError').html('');
+            if ($("#txtYear").val() == '') {
+                $("#txtYear").addClass("input-validation-error");
+                $('#lblYearError').html('لطفا سال را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblYearError').html('');
+            if ($("#txtGuestFees").val() == '') {
+                $("#txtGuestFees").addClass("input-validation-error");
+                $('#lblGuestFeesError').html('لطفا شهریه مهمان را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblGuestFeesError').html('');
+            if ($("#txtStartDate").val() == '') {
+                $("#txtStartDate").addClass("input-validation-error");
+                $('#lblStartDateError').html('لطفا تاریخ شروع را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblStartDateError').html('');
+            if ($("#txtEndDate").val() == '') {
+                $("#txtEndDate").addClass("input-validation-error");
+                $('#lblEndDateError').html('لطفا تاریخ پایان را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblEndDateError').html('');
+            if ($("#txtTLPTSTM").val() == '') {
+                $("#txtTLPTSTM").addClass("input-validation-error");
+                $('#lblTLPTSTMError').html('');
+                er = true;
+            }
+            else
+                $('#lblTLPTSTMError').html('');
+            if ($("#txtTLPTSTH").val() == '') {
+                $("#txtTLPTSTH").addClass("input-validation-error");
+                $('#lblTLPTSTHError').html('لطفا ساعت شروع را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblTLPTSTHError').html('');
+            if ($("#txtTLPTETM").val() == '') {
+                $("#txtTLPTETM").addClass("input-validation-error");
+                $('#lblTLPTETMError').html('');
+                er = true;
+            }
+            else
+                $('#lblTLPTETMError').html('');
+            if ($("#txtTLPTETH").val() == '') {
+                $("#txtTLPTETH").addClass("input-validation-error");
+                $('#lblTLPTETHError').html('لطفا ساعت پایان را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblTLPTETHError').html('');
+
+            if (er)
+                return;
+
+            StartTime = $("#txtTLPTSTH").val() + ':' + $("#txtTLPTSTM").val();
+            EndTime = $("#txtTLPTETH").val() + ':' + $("#txtTLPTETM").val();
+
+            var data = {
+                fldPeriodName: $("#txtPeriodName").val(),
+                fldYear: $("#txtYear").val(),
+                fldGuestFees: $("#txtGuestFees").val(),
+                fldStartDate: $("#txtStartDate").val(),
+                fldEndDate: $("#txtEndDate").val(),
+                fldTLPTST: StartTime,
+                fldTLPTET: EndTime,
+                fldDesc: $("#txtDesc").val(),
+                fldPeriodCode: $("#fldPeriodCode").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/B_tblPeriodDormitory/Save")', "#win");
+            }
+            Clear();
+        }
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldPeriodCode;
+                var URL = '@Url.Content("~/B_tblPeriodDormitory/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        $('#txtTLPTSTM').val(data.fldTLPTSTM);
+                        $('#txtTLPTSTH').val(data.fldTLPTSTH);
+                        $('#txtTLPTETM').val(data.fldTLPTETM);
+                        $('#txtTLPTETH').val(data.fldTLPTETH);
+                        $('#txtPeriodName').val(data.fldPeriodName);
+                        $('#txtYear').val(data.fldYear);
+                        $('#txtGuestFees').val(data.fldGuestFees);
+                        $('#txtStartDate').val(data.fldStartDate);
+                        $('#txtEndDate').val(data.fldEndDate);
+                        $('#fldPeriodCode').val(data.fldPeriodCode);
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+
+
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldPeriodCode;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblPeriodDormitory/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblPeriodDormitory")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+

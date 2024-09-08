@@ -1,0 +1,317 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblAllocationResponsibilitis">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+          <a href="@Url.Content("~/Helps/تخصیص%20مسئولیت.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+           
+            <table>   
+                  @Html.Hidden("fldAllocationCode")
+                 <tr>
+                   <td align="left">
+                     نام و نام خانوادگی (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtPCodeId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td> 
+                    <td align="left">
+                     نام مسئولیت (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtRCodeId", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+                    </tr>
+                    <tr> 
+                    <td align="left">
+                        <span style="color: Red;">*</span> رشته و مقطع تحصیلی:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtDisciplines")
+                        <span id="lblDisciplinesError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        شماره داخلی:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtExNumber")
+                    </td>
+                </tr>
+                                    
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نام و نام خانوادگی" }, new { ID = "1", Name = "نام مسئولیت" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblAllocationResponsibilitisSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldAllocationCode).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldPersonalName).Title("نام و نام خانوادگی");
+                    columns.Bound(p => p.fldRName).Title("نام مسئولیت");
+                    columns.Bound(p => p.fldDisciplines).Title("رشته و مقطع تحصیلی");
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                .Read("Fill", "B_tblAllocationResponsibilitis")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var pcodeid='';
+        var rcodeid='';
+        var isWinOpen = false;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#B_tblAllocationResponsibilitis").remove();
+            });
+
+            $('#txtPCodeId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("body", "faces/SearchPersonal");
+                    isWinOpen = true;
+
+                }
+            });
+
+            $('#txtRCodeId').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("body", "faces/SearchResponsibilitis");
+                    isWinOpen = true;
+                }
+            });
+            $('#B_tblAllocationResponsibilitis').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblAllocationResponsibilitis').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+
+
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblAllocationResponsibilitis")';
+                var value1 = pcodeid;
+                if ($("#cboSearchFiald").val() == 0)
+                    value1 = rcodeid;
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val(), value1);
+            });
+
+
+
+            $("#txtDisciplines").keyup(function () {
+                if ($("#txtDisciplines").val() != '') {
+                    $("#txtDisciplines").removeClass("input-validation-error");
+                    $("#lblDisciplinestError").html("");
+                }
+                else {
+                    $("#txtDisciplines").addClass("input-validation-error");
+                    $('#lblDisciplinesError').html('لطفا رشته و مقطع تحصیلی را وارد کنید.');
+                }
+            });
+
+
+        });
+        function Clear() {
+            $('#txtDisciplines').val('');
+            $('#txtExNumber').val('');
+            $('#fldAllocationCode').val(0);
+            $('#txtEMail').val('');
+        }
+
+            function DeleteRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldAllocationCode;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblAllocationResponsibilitis/Delete")';
+                    if (MetroDialogOpen == false) {
+                        MetroDialogOpen = true;
+                        windowAppend("body", URL);
+                        $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                    }
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                Clear();
+            }
+               function SaveRecord() {
+                var er = false;
+                if ($("#txtDisciplines").val() == '') {
+                    $("#txtDisciplines").addClass("input-validation-error");
+                    $('#lblDisciplinesError').html('لطفا رشته و مقطع تحصیلی را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblDisciplinesError').html('');
+
+                if (er)
+                    return;
+
+                var data = {
+                    fldPCodeId: pcodeid,
+                    fldRCodeId: rcodeid,
+                    fldDisciplines: $("#txtDisciplines").val(),
+                    fldExNumber: $("#txtExNumber").val(),
+                    fldEMail: $("#txtEMail").val(),
+                    fldAllocationCode: $("#fldAllocationCode").val()
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/B_tblAllocationResponsibilitis/Save")', "#win");
+                }
+                Clear();
+            }
+            function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldAllocationCode;
+                var URL = '@Url.Content("~/B_tblAllocationResponsibilitis/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        $('#txtDisciplines').val(data.fldDisciplines);
+                        pcodeid = data.fldPCodeId;
+                        rcodeid = data.fldRCodeId;
+                        $('#txtRCodeId').val(data.fldRName);
+                        $('#txtPCodeId').val(data.fldPersonalName);
+                        $('#txtExNumber').val(data.fldExNumber);
+                        $('#txtEMail').val(data.fldEMail);
+                        $('#fldAllocationCode').val(data.fldAllocationCode);
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+        function Reload(Url, gridname, field, value, top, searchType,value1) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType, value1:value1 },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblAllocationResponsibilitis")';
+                    Reload(url, 'Grid','2', pcodeid, 30, 2,rcodeid);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+
+

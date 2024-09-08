@@ -1,0 +1,243 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="PayOff">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    <div>
+        <br />
+         <a href="@Url.Content("~/Helps/تسویه حساب دانشجویان.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>
+                @Html.Hidden("fldId")
+                
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>نام دارنده کارت:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtName")
+                        @UniAutomation.Helper.winClass.Buttons("btnSearchName", "جستجو", "search")
+                    </td>
+                    <td>
+                        <span id="lblName" style="color: Black;"></span>  
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        میزان شارژ باقیمانده:
+                    </td>
+                    <td>
+                        <span id="lblCharge" style="color: Black;"></span>  
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                       مبلغ تسویه:
+                    </td>
+                    <td>
+                    @UniAutomation.Helper.winClass.textbox("txtTasvie")
+                    </td>
+                </tr>
+                <tr>
+                <td colspan=4 align="center">
+                <span id="lblError" style="color: Red;"></span>  
+                </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "تسویه", "Save")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblL_BookTrustSelect>()
+                .Name("GridBooks")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldBookTitle).Title("نام کتاب");
+                    columns.Bound(p => p.fldBookStateCaption).Title("وضعیت");
+                    columns.Bound(p => p.fldStartDate).Title("تاریخ شروع امانت");
+                    columns.Bound(p => p.fldTrustDate).Title("تاریخ پایان امانت");
+                    columns.Bound(p => p.fldTarikheTahvilShamsi).Title("تاریخ تحویل");
+                    columns.Bound(p => p.fldTedadRooz).Title("روز تاخیر");
+
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                 //       .Read("Fill", "L_BookTrust")
+            )
+            )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        var foodcart = 0;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#exit").button();
+            $('#Help').button();
+            $('#btnSearchName').button();
+
+
+            $("#exit").click(function () {
+                $("#PayOff").remove();
+            });
+
+
+            $('#PayOff').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    if ($('#txtName').val().length > 0) {
+                        var id = $('#txtName').val();
+                        $.ajax({
+                            url: '/PayOff/LoadCart',
+                            type: 'get',
+                            datatype: 'json',
+                            data: { rfid: id },
+                            error: function (xhr, status, error) { 
+                                alert(xhr + status);
+                            },
+                            success: function (result) {
+                                foodcart = result.foodcartID;
+                                $('#lblName').html(result.PersonName); 
+                                $('#lblCharge').html(result.Charge);
+                                $('#txtTasvie').val(0-result.Charge);
+                                $('#lblError').html(result.Error);
+                                $("#GridBooks").data("kendoGrid").dataSource.data(result.books);
+                            }
+                        });
+                    }
+                  
+                    
+                }
+            });
+
+            $('#btnSearchName').click(function () {
+                windowAppend("#PayOff", "/faces/SearchFoodCartsIns/index/8");
+            });
+
+            $('#PayOff').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#PayOff').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+
+         
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+      
+
+          
+        });
+
+        function Clear() {  
+            $('#txtName').val('');
+            $('#lblName').html('');
+            $('#lblCharge').html('');
+            $('#txtTasvie').val('');
+            $('#fldId').val(0);
+            $('#txtDesc').val('');
+            foodcart = 0;
+            $('#lblError').html('');
+        }
+
+        function SaveRecord() {
+            var er = false;
+            
+
+            if (foodcart == 0) {
+                $("#txtName").addClass("input-validation-error");
+                $('#lblName').html('لطفا کارت دانشجو را انتخاب کنید.');
+                er = true;
+            }
+            else {
+                $("#txtName").removeClass("input-validation-error");
+                $('#lblName').html('');
+            }
+
+      
+            if (er)
+                return;
+
+            var data = {
+                fldFoodCartsID: foodcart,
+                fldPrice: $("#txtTasvie").val(),
+                fldChargeType: 1,
+                fldDesc: $("#txtDesc").val(),
+                fldId: $("#fldId").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/PayOff/Save")', "#win");
+            }
+            Clear();
+        }
+
+        
+        
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+    </script>
+</div>

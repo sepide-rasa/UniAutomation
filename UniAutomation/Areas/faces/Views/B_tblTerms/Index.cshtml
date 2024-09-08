@@ -1,0 +1,349 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblTerms">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+    <a href="@Url.Content("~/Helps/تعریف ترم.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        
+        <center>
+            <table>                
+                @Html.Hidden("fldId")                 
+                 <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> ترم:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtTermName")
+                        <span id="lblTermNameError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <input type="checkbox" name="Active_Deactive" id="Active_Deactive" />
+                    </td>
+                    <td>  
+                        فعال
+                    </td>
+                </tr>
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> از تاریخ:
+                    </td>
+                    <td>
+                    @Html.TextBox("txtStartDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblStartDateError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تا تاریخ:
+                    </td>
+                    <td>
+                    @Html.TextBox("txtFinishDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblFinishDateError" style="color: Red;"></span>
+                    </td>
+                </tr>    
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "عنوان ترم" }}, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblTermsSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldTermName).Title("ترم");
+                    columns.Bound(p => p.fldStartDate).Title("از تاریخ");
+                    columns.Bound(p => p.fldFinishDate).Title("تا تاریخ");                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                .Read("Fill", "B_tblTerms")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $("#exit").click(function () {
+                $("#B_tblTerms").remove();
+            });
+
+            $('#txtStartDate').datepicker({  
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            });
+            $('#txtFinishDate').datepicker({
+                showButtonPanel: true,
+                changeMonth: true,
+                changeYear: true
+            });
+
+            $('#B_tblTerms').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblTerms').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblTerms")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+          
+            $("#txtTermName").keyup(function () {
+                if ($("#txtTermName").val() != '') {
+                    $("#txtTermName").removeClass("input-validation-error");
+                    $("#lblTermNameError").html("");
+                }
+                else {
+                    $("#txtTermName").addClass("input-validation-error");
+                    $('#lblTermNameError').html('لطفا عنوان ترم را وارد کنید.');
+                }
+            });
+
+            $("#txtStartDate").keyup(function () {
+                if ($("#txtStartDate").val() != '') {
+                    $("#txtStartDate").removeClass("input-validation-error");
+                    $("#lblStartDateError").html("");
+                }
+                else {
+                    $("#txtStartDate").addClass("input-validation-error");
+                    $('#lblStartDateError').html('لطفا تاریخ شروع ترم را وارد کنید.');
+                }
+            });
+
+            $("#txtFinishDate").keyup(function () {
+                if ($("#txtFinishDate").val() != '') {
+                    $("#txtFinishDate").removeClass("input-validation-error");
+                    $("#lblFinishDateError").html("");
+                }
+                else {
+                    $("#txtFinishDate").addClass("input-validation-error");
+                    $('#lblFinishDateError').html('لطفا تاریخ پایان ترم را وارد کنید.');
+                }
+            });
+
+        });
+        function Clear() {
+            $('#txtTermName').val('');
+            $('#txtFinishDate').val('');
+            $('#txtStartDate').val('');
+            $('#fldId').val(0);
+            $('#txtDesc').val('');
+            Active_Deactive.checked = false;
+        }
+
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/B_tblTerms/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        $('#txtTermName').val(data.fldTermName);
+                        $('#txtFinishDate').val(data.fldFinishDate);
+                        $('#txtStartDate').val(data.fldStartDate);
+                        Active_Deactive.checked = data.fldActive_Deactive;
+                        $('#fldId').val(data.fldId);
+                        $('#txtDesc').val(data.fldDesc);
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblTerms/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+
+        function SaveRecord() {   
+            var er = false;
+            if ($("#txtTermName").val() == '') {
+                $("#txtTermName").addClass("input-validation-error");
+                $('#lblTermNameError').html('لطفا عنوان ترم را وارد کنید.');
+                er = true;
+            }
+            else {
+                $('#lblTermNameError').html('');
+                $("#txtTermName").removeClass("input-validation-error");
+            }
+
+            if ($("#txtStartDate").val() == '') {
+                $("#txtStartDate").addClass("input-validation-error");
+                $('#lblStartDateError').html('لطفا تاریخ شروع ترم را وارد کنید.');
+                er = true;
+            }
+            else {
+                $('#lblStartDateError').html('');
+                $("#txtStartDate").removeClass("input-validation-error");
+            }
+
+            if ($("#txtFinishDate").val() == '') {
+                $("#txtFinishDate").addClass("input-validation-error");
+                $('#lblFinishDateError').html('لطفا تاریخ پایان ترم را وارد کنید.');
+                er = true;
+            }
+            else {
+                $("#txtFinishDate").removeClass("input-validation-error");
+                $('#lblFinishDateError').html('');
+            }
+
+            if (er)
+                return;
+
+            var data = {
+                fldTermName: $('#txtTermName').val(),
+                fldFinishDate: $('#txtFinishDate').val(),
+                fldStartDate: $('#txtStartDate').val(),
+                fldActive_Deactive: Active_Deactive.checked,
+                fldDesc: $("#txtDesc").val(),
+                fldId: $("#fldId").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/B_tblTerms/Save")', "#win");
+            }
+            Clear();
+        }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblTerms")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

@@ -1,0 +1,71 @@
+﻿<div id="rptReserv">
+@UniAutomation.Helper.winClass.windowHeader("", "چاپ بارکد", 500,250)
+    @using Kendo.Mvc.UI;
+    <table>
+        
+        <tr>
+            <td>
+                محل چاپ:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboPosition")
+                              .OptionLabel("محل چاپ ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "ابتدا صفحه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "وسط صفحه",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "انتهای صفحه",
+                                                          Value = "3"
+                                                      }
+                                                   
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                                    )
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+                 @UniAutomation.Helper.winClass.Buttons("exit1", "خروج", "exit")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var BookStockId;
+        var isWinOpen = false;
+        var WinOpen = false;
+        $(document).ready(function () {
+            BookStockId = '@ViewBag.BookStockId';
+            $('#show').button();
+            $('#exit1').button();
+
+            $('#rptReserv #btnClose').click(function () {
+                $("#rptReserv").remove();
+                isWinOpen = false;
+            });
+
+            $("#exit1").click(function () {
+                isWinOpen = false;
+                $("#rptReserv").remove();
+            });
+
+            $('#show').click(function () {
+               // window.open('/faces/BarCodBookStock/rptBarcode?id=' + BookStockId + '&P=' + $('#cboPosition').val());
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/BarCodBookStock/rptBarcode?id=' + BookStockId + '&P=' + $('#cboPosition').val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+        });
+    </script>
+      @UniAutomation.Helper.winClass.windowFother();
+</div>

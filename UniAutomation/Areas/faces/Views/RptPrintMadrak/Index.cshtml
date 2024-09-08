@@ -1,0 +1,197 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="RptPrintMadrak">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+       
+        <center>
+            <table>
+                @Html.Hidden("fldId")
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> شماره سریال:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtMadrakNum")
+                        <span id="lblMadrakNumError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تاریخ:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtMadrakDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblMadrakDateError" style="color: Red;"></span>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("btnSave", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("btnPrint", "دانلود", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+    </div>
+    <script type="text/javascript">
+    var StudentId = 0;
+    $("document").ready(function () {
+        $("#btnSave").button();
+        $("#btnPrint").button();
+        $("#exit").button();
+        $('#Help').button();
+
+        var URL = '@Url.Content("~/RptPrintMadrak/Details")';
+        URL = URL + "/" + '@ViewBag.StudentId';
+        $.ajax({
+            type: "post",
+            url: URL,
+            success: function (data) {
+                $('#txtMadrakNum').val(data.fldMadrakNum);
+                $('#txtMadrakDate').val(data.fldMadrakDate);
+                $('#fldId').val(data.fldId);
+                StudentId = data.fldStudentId;
+            },
+            failure: function (data) {
+                alert(data.data);
+            }
+        });
+
+        $("#exit").click(function () {
+            $("#RptPrintMadrak").remove();
+        });
+
+        $('#txtMadrakDate').datepicker({
+            showButtonPanel: true,
+            changeMonth: true,
+            changeYear: true
+        });
+
+        $('#RptPrintMadrak').on('keyup', 'input', function (event) {
+            if (event.which == 13) {
+                var inputs = $('#RptPrintMadrak').find(':input:visible');
+                inputs.eq(inputs.index(this) + 1).focus();
+            }
+        });
+
+        $(document).keyup(function (event) {
+            if (event.which == 119) {
+                SaveRecord();
+            }
+            else if (event.which == 113) {
+                EditRecord();
+            }
+            else if (event.which == 115) {
+                DeleteRecord();
+            }
+        });
+        $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+        $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+        $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+        jQuery("#btnPrint").click(function () {
+            FnSave(1);
+        });
+
+
+
+        $("#btnSave").click(function () {
+            FnSave(0);
+        });
+
+        $("#txtMadrakNum").keyup(function () {
+            if ($("#txtMadrakNum").val() != '') {
+                $("#txtMadrakNum").removeClass("input-validation-error");
+                $("#lblMadrakNumError").html("");
+            }
+            else {
+                $("#txtMadrakNum").addClass("input-validation-error");
+                $('#lblMadrakNumError').html('لطفا شماره سریال مدرک را وارد کنید.');
+            }
+        });
+        $("#txtMadrakDate").keyup(function () {
+            if ($("#txtMadrakDate").val() != '') {
+                $("#txtMadrakDate").removeClass("input-validation-error");
+                $("#lblMadrakDateError").html("");
+            }
+            else {
+                $("#txtMadrakDate").addClass("input-validation-error");
+                $('#lblMadrakDateError').html('لطفا تاریخ فارغ التحصیلی را وارد کنید.');
+            }
+        });
+
+    });
+    function FnSave(State) {
+        var er = false;
+        if ($("#txtMadrakNum").val() == '') {
+            $("#txtMadrakNum").addClass("input-validation-error");
+            $('#lblMadrakNumError').html('لطفا شماره سریال مدرک را وارد کنید.');
+            er = true;
+        }
+        else {
+            $('#lblMadrakNumError').html('');
+            $("#txtMadrakNum").removeClass("input-validation-error");
+        }
+
+        if ($("#txtMadrakDate").val() == '') {
+            $("#txtMadrakDate").addClass("input-validation-error");
+            $('#lblMadrakDateError').html('لطفا تاریخ فارغ التحصیلی را وارد کنید.');
+            er = true;
+        }
+        else {
+            $('#lblMadrakDateError').html('');
+            $("#txtMadrakDate").removeClass("input-validation-error");
+        }
+
+
+        if (er)
+            return;
+
+        var data = {
+            fldMadrakNum: $('#txtMadrakNum').val(),
+            fldMadrakDate: $('#txtMadrakDate').val(),
+            fldStudentId: StudentId,
+            fldId: $("#fldId").val()
+        };
+        if (data != '') {
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Content("~/RptPrintMadrak/Save")',
+                    data: data,
+                    datatype: "json",
+                    success: function (data) {
+                        if (State == 1) {
+                            window.location.href = '@Url.Content("/faces/RptPrintMadrak/RptPrint?StudentId=")' + StudentId;
+                            /*if (isWinOpen == false) {
+                                isWinOpen = true;
+                                windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                                var t = "/faces/RptPrintMadrak/RptPrint?StudentId=" + StudentId;
+                             //   $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+
+                                $('#pdf').html("<img alt='' src='" + t + "' width='90px' height='120px'  style='width: 900px;height: 500px;border: 1px solid #ccc;' />")
+                            }*/
+                            $('#Lock').hide();
+                        }
+                        else {
+                            var m = data;
+                            windowAppend("body", "/faces/metro/error");
+                            $("#message").html(m.data);
+                            switch (m.state) {
+                                case 0:
+                                    $("#error .wintitle").html("ذخیره موفق");
+                                    break;
+                                case 1:
+                                    $("#error .wintitle").html("خطا");
+                                    break;
+                            }
+                            $('#Lock').hide();
+                        }
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+        }
+    </script>
+</div>

@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/22/2013 12:59:48" ReportInfo.Modified="02/14/2018 10:54:29" ReportInfo.CreatorVersion="2015.1.2.0">
+  <Dictionary>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblChargeSelect1" Alias="sp_tblChargeSelect" ReferenceName="uniAutomationDataSet.sp_tblChargeSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldID" DataType="System.Int64"/>
+      <Column Name="fldFoodCartsID" DataType="System.Int64"/>
+      <Column Name="fldPrice" DataType="System.Int32"/>
+      <Column Name="fldChargeType" DataType="System.Byte"/>
+      <Column Name="fldChargeTypeName" DataType="System.String"/>
+      <Column Name="fldDate" DataType="System.String"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="PersonName" DataType="System.String"/>
+      <Column Name="PersonMelliCode" DataType="System.String"/>
+    </TableDataSource>
+    <Parameter Name="date" DataType="System.String"/>
+    <Parameter Name="time" DataType="System.String"/>
+    <Parameter Name="OrganName" DataType="System.String"/>
+    <Total Name="Total" Expression="[sp_tblChargeSelect.fldPrice]" Evaluator="Data1" PrintOn="ReportSummary1"/>
+  </Dictionary>
+  <ReportPage Name="Page1">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="718.2" Height="135.1">
+      <TableObject Name="Table1" Left="0.42" Top="110.54" Width="717.37" Height="24.56" Border.Lines="All">
+        <TableColumn Name="Column1" Width="174.51"/>
+        <TableColumn Name="Column3" Width="95.75"/>
+        <TableColumn Name="Column6" Width="100.49"/>
+        <TableColumn Name="Column13" Width="101.11"/>
+        <TableColumn Name="Column18" Width="179.36"/>
+        <TableColumn Name="Column20"/>
+        <TableRow Name="Row1" Height="24.56">
+          <TableCell Name="Cell1" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="توضیحات" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell3" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نوع شارژ" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell6" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="مبلغ شارژ" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell13" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="نام و نام خانوادگی" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 10pt, style=Bold" ColSpan="2"/>
+          <TableCell Name="Cell18" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell20" Border.Lines="All" Fill="Glass" Fill.Color="Orange" Fill.Blend="0.2" Fill.Hatch="false" Text="ردیف" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+      <TableObject Name="Table3" Width="769.76" Height="78.08">
+        <TableColumn Name="Column10" Width="198.75"/>
+        <TableColumn Name="Column11" Width="323.8"/>
+        <TableColumn Name="Column12" Width="247.21"/>
+        <TableRow Name="Row3" Height="78.08">
+          <TableCell Name="Cell10" Text="تاریخ چاپ :[date]&#13;&#10;ساعت چاپ:[time]&#13;&#10;صفحه:[Page#] از [TotalPages#]" HorzAlign="Right" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt"/>
+          <TableCell Name="Cell11" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt"/>
+          <TableCell Name="Cell12" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="Microsoft Sans Serif, 10pt">
+            <PictureObject Name="Picture1" Left="61.42" Top="1.89" Width="75.6" Height="71.82" DataColumn="sp_tblSettingSelect.fldImage"/>
+          </TableCell>
+        </TableRow>
+      </TableObject>
+      <TextObject Name="Text1" Left="199.39" Top="87.89" Width="319.43" Height="18.9" Text="تاریخ واریز: [sp_tblChargeSelect.fldDate]" HorzAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="143.1" Width="718.2" Height="34.01" DataSource="sp_tblChargeSelect1" Columns.Count="1" Columns.Layout="DownThenAcross">
+      <TableObject Name="Table4" Left="0.42" Width="717.37" Height="34.01" Border.Lines="All">
+        <TableColumn Name="Column21" Width="174.51"/>
+        <TableColumn Name="Column22" Width="95.75"/>
+        <TableColumn Name="Column23" Width="100.49"/>
+        <TableColumn Name="Column24" Width="101.11"/>
+        <TableColumn Name="Column25" Width="179.36"/>
+        <TableColumn Name="Column26"/>
+        <TableRow Name="Row4" Height="34.01">
+          <TableCell Name="Cell21" Border.Lines="All" Text="[sp_tblChargeSelect.fldDesc]" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell22" Border.Lines="All" Text="[sp_tblChargeSelect.fldChargeType]" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell23" Border.Lines="All" Text="[sp_tblChargeSelect.fldPrice]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="0" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="1" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell24" Border.Lines="All" Text="[sp_tblChargeSelect.PersonName]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 10pt, style=Bold" ColSpan="2"/>
+          <TableCell Name="Cell25" Border.Lines="All" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell26" Border.Lines="All" Text="[Row#]" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+    <ReportSummaryBand Name="ReportSummary1" Top="181.11" Width="718.2" Height="56.7">
+      <TableObject Name="Table5" Width="717.37" Height="34.01">
+        <TableColumn Name="Column27" Width="174.51"/>
+        <TableColumn Name="Column28" Width="95.75"/>
+        <TableColumn Name="Column29" Width="100.49"/>
+        <TableColumn Name="Column30" Width="101.11"/>
+        <TableColumn Name="Column31" Width="179.36"/>
+        <TableColumn Name="Column32"/>
+        <TableRow Name="Row5" Height="34.01">
+          <TableCell Name="Cell27" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell28" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell29" Border.Lines="All" Text="[Total]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="0" Format.DecimalSeparator="." Format.GroupSeparator="," Format.NegativePattern="1" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell30" Border.Lines="All" Text="جمع کل:" HorzAlign="Right" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold" ColSpan="2"/>
+          <TableCell Name="Cell31" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 10pt, style=Bold"/>
+          <TableCell Name="Cell32" HorzAlign="Center" VertAlign="Center" Font="RasaFont, 10pt, style=Bold"/>
+        </TableRow>
+      </TableObject>
+    </ReportSummaryBand>
+    <PageFooterBand Name="PageFooter1" Top="241.81" Width="718.2"/>
+  </ReportPage>
+</Report>

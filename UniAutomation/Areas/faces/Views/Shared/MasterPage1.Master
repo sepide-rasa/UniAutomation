@@ -1,0 +1,29 @@
+﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="~/Content/Base.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui-1.8.20.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery-ui-1.8.20.min.js" type="text/javascript"></script>
+    <link href="~/Content/ui.css" rel="stylesheet" type="text/css" />
+</head>
+<body dir="rtl">
+    <div>
+        
+        <div class="page">
+        <header>
+            <img src="../../../../Content/header.png" />
+		</header>
+        <section id="main">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server">
+        
+        </asp:ContentPlaceHolder>
+        </section>
+        </div>
+    </div>
+</body>
+</html>

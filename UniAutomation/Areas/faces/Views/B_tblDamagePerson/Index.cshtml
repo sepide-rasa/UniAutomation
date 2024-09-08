@@ -1,0 +1,478 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblDamagePerson">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script> 
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>     
+    <div>    
+        <br />
+        <a href="@Url.Content("~/Helps/ثبت%20خسارت%20جمعی%20و%20فردی.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table>   
+             @Html.Hidden("fldDamageCode")
+             <tr>
+             <td align="left"> <span style="color: Red;">*</span>
+                     نام و نام خانوادگی (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+
+                    <td align="left"> <span style="color: Red;">*</span>
+                        شماره دانشجویی:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtStudentNumber", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                    </td>
+                   </tr>
+                   <tr>
+                   <td align="left">
+                        <span style="color: Red;">*</span>عنوان خسارت :
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtDamageName")
+                        <span id="lblDamageNameError" style="color: Red;"></span>
+                    </td>
+                    <td align="left"> <span style="color: Red;">*</span>
+                     وسیله آسیب دیده (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtEqName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+                    </tr>
+                    <tr>
+                <td align="left">
+                  
+                        <span style="color: Red;">*</span>تاریخ :
+                    </td>
+                    <td>
+                     @Html.TextBox("txtDamageDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblDamageDateError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                         ساعت:
+                    </td>
+                    <td align="right">
+                        @Html.TextBox("txtDamageTimeM", null, new { @style = "width:30px;height: 23px;" })
+                        : @Html.TextBox("txtDamageTimeH", null, new { @style = "width:30px;height: 23px;" })
+                        <span id="lblDamageTimeMError" style="color: Red;"></span>
+                        <span id="lblDamageTimeHError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>مبلغ :
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtTotalAmount")
+                        <span id="lblTotalAmountError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>تعداد :
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtCount")
+                        <span id="lblCountError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                     <td align="left">
+                        توضیحات:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)
+                    </td>
+                </tr>    
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "عنوان خسارت" }, new { ID = "2", Name = "نام دانشجو" }, new { ID = "3", Name = "شماره دانشجویی" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblDamagePersonSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldDamageCode).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldDamageName).Title("عنوان خسارت");
+                    columns.Bound(p => p.StudentName).Title("نام دانشجو");
+                    columns.Bound(p => p.fldStudentNumber).Title("شماره دانشجویی");
+                    columns.Bound(p => p.fldDamageDate).Title("تاریخ");
+                    columns.Bound(p => p.fldDamageTime).ClientTemplate("#=fldDamageTime.Hours#:#=fldDamageTime.Minutes#").Title("ساعت");
+                    columns.Bound(p => p.fldTotalAmount).Title("مبلغ کل");
+                    columns.Bound(p => p.fldEqName).Title("وسیله خسارت دیده");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                                .Read("Fill", "B_tblDamagePerson")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        var Sid = 0;
+        var EqId = 0;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            $('#txtName').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#B_tblDamagePerson", "/faces/SearchStudentIns/index/2");
+                    isWinOpen = true;
+                }
+            });
+
+            $('#txtEqName').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#B_tblDamagePerson", "/faces/SearchEqu");
+                    isWinOpen = true;
+                }
+            });
+
+            $("#exit").click(function () {
+                $("#B_tblDamagePerson").remove();
+            });
+
+            $('#txtDamageDate').datepicker({
+                showButtonPanel: true
+            });
+            $('#B_tblDamagePerson').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblDamagePerson').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+           
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblDamagePerson")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+         
+            $("#txtDamageName").keyup(function () {
+                if ($("#txtDamageName").val() != '') {
+                    $("#txtDamageName").removeClass("input-validation-error");
+                    $("#lblDamageNameError").html("");
+                }
+                else {
+                    $("#txtDamageName").addClass("input-validation-error");
+                    $('#lblDamageNameError').html('لطفا عنوان خسارت را وارد کنید.');
+                }
+            });
+
+            $("#txtStudentCodeId").keyup(function () {
+                if ($("#txtStudentCodeId").val() != '') {
+                    $("#txtStudentCodeId").removeClass("input-validation-error");
+                    $("#lblStudentCodeIdError").html("");
+                }
+                else {
+                    $("#txtStudentCodeId").addClass("input-validation-error");
+                    $('#lblStudentCodeIdError').html('لطفا شماره دانشجویی را وارد کنید.');
+                }
+            });
+
+            $("#txtDamageDate").keyup(function () {
+                if ($("#txtDamageDate").val() != '') {
+                    $("#txtDamageDate").removeClass("input-validation-error");
+                    $("#lblDamageDateError").html("");
+                }
+                else {
+                    $("#txtDamageDate").addClass("input-validation-error");
+                    $('#lblDamageDateError').html('لطفا تاریخ را وارد کنید.');
+                }
+            });
+
+            $("#txtDamageTimeM").keyup(function () {
+                if ($("#txtDamageTimeM").val() != '') {
+                    $("#txtDamageTimeM").removeClass("input-validation-error");
+                    $("#lblDamageTimeMError").html("");
+                }
+                else {
+                    $("#txtDamageTimeM").addClass("input-validation-error");
+                    $('#lblDamageTimeMError').html('');
+                }
+            });
+
+            $("#txtDamageTimeH").keyup(function () {
+                if ($("#txtDamageTimeH").val() != '') {
+                    $("#txtDamageTimeH").removeClass("input-validation-error");
+                    $("#lblDamageTimeHError").html("");
+                }
+                else {
+                    $("#txtDamageTimeH").addClass("input-validation-error");
+                    $('#lblDamageTimeHError').html('لطفا ساعت را وارد کنید.');
+                }
+            });
+
+            $("#txtTotalAmount").keyup(function () {
+                if ($("#txtTotalAmount").val() != '') {
+                    $("#txtTotalAmount").removeClass("input-validation-error");
+                    $("#lblTotalAmountError").html("");
+                }
+                else {
+                    $("#txtTotalAmount").addClass("input-validation-error");
+                    $('#lblTotalAmountError').html('لطفا مبلغ واحد را وارد کنید.');
+                }
+            });
+
+           
+        });
+        function Clear() {
+            $('#txtDamageName').val('');
+            $('#txtStudentCodeId').val('');
+            $('#txtDamageDate').val('');
+            $('#txtTotalAmount').val('');
+            $('#txtDamageTimeH').val('');
+            $('#txtDamageTimeM').val('');
+            $('#fldDamageCode').val(0);
+            $('#txtEquimpmentRoomId').val('');
+            $('#txtDesc').val('');
+            $('#txtCount').val('');
+            $('#txtDamageName').val('');
+            $('#txtName').val('');
+            $('#txtEqName').val('');
+            $('#txtStudentNumber').val('');
+           
+        }
+        function DeleteRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldDamageCode;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblDamagePerson/Delete")';
+                    if (MetroDialogOpen == false) {
+                        MetroDialogOpen = true;
+                        windowAppend("body", URL);
+                        $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                    }
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                Clear();
+            }
+            function SaveRecord() {
+                var er = false;
+                if ($("#txtDamageName").val() == '') {
+                    $("#txtDamageName").addClass("input-validation-error");
+                    $('#lblDamageNameError').html('لطفا نام خسارت را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblDamageNameError').html('');
+
+                if ($("#txtStudentCodeId").val() == '') {
+                    $("#txtStudentCodeId").addClass("input-validation-error");
+                    $('#lblStudentCodeIdError').html('لطفا شماره دانشجویی را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblStudentCodeIdError').html('');
+
+                if ($("#txtDamageDate").val() == '') {
+                    $("#txtDamageDate").addClass("input-validation-error");
+                    $('#lblDamageDateError').html('لطفا تاریخ را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblDamageDateError').html('');
+
+                if ($("#txtDamageTimeM").val() == '') {
+                    $("#txtDamageTimeM").addClass("input-validation-error");
+                    $('#lblDamageTimeMError').html('');
+                    er = true;
+                }
+                else
+                    $('#lblDamageTimeMError').html('');
+
+                if ($("#txtDamageTimeH").val() == '') {
+                    $("#txtDamageTimeH").addClass("input-validation-error");
+                    $('#lblDamageTimeHError').html('لطفا ساعت را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblDamageTimeHError').html('');
+
+                if ($("#txtTotalAmount").val() == '') {
+                    $("#txtTotalAmount").addClass("input-validation-error");
+                    $('#lblTotalAmountError').html('لطفا مبلغ واحد را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblTotalAmountError').html('');
+
+
+                if (er)
+                    return;
+                DamageTime = $("#txtDamageTimeH").val() + ':' + $("#txtDamageTimeM").val();
+                var data = {
+                    fldStudentCodeId: Sid,
+                    fldEquimpmentRoomId:EqId,
+                    fldDamageDate: $("#txtDamageDate").val(),
+                    fldDamageTime: DamageTime,
+                    fldTotalAmount: $("#txtTotalAmount").val(),
+                    fldDesc: $("#txtDesc").val(),
+                    fldDamageCode: $("#fldDamageCode").val(),
+                    fldDamageName: $("#txtDamageName").val(),
+                    fldCount: $("#txtCount").val()
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/B_tblDamagePerson/Save")', "#win");
+                }
+                Clear();
+            }
+            function EditRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldDamageCode;
+                    var URL = '@Url.Content("~/B_tblDamagePerson/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            Sid = data.fldStudentCodeId;
+                            EqId = data.fldEquimpmentRoomId;
+                            $('#txtDamageName').val(data.fldDamageName);
+                            $('#txtDamageDate').val(data.fldDamageDate);
+                            $('#txtDamageTimeM').val(data.fldDamageTimeM);
+                            $('#txtDamageTimeH').val(data.fldDamageTimeH);
+                            $('#txtTotalAmount').val(data.fldTotalAmount);
+                            $('#txtDesc').val(data.fldDesc);
+                            $('#fldDamageCode').val(data.fldDamageCode);
+                            $('#txtEqName').val(data.fldEqName);
+                            $('#txtStudentNumber').val(data.fldStudentNumber);
+                            $('#txtName').val(data.StudentName);
+                            $('#txtCount').val(data.fldCount);
+
+
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblDamagePerson")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+

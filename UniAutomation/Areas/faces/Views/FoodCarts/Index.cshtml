@@ -1,0 +1,502 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="FoodCarts">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    
+
+    <div>    
+        <br />
+         <a href="@Url.Content("~/Helps/تعریف کارت تغذیه.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table> 
+            @Html.Hidden("fldID")
+           
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نوع کاربری:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                      .Name("cboType")
+                                      .BindTo(new List<SelectListItem>() {
+                                                      new SelectListItem() {
+                                                          Text = "دانشجو",
+                                                          Value = "1"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "دانشجو سنواتی",
+                                                          Value = "4"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "استاد",
+                                                          Value = "2"
+                                                      },
+                                                        new SelectListItem() {
+                                                          Text = "کارمند",
+                                                          Value = "3"
+                                                      }
+                                                  })                    
+                                    )                       
+                        <span id="lblTypeError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                   <tr>
+                    <td align="left">
+                     نام و نام خانوادگی (Ins):
+                    </td>
+                    <td>
+                        @Html.TextBox("txtName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+                    </td>
+                    <td align="left">
+                        کد ملی:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtMeliCode", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);", @readonly = "true" })
+                    </td>
+                    </tr>
+                    <tr>
+
+                    <td align="left">
+                        <span style="color: Red;">*</span> نام کاربری:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtUserName")
+                        <span id="lblUserNameError" style="color: Red;"></span>
+                    </td>
+
+                    <td align="left">
+                         رمز عبور:
+                    </td>
+                    <td>
+                        پیش فرض کدملی
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        RFID:
+                    </td>
+                    <td>
+                        @Html.Password("txtRFID")
+                    </td>
+                </tr>
+                </table>     
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("Reset", "ریست پسورد", "Clean")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("ChangeStatus", "تغییر وضعیت", "yes")
+                @*@UniAutomation.Helper.winClass.Buttons("Next", "بارکد", "Next")*@
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "نام خانوادگی" }, new { ID = "1", Name = "نام" }, new { ID = "2", Name = "کد ملی" }, new { ID = "3", Name = "شماره دانشجویی" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblFoodCartsSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldID).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldName).Title("نام");
+                    columns.Bound(p => p.fldFamily).Title("نام خانوادگی");
+                    columns.Bound(p => p.fldMelliCode).Title("کد ملی");
+                    columns.Bound(p => p.fldStudentNumber).Title("شماره دانشجویی");
+                    columns.Bound(p => p.fldUserName).Title("نام کاربری");
+                    columns.Bound(p => p.fldActiveTitle).Title("وضعیت");
+                    columns.Bound(p => p.fldActive).Title("کد").Visible(false);
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                       .Read("Fill", "FoodCarts")
+            )
+        )
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var Sid = null;
+        var Pid = null;
+        var Tid = null;
+        var Name;
+        var MeliCode;
+        var Famil;
+        var isWinOpen = false;
+        var Pass = "";
+        $("document").ready(function () {
+
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#ChangeStatus").button();
+            $("#exit").button(); 
+            $("#Next").button();
+            $("#Help").button();
+            $("#Reset").button();
+
+            $("#Next").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldID;
+                    windows('#Main', '/faces/Barcode/index/' + id);
+                } else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            });
+
+            $("#Reset").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldID;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/FoodCarts/Reset/")' + id;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به ریست پسورد رکورد انتخاب شده هستید؟');
+                }
+
+                else {
+                    windowAppend('body', '/metro/error');
+                    $('#message').html('لطفا یک سطر را انتخاب کنید.');
+                    $("#error .wintitle").html("خطا");
+                }
+                Clear();
+            });
+
+            $("#exit").click(function () {
+                $("#FoodCarts").remove();
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "FoodCarts")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+            $('#txtName').keyup(function () {
+                if (isWinOpen == false) {
+                    if ($("#cboType").val() == 1 || $("#cboType").val() == 4) {
+                        windowAppend("#FoodCarts", "/faces/SearchStudentIns/index/1");
+                    }
+                    else if ($("#cboType").val() == 2) {
+                        windowAppend("#FoodCarts", "/faces/SearchTeacherIns");
+                    }
+                    else if ($("#cboType").val() == 3) {
+                        windowAppend("#FoodCarts", "/faces/SearchPersonelIns");
+                    }
+                    Sid = null;
+                    Tid = null;
+                    isWinOpen = true;
+                }
+            });
+            $('#cboType').change(function () {
+                if ($("#cboType").val() == 1 || $("#cboType").val() == 4) {
+                    $('#txtName').keyup(function () {
+                        if (isWinOpen == false) {
+                            windowAppend("#FoodCarts", "/faces/SearchStudentIns/index/1");
+                            isWinOpen = true;
+                        }
+                    });
+                    Pid = null;
+                    Tid = null;
+                }
+                else if ($("#cboType").val() == 2) {
+                    $('#txtName').keyup(function () {
+                        if (isWinOpen == false) {
+                            windowAppend("#FoodCarts", "/faces/SearchTeacherIns");
+                            isWinOpen = true;
+                        }
+                    });
+                    Sid = null;
+                    Pid = null;
+                }
+                else if ($("#cboType").val() == 3) {
+                    $('#txtName').keyup(function () {
+                        if (isWinOpen == false) {
+                            windowAppend("#FoodCarts", "/faces/SearchPersonelIns");
+                            isWinOpen = true;
+                        }
+                    });
+                    Sid = null;
+                    Tid = null;
+                }
+            });
+
+            $('#Course').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#Course').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+            $("#ChangeStatus").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldID;
+                    var msg = 'آیا مایل به فعال کردن کارت تغذیه انتخاب شده هستید؟';
+                    if (selectedItem.fldActive) 
+                        msg = 'آیا مایل به غیرفعال کردن کارت تغذیه انتخاب شده هستید؟';
+
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/FoodCarts/ChangeStatus")';
+                    if (MetroDialogOpen == false) {
+                        MetroDialogOpen = true;
+                        windowAppend("body", URL);
+                        $("#message").html(msg);
+                    }
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            });
+            
+            $("#txtUserName").keyup(function () {
+                if ($("#txtUserName").val() != '') {
+                    $("#txtUserName").removeClass("input-validation-error");
+                    $("#lblUserNameError").html("");
+                }
+                else {
+                    $("#txtUserName").addClass("input-validation-error");
+                    $('#lblUserNameError').html('لطفا نام کاربری را وارد کنید.');
+                }
+            });
+
+            //$("#txtPassword").keyup(function () {
+            //    if ($("#txtPassword").val() != '') {
+            //        $("#txtPassword").removeClass("input-validation-error");
+            //        $("#lblPasswordError").html("");
+            //    }
+            //    else {
+            //        $("#txtPassword").addClass("input-validation-error");
+            //        $('#lblPasswordError').html('لطفا رمز عبور را وارد کنید.');
+            //    }
+            //});
+        });
+        function Clear() {
+            $('#fldId').val(0);
+            $('#txtPassword').val('');
+            $('#txtUserName').val('');
+
+        }
+        function SaveRecord() {
+            var er = false;
+            if ($("#txtUserName").val() == '') {
+                $("#txtUserName").addClass("input-validation-error");
+                $('#lblUserNameError').html('لطفا نام کاربری را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblUserNameError').html('');
+
+            //if ($("#txtPassword").val() == '') {
+            //    $("#txtPassword").addClass("input-validation-error");
+            //    $('#lblPasswordError').html('لطفا رمز عبور را وارد کنید.');
+            //    er = true;
+            //}
+            //else
+            //    $('#lblPasswordError').html('');
+
+
+            if (er)
+                return;
+
+            var Type=null;
+            if ($("#cboType").val() == "1") 
+                Type = 1;
+            else if ($("#cboType").val() == "2")
+                Type = 2;
+            else if ($("#cboType").val() == "3")
+                Type = 3;
+            else if ($("#cboType").val() == "4")
+                Type=4;
+
+            var data = {
+                fldID: $('#fldID').val(),
+                fldPersonalID: Pid,
+                fldStudentID: Sid,
+                fldTeacherID: Tid,
+                fldPassword: Pass,
+                fldUserName: $('#txtUserName').val(),
+                fldRFID: $('#txtRFID').val(),
+                fldType: Type
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/FoodCarts/Save")', "#win");
+            }
+            Clear();
+        }
+
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldID;
+                var URL = '@Url.Content("~/FoodCarts/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        $('#fldID').val(data.fldID);
+                        $('#txtName').val(data.fldName);
+                        $('#txtMeliCode').val(data.fldMelliCode);
+                        $('#txtUserName').val(data.fldUserName);
+                        Pass = data.fldPassword;
+                        //$('#txtPassword').val(data.fldPassword);
+                        $('#txtRFID').val(data.fldRFID);
+                        if ((data.fldStudentID) != null) {
+                            var a = $("#cboType").data("kendoDropDownList");
+                            Sid = data.fldStudentID;
+                            if (data.fldType == 1)
+                                a.value(1);
+                            else
+                                a.value(4);
+                        }
+                        else if ((data.fldTeacherID) != null) {
+                            var a = $("#cboType").data("kendoDropDownList");
+                            Tid = data.fldTeacherID;
+                            a.value(2);
+                        }
+                        else if ((data.fldPersonalID) != null) {
+                            var a = $("#cboType").data("kendoDropDownList");
+                            Pid = data.fldPersonalID;
+                            a.value(3);
+                        }
+
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+
+
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldID;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/FoodCarts/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "FoodCarts")';
+                    Reload(url, 'Grid', '0', '', 30, 1);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+    </script>
+</div>

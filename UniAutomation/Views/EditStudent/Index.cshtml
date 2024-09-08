@@ -1,0 +1,434 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="EditStudent">
+    @UniAutomation.Helper.winClass.windowHeader("", "ویرایش اطلاعات", 900, 500)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    <div>
+        <br />
+       <center>
+            <table>
+               
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نام پدر:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtFatherName")
+                        <span id="lblFatherNameError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>سال تولد:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtBDate")
+                        <span id="lblBDateError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> شماره شناسنامه:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtShenasnameNo")
+                        <span id="lblShenasnameNoError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>محل صدور:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtMahaleSodoor")
+                        <span id="lblMahaleSodoorError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    @Html.Hidden("fldID")
+                    <td align="left">
+                        <span style="color: Red;">*</span> شهر محل سکونت:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtCity")
+                        <span id="lblCityError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>مذهب:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                                     .Name("cboMazhab")
+                              .OptionLabel("مذهب ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "شیعه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "سنی",
+                                                          Value = "2"
+                                                      }
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                        )
+                        <span id="lblMazhabError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تلفن همراه:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtMobile")
+                        <span id="lblMobileError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>  ایمیل:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtEmail")
+                        <span id="lblEmailError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تلفن همراه ولی:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtParentPhone")
+                        <span id="lblParentPhoneError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>  تلفن ثابت:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtTelephone")
+                        <span id="lblTelephoneError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        توضیحات:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)
+                    </td>
+                    <td colspan="2">
+                        <table>
+                            <tr>
+                                <td align="left">
+                                    عکس دانشجو:(با فرمت jpg و کمتر از 25 کیلوبایت)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" style="color:red;">
+                                    برای بارگذاری عکس از مرورگر کروم استفاده کنید.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img id="PreviewImage1" src="@Url.Content("~/Content/images/Blank.jpg")" alt="" style="width: 80px; height: 80px; border: 2px;" />
+                                    @UniAutomation.Helper.winClass.Buttons("btnBrowse1", "انتخاب عکس", "search")
+                                    @UniAutomation.Helper.winClass.Buttons("btnRemove1", "برچیدن عکس", "del")
+                                    <input style="display: none;" type="file" accept=".jpg" id="image1" name="image1"
+                                           onchange="readURL1(this)" />
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @*@UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")*@
+            </p>
+        </center>
+ 
+
+    </div>
+    <script type="text/javascript">
+        var TermId;
+        var isWinOpen = false;
+        $("document").ready(function () {
+
+
+            $("#AddLink").button();
+            $("#btnBrowse1").button();
+            $("#btnRemove1").button();
+            $("#exit").button();
+              $('#Help').button();
+              EditRecord();
+
+            $("#exit").click(function () {
+                $("#EditStudent").remove();
+            });
+
+            $("#btnRemove1").click(function () {
+                $('#PreviewImage1').attr('src', '@Url.Content("~/Content/images/Blank.jpg")');
+            });
+            $('#EditStudent').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#EditStudent').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+
+     
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+
+
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+
+            $("#btnBrowse1").click(function () {
+                performClick(document.getElementById('image1'));
+            });
+
+            function performClick(node) {
+                var evt = document.createEvent("MouseEvents");
+                evt.initEvent("click", true, false);
+                node.dispatchEvent(evt);
+            }
+         
+
+        });
+
+        function SaveRecord() {
+            var image1 = document.getElementById('PreviewImage1');
+            var c = image1.attributes[1];
+            var imgData1 = "";
+            if (c.value != "") {
+                imgData1 = getBase64Image(image1);
+            }
+
+
+
+            var er = false;
+           
+
+            if ($("#txtMahaleSodoor").val() == '') {
+                $("#txtMahaleSodoor").addClass("input-validation-error");
+                $('#lblMahaleSodoorError').html('لطفا محل صدور را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblMahaleSodoorError').html('');
+
+            if ($("#txtShenasnameNo").val() == '') {
+                $("#txtShenasnameNo").addClass("input-validation-error");
+                $('#lblShenasnameNoError').html('لطفا شماره شناسنامه را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblShenasnameNoError').html('');
+
+            if ($("#txtBDate").val() == '') {
+                $("#txtBDate").addClass("input-validation-error");
+                $('#lblBDateError').html('لطفا سال تولد را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblBDateError').html('');
+
+            if ($("#txtFatherName").val() == '') {
+                $("#txtFatherName").addClass("input-validation-error");
+                $('#lblFatherNameError').html('لطفا نام پدر را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblFatherNameError').html('');
+
+            if ($("#txtEmail").val() == '') {
+                $("#txtEmail").addClass("input-validation-error");
+                $('#lblEmailError').html('لطفا ایمیل را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblEmailError').html('');
+
+            if ($("#txtMobile").val() == '') {
+                $("#txtMobile").addClass("input-validation-error");
+                $('#lblMobileError').html('لطفا تلفن همراه را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblMobileError').html('');
+
+            if ($("#txtParentPhone").val() == '') {
+                $("#txtParentPhone").addClass("input-validation-error");
+                $('#lblParentPhoneError').html('لطفا تلفن همراه ولی را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblParentPhoneError').html('');
+
+            if ($("#txtTelephone").val() == '') {
+                $("#txtTelephone").addClass("input-validation-error");
+                $('#lblTelephoneError').html('لطفا تلفن را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblTelephoneError').html('');
+
+            if ($("#txtCity").val() == '') {
+                $("#txtCity").addClass("input-validation-error");
+                $('#lblCityError').html('لطفا شهر را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblCityError').html('');
+
+            if ($("#cboMazhab").val() == '') {
+                $("#cboMazhab").addClass("input-validation-error");
+                $('#lblMazhabError').html('لطفا مذهب را انتخاب کنید.');
+                er = true;
+            }
+            else
+                $('#lblMazhabError').html('');
+            
+
+            if (er)
+                return;
+
+            var data = {
+                fldFatherName: $("#txtFatherName").val(),
+                fldMazhab: $("#cboMazhab").val(),
+                fldBDate: $("#txtBDate").val(),
+                fldShenasnameNo: $("#txtShenasnameNo").val(),
+                fldMahaleSodoor: $("#txtMahaleSodoor").val(),
+                fldEmail: $("#txtEmail").val(),
+                fldDesc: $("#txtDesc").val(),
+                fldID: $("#fldID").val(),
+                fldMobile: $("#txtMobile").val(),
+                fldParentPhone: $("#txtParentPhone").val(),
+                fldTelephone: $("#txtTelephone").val(),
+                fldCity: $("#txtCity").val(),
+                fldPic: imgData1
+            };
+
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/EditStudent/Save")', "#win");
+            }
+            $("#EditStudent").remove();
+        }
+
+        function EditRecord() {
+            
+                var URL = '@Url.Content("~/EditStudent/Details")';
+                URL = URL;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+                        $('#txtFatherName').val(data.fldFatherName);
+                        $('#txtBDate').val(data.fldBDate);
+                        $('#txtShenasnameNo').val(data.fldShenasnameNo);
+                        $('#txtMahaleSodoor').val(data.fldMahaleSodoor);
+                        $('#fldID').val(data.fldID);
+                        $('#txtEmail').val(data.fldEmail);
+                        $('#txtMobile').val(data.fldMobile);
+                        $('#txtTelephone').val(data.fldTelephone);
+                        $('#txtParentPhone').val(data.fldParentPhone);
+                        $('#txtDesc').val(data.fldDesc);
+                        $('#txtCity').val(data.fldCity);
+                        var modelm = $("#cboMazhab").data("kendoDropDownList");
+                        modelm.value(data.fldMazhab);
+                        var g = '@Url.Content("~/EditStudent/StudentImage/")' + data.fldpic;
+                        $('#PreviewImage1').attr('src', g);
+
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+   
+        }
+
+        function readURL1(input) {
+            if (input.files && input.files[0]) {//Check if input has files.
+                if (input.files[0].size > 25600) {
+                    alert('حجم فایل بزرگتر از 25 کیلو بایت است.');
+                }
+                else {
+                    var reader = new FileReader(); //Initialize FileReader.
+
+                    reader.onload = function (e) {
+                        $('#PreviewImage1').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+
+        function getBase64Image(imgElem) {
+            // imgElem must be on the same server otherwise a cross-origin error will be thrown "SECURITY_ERR: DOM Exception 18"
+            var canvas = document.createElement("canvas");
+            canvas.width = imgElem.clientWidth;
+            canvas.height = imgElem.clientHeight;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(imgElem, 0, 0, 80, 80);
+            var dataURL = canvas.toDataURL("image/jpg");
+            return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+        }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+    </script>
+    @UniAutomation.Helper.winClass.windowFother();
+</div>

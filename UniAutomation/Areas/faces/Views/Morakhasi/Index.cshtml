@@ -1,0 +1,505 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="Morakhasi">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+          <a href="@Url.Content("~/Helps/مرخصی.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+       
+        <center>
+            <table>   
+            <tr>
+            @Html.Hidden("fldId")
+                    <td align="right">
+                   <span style="color: Red;">*</span> تاریخ:
+                    @UniAutomation.Helper.winClass.textbox("txtFormDate")
+                    <span id="lblFormDateError" style="color: Red;"></span>
+                    </td>
+                </tr> 
+                 <tr>
+                    <td align="right">
+                    سرپرست محترم خوابگاه:
+                    </td>
+                </tr>  
+                <tr>
+                    <td align="right">   
+                    با سلام
+                      </td>
+                </tr>
+                    <tr>
+                  <td align="right">
+                       احتراما اینجانب(Ins):<span style="color: Red;">*</span>
+                       @UniAutomation.Helper.winClass.textbox("txtStudent")
+                     <span id="lblStudentError" style="color: Red;"></span>
+                   
+                         به شماره دانشجویی:
+                         
+                     <span id="lblStudentNumber" style="color: Black;"></span>
+              
+                          رشته:
+                          
+                        <span id="lblReshte" style="color: Black;"></span>
+                     
+                        ساکن:
+                       
+                         <span id="lblSaken" style="color: Black;"></span>
+
+                          خوابگاه:
+                          
+                     <span id="lblKhabgah" style="color: Black;"></span>
+              
+                          اتاق:
+                          
+                        <span id="lblRoom" style="color: Black;"></span>
+                        </td>
+                        </tr>
+                        <tr>
+                        <td align="right">
+                        از تاریخ: <span style="color: Red;">*</span>
+                       @UniAutomation.Helper.winClass.textbox("txtStartDate")   
+                        <span id="lblStartDateError" style="color: Red;"></span>
+
+                        لغایت:<span style="color: Red;">*</span>
+                        @UniAutomation.Helper.winClass.textbox("txtFinishDate") 
+                        <span id="lblFinishDateError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr></tr> 
+                    <tr>
+                  <td align="right">
+                     در منزل محارم خویش (مندرج در فرم محارم) آقای/خانم:<span style="color: Red;">*</span>
+                     @UniAutomation.Helper.winClass.textbox("txtHostName")
+                       <span id="lblHostNameError" style="color: Red;"></span>
+                       
+                       نسبت:<span style="color: Red;">*</span>
+                       @UniAutomation.Helper.winClass.textbox("txtNesbat")
+                       <span id="lblNesbatError" style="color: Red;"></span>
+
+                       مهمان خواهم بود مراتب جهت استحضار تقدیم می گردد.
+
+                    </td>
+                    </tr> 
+                    <tr>
+                    
+                    <td align="right">
+                    <p> <span style="color: Red;">*</span>آدرس و تلفن میزبان:
+                    </p>
+                       
+                        @UniAutomation.Helper.winClass.textArea("txtAddress", 2, 100)
+                        <span id="lblAddressError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @*@(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "عنوان رده بندی کتاب" }}, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )*@
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblMorakhasiSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldStudentName).Title("نام و نام خانوادگی");
+                    columns.Bound(p => p.fldStudentNumber).Title("شماره دانشجویی");
+                    columns.Bound(p => p.fldNameRoom).Title("اتاق");
+                    columns.Bound(p => p.fldCourseName).Title("رشته تحصیلی");
+                    columns.Bound(p => p.fldStartDate).Title("تاریخ شروع");
+                    columns.Bound(p => p.fldFinishDate).Title("تاریخ پایان");
+                    columns.Bound(p => p.fldDesc).Title("توضیحات");
+                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                .Read("Fill", "Morakhasi")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var EnterDormId = 0;
+        var EnterDormSarbarg = 0;
+        var isWinOpen = false;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+
+            EnterDormSarbarg = '@ViewBag.EnterDormSarbarg';
+
+            $("#exit").click(function () {
+                $("#Morakhasi").remove();
+            });
+            $('#Morakhasi').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#Morakhasi').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+
+
+            $('#txtStudent').keyup(function () {
+                if (isWinOpen == false) {
+                    windowAppend("#Morakhasi", "/faces/SearchEnterDorm/index/"+EnterDormSarbarg);
+                    isWinOpen = true;
+                }
+            });
+
+            $('#txtStartDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $('#txtFinishDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $('#txtFormDate').datepicker({
+                showButtonPanel: true
+            });
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "Morakhasi")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+            
+
+            $("#txtFormDate").keyup(function () {
+                if ($("#txtFormDate").val() != '') {
+                    $("#txtFormDate").removeClass("input-validation-error");
+                    $("#lblFormDateError").html("");
+                }
+                else {
+                    $("#txtFormDate").addClass("input-validation-error");
+                    $('#lblFormDateError').html('لطفا تاریخ فرم را وارد کنید.');
+                }
+            });
+            $("#txtStartDate").keyup(function () {
+                if ($("#txtStartDate").val() != '') {
+                    $("#txtStartDate").removeClass("input-validation-error");
+                    $("#lblStartDateError").html("");
+                }
+                else {
+                    $("#txtStartDate").addClass("input-validation-error");
+                    $('#lblStartDateError').html('لطفا تاریخ شروع مرخصی را وارد کنید.');
+                }
+            });
+            $("#txtFinishDate").keyup(function () {
+                if ($("#txtFinishDate").val() != '') {
+                    $("#txtFinishDate").removeClass("input-validation-error");
+                    $("#lblFinishDateError").html("");
+                }
+                else {
+                    $("#txtFinishDate").addClass("input-validation-error");
+                    $('#lblFinishDateError').html('لطفا تاریخ پایان مرخصی را وارد کنید.');
+                }
+            });
+            $("#txtHostName").keyup(function () {
+                if ($("#txtHostName").val() != '') {
+                    $("#txtHostName").removeClass("input-validation-error");
+                    $("#lblHostNameError").html("");
+                }
+                else {
+                    $("#txtHostName").addClass("input-validation-error");
+                    $('#lblHostNameError').html('لطفا نام میزبان را وارد کنید.');
+                }
+            });
+            $("#txtNesbat").keyup(function () {
+                if ($("#txtNesbat").val() != '') {
+                    $("#txtNesbat").removeClass("input-validation-error");
+                    $("#lblNesbatError").html("");
+                }
+                else {
+                    $("#txtNesbat").addClass("input-validation-error");
+                    $('#lblNesbatError').html('لطفا نسبت میزبان را وارد کنید.');
+                }
+            });
+            $("#txtAddress").keyup(function () {
+                if ($("#txtAddress").val() != '') {
+                    $("#txtAddress").removeClass("input-validation-error");
+                    $("#lblAddressError").html("");
+                }
+                else {
+                    $("#txtAddress").addClass("input-validation-error");
+                    $('#lblAddressError').html('لطفا آدرس میزبان را وارد کنید.');
+                }
+            });
+        });
+        function Clear() {   
+            EnterDormId = 0;
+            $('#txtStudent').val('');
+            $('#lblStudentNumber').html('');
+            $('#lblReshte').html('');
+            $('#lblSaken').html('');
+            $('#lblKhabgah').html('');
+            $('#lblRoom').html('');
+            $('#txtFormDate').val('');
+            $('#txtHostName').val('');
+            $('#txtNesbat').val('');
+            $('#txtStartDate').val('');
+            $('#txtFinishDate').val('');
+            $('#txtAddress').val('');
+            $('#fldId').val(0);
+            $('#txtDesc').val('');
+        }
+
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/Morakhasi/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+
+        function SaveRecord() {   
+            var er = false;
+            if (EnterDormId == 0) {
+                $("#txtStudent").addClass("input-validation-error");
+                $('#lblStudentError').html('لطفا دانشجو را انتخاب کنید.');
+                er = true;
+            }
+            else {
+                $("#txtStudent").removeClass("input-validation-error");
+                $('#lblStudentError').html('');
+            }
+
+            if ($("#txtFormDate").val() == "") {
+                $("#txtFormDate").addClass("input-validation-error");
+                $('#lblFormDateError').html('لطفا تاریخ فرم را وارد کنید.');
+                er = true;
+            }
+            else {
+                $("#txtFormDate").removeClass("input-validation-error");
+                $('#lblFormDateError').html('');
+            }
+
+            if ($("#txtStartDate").val() == "") {
+                $("#txtStartDate").addClass("input-validation-error");
+                $('#lblStartDateError').html('لطفا تاریخ شروع مرخصی را وارد کنید.');
+                er = true;
+            }
+            else {
+                $("#txtStartDate").removeClass("input-validation-error");
+                $('#lblStartDateError').html('');
+            }
+
+            if ($("#txtFinishDate").val() == "") {
+                $("#txtFinishDate").addClass("input-validation-error");
+                $('#lblFinishDateError').html('لطفا تاریخ پایان مرخصی را وارد کنید.');
+                er = true;
+            }
+            else {
+                $("#txtFinishDate").removeClass("input-validation-error");
+                $('#lblFinishDateError').html('');
+            }
+
+            if ($("#txtHostName").val() == "") {
+                $("#txtHostName").addClass("input-validation-error");
+                $('#lblHostNameError').html('لطفا نام میزبان را وارد کنید.');
+                er = true;
+            }
+            else {
+                $("#txtHostName").removeClass("input-validation-error");
+                $('#lblHostNameError').html('');
+            }
+
+            if ($("#txtNesbat").val() == "") {
+                $("#txtNesbat").addClass("input-validation-error");
+                $('#lblNesbatError').html('لطفا نسبت میزبان را وارد کنید.');
+                er = true;
+            }
+            else {
+                $("#txtNesbat").removeClass("input-validation-error");
+                $('#lblNesbatError').html('');
+            }
+
+            if ($("#txtAddress").val() == "") {
+                $("#txtAddress").addClass("input-validation-error");
+                $('#lblAddressError').html('لطفا آدرس میزبان را وارد کنید.');
+                er = true;
+            }
+            else {
+                $("#txtAddress").removeClass("input-validation-error");
+                $('#lblAddressError').html('');
+            }
+
+            if (er)
+                return;
+                   
+            var data = {
+                fldEnterDormId: EnterDormId,
+                fldFormDate: $("#txtFormDate").val(),
+                fldStartDate: $("#txtStartDate").val(),
+                fldFinishDate: $("#txtFinishDate").val(),
+                fldHostName: $("#txtHostName").val(),
+                fldNesbat: $("#txtNesbat").val(),
+                fldAddress: $("#txtAddress").val(),
+                fldDesc: $("#txtDesc").val(),
+                fldId: $("#fldId").val()
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/Morakhasi/Save")', "#win");
+            }
+            Clear();
+        }
+
+        function EditRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/Morakhasi/Details")';
+                URL = URL + "/" + id;
+                $.ajax({
+                    type: "GET",
+                    url: URL,
+                    success: function (data) {
+
+                        EnterDormId = data.fldEnterDormId;
+                        $('#txtStudent').val(data.fldStudentName);
+                        $('#lblStudentNumber').html(data.fldStudentNumber);
+                        $('#lblReshte').html(data.fldCourseName);
+                        $('#lblSaken').html(data.fldCity);
+                        $('#lblKhabgah').html(data.fldBuildingName);
+                        $('#lblRoom').html(data.fldNameRoom);
+                        $('#txtFormDate').val(data.fldFormDate);
+                        $('#txtHostName').val(data.fldHostName);
+                        $('#txtNesbat').val(data.fldNesbat);
+                        $('#txtAddress').val(data.fldAddress);
+                        $("#txtStartDate").val(data.fldStartDate);
+                        $("#txtFinishDate").val(data.fldFinishDate);
+                        $('#fldId').val(data.fldId);
+                    },
+                    failure: function (data) {
+                        alert(data.data);
+                    }
+                });
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+        }
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.read();
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "Morakhasi")';
+                    Reload(url, 'Grid', '0', EnterDormId, 30, 2);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>
+

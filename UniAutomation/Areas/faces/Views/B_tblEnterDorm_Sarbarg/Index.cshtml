@@ -1,0 +1,314 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="B_tblEnterDorm_Sarbarg">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br /> 
+        
+          <a href="@Url.Content("~/Helps/ثبت نام ورود به خوابگاه.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;width:20px;height: 20px;float: left;top: 10px;left: 10px;"></a>
+          <center>
+            <table>                
+                @Html.Hidden("fldId")                 
+                 <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تاریخ:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtDate")
+                        <span id="lblDateError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>ترم:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                                .Name("cboSemester")
+                                                  .OptionLabel("ترم...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetSemester", "B_tblEnterDorm_Sarbarg");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                                  )
+                        <span id="lblSemesterError" style="color: Red;"></span>
+                    </td>
+                </tr>    
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("Next", "ادامه", "Next")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] {  new { ID = "1", Name = "تاریخ" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_B_tblEnterDorm_SarbargSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldSemester).Title("ترم").Visible(false);
+                    columns.Bound(p => p.fldTermName).Title("ترم");
+                    columns.Bound(p => p.fldTarikh).Title("تاریخ");                    
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                .Read("Fill", "B_tblEnterDorm_Sarbarg")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#exit").button();
+            $('#Help').button();
+            $('#Next').button();
+
+            $("#exit").click(function () {
+                $("#B_tblEnterDorm_Sarbarg").remove();
+            });
+            $('#txtDate').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtDate').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+            $("#Next").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var fldSemester = selectedItem.fldSemester;
+                    windows('#Main', '/faces/B_tblEnterDorm/Index?Id=' + id + "&termId=" + fldSemester);
+                } else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            });
+            $('#B_tblEnterDorm_Sarbarg').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#B_tblEnterDorm_Sarbarg').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "B_tblEnterDorm_Sarbarg")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+            $('#cboSemester').change(function () {
+                var url = '@Url.Action("Reload", "B_tblEnterDorm_Sarbarg")';
+                Reload(url, 'Grid', '0', $('#cboSemester').val(), 30, 2);
+
+                if ($('#cboSemester').val() == '')
+                    Reload(url, 'Grid', '0', '', 30, 0);
+            });
+
+
+            $("#txtDate").keyup(function () {
+                if ($("#txtDate").val() != '') {
+                    $("#txtDate").removeClass("input-validation-error");
+                    $("#lblDateError").html("");
+                }
+                else {
+                    $("#txtDate").addClass("input-validation-error");
+                    $('#lblDateError').html('لطفا تاریخ را وارد کنید.');
+                }
+            });
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+        });
+        function Clear() {
+            $('#txtDate').val('');
+            $('#fldId').val(0);
+            $('#txtSemester').val('');
+        }
+        function DeleteRecord() {
+            var entityGrid = $("#Grid").data("kendoGrid");
+            var selectedItem = entityGrid.dataItem(entityGrid.select());
+            if (selectedItem) {
+                var id = selectedItem.fldId;
+                var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/B_tblEnterDorm_Sarbarg/Delete")';
+                if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+            }
+            else {
+                alert('لطفا یک سطر را انتخاب کنید.');
+            }
+            Clear();
+        }
+            function SaveRecord() {
+                var er = false;
+                if ($("#txtDate").val() == '') {
+                    $("#txtDate").addClass("input-validation-error");
+                    $('#lblDateError').html('لطفا تاریخ را وارد کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblDateError').html('');
+
+               
+                if ($("#cboSemester").val() == '') {
+                    $("#cboSemester").addClass("input-validation-error");
+                    $('#lblSemesterError').html('لطفا ترم را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblSemesterError').html('');
+
+                if (er)
+                    return;
+
+                var data = {
+                    fldSemester: $("#cboSemester").val(),
+                    fldTarikh: $("#txtDate").val(),
+                    fldId: $("#fldId").val()
+                };
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/B_tblEnterDorm_Sarbarg/Save")', "#win");
+                }
+                Clear();
+            }
+            function EditRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var URL = '@Url.Content("~/B_tblEnterDorm_Sarbarg/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,
+                        success: function (data) {
+                            $('#fldId').val(data.fldId);
+                            $('#txtDate').val(data.fldTarikh);
+                            var model2 = $("#cboSemester").data("kendoDropDownList");
+                            model2.value(data.fldSemester);
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            }
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                    var url = '@Url.Action("Reload", "B_tblEnterDorm_Sarbarg")';
+                    Reload(url, 'Grid', '0', $('#cboSemester').val(), 30, 2);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+</div>

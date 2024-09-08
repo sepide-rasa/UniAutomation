@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="12/11/2014 09:52:29" ReportInfo.Modified="01/01/2015 11:39:51" ReportInfo.CreatorVersion="2013.2.5.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+
+    private void Data1_AfterData(object sender, EventArgs e)
+    {
+      
+    }
+
+    private void Barcode1_AfterData(object sender, EventArgs e)
+    {
+      
+    }
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="sp_tblL_BookStockSelect" ReferenceName="uniAutomationDataSet.sp_tblL_BookStockSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldBookId" DataType="System.Int32"/>
+      <Column Name="fldUserID" DataType="System.Int32"/>
+      <Column Name="fldDate" DataType="System.DateTime"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="fldBookTitle" DataType="System.String"/>
+      <Column Name="fldPersianName" DataType="System.String"/>
+      <Column Name="fldEnglishName" DataType="System.String"/>
+      <Column Name="fldNashr" DataType="System.String"/>
+      <Column Name="fldRadeBandi_Kongere" DataType="System.String"/>
+      <Column Name="fldTirazh" DataType="System.Int32"/>
+      <Column Name="fldNobateChap" DataType="System.Byte"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" RawPaperSize="9" FirstPageSource="15" OtherPagesSource="15">
+    <ReportTitleBand Name="ReportTitle1" Width="718.2"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="718.2"/>
+    <DataBand Name="Data1" Top="8" Width="239.4" Height="119.06" AfterDataEvent="Data1_AfterData" DataSource="sp_tblL_BookStockSelect" Columns.Count="3">
+      <BarcodeObject Name="Barcode1" Left="77.09" Top="7.07" Width="85" Height="44.4" MouseLeaveEvent="Barcode1_MouseLeave" DataColumn="sp_tblL_BookStockSelect.fldId" Text="100001" ShowText="false" Barcode="Code128" Barcode.AutoEncode="true"/>
+      <TextObject Name="Text1" Left="8.12" Top="54.37" Width="224.21" Height="47.24" Text="[sp_tblSettingSelect.fldName]&#13;&#10;[sp_tblL_BookStockSelect.fldBookTitle]" HorzAlign="Center" RightToLeft="true" Font="RasaFont, 11pt"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="131.06" Width="718.2"/>
+  </ReportPage>
+</Report>

@@ -1,0 +1,1250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="UniAutomationModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <Function Name="sp_B_tblCallRegister_SectionSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_B_tblCallRegister_YearDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldCallCode" Type="int" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_B_tblCallRegister_YearSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_B_tblFinesSectionDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldFinesCode" Type="int" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_B_tblFinesSectionInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldSectionCodeId" Type="int" Mode="In" />
+          <Parameter Name="fldCost" Type="money" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_B_tblFinesSectionSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_B_tblFinesSectionUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldFinesCode" Type="int" Mode="In" />
+          <Parameter Name="fldSectionCodeId" Type="int" Mode="In" />
+          <Parameter Name="fldCost" Type="money" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_B_tblTermsSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_CheckPersonPass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userName" Type="nvarchar" Mode="In" />
+          <Parameter Name="pass" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_GetCartPersonType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_GetCharge" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldCartId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_GetDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_PersonChPass" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CartId" Type="int" Mode="In" />
+          <Parameter Name="pass" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_PersonImageId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldCartId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_PersonName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldCartId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblChargeInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldFoodCartsID" Type="bigint" Mode="In" />
+          <Parameter Name="fldPrice" Type="int" Mode="In" />
+          <Parameter Name="fldChargeType" Type="tinyint" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblDargah_Pardakht_InfoSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblDargah_PardakhtSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value2" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value3" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblDarsadTakhfifSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value2" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblDorm_PayDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldID" Type="int" Mode="In" />
+          <Parameter Name="fldUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblDorm_PayInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldFoodCartsID" Type="bigint" Mode="In" />
+          <Parameter Name="fldPrice" Type="int" Mode="In" />
+          <Parameter Name="fldTermsId" Type="int" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_tblDorm_PaySelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblDorm_PayUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldID" Type="bigint" Mode="In" />
+          <Parameter Name="fldFoodCartsID" Type="bigint" Mode="In" />
+          <Parameter Name="fldPrice" Type="int" Mode="In" />
+          <Parameter Name="fldTermsId" Type="int" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_tblEtelaeyeSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblFoodCartsSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblFoodProgramingSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblHistoryReserveInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldFoodCartID" Type="bigint" Mode="In" />
+          <Parameter Name="fldFoodProgramingID" Type="int" Mode="In" />
+          <Parameter Name="fldCount" Type="int" Mode="In" />
+          <Parameter Name="fldPrice" Type="int" Mode="In" />
+          <Parameter Name="fldType" Type="bit" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_tblHistoryReserveSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="StartDate" Type="nvarchar" Mode="In" />
+          <Parameter Name="EndDate" Type="nvarchar" Mode="In" />
+          <Parameter Name="Nobat" Type="int" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblParametrHay_Dargah_PardakhtSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value2" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPardakhtOnlineDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPardakhtOnlineInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldTarakoneshCode" Type="nvarchar" Mode="InOut" />
+          <Parameter Name="fldMablagh" Type="int" Mode="In" />
+          <Parameter Name="fldState" Type="bit" Mode="In" />
+          <Parameter Name="fldPeygyriCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="fldlFoodCartId" Type="bigint" Mode="In" />
+          <Parameter Name="fldPayType" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPardakhtOnlineSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPardakhtOnlineStateUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldId" Type="nvarchar" Mode="In" />
+          <Parameter Name="fldState" Type="bit" Mode="In" />
+          <Parameter Name="PeygyriCode" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPardakhtOnlineUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldId" Type="int" Mode="In" />
+          <Parameter Name="fldTarakoneshCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="fldMablagh" Type="int" Mode="In" />
+          <Parameter Name="fldState" Type="bit" Mode="In" />
+          <Parameter Name="fldPeygyriCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="fldlFoodCartId" Type="bigint" Mode="In" />
+          <Parameter Name="fldPayType" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPersonalSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPicturesSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPishSabtenam_KhabgahDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldID" Type="int" Mode="In" />
+          <Parameter Name="fldUserID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPishSabtenam_KhabgahInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldTermId" Type="int" Mode="In" />
+          <Parameter Name="fldFoodCartId" Type="bigint" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPishSabtenam_KhabgahSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblPishSabtenam_KhabgahUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldId" Type="int" Mode="In" />
+          <Parameter Name="fldTermId" Type="int" Mode="In" />
+          <Parameter Name="fldFoodCartId" Type="bigint" Mode="In" />
+          <Parameter Name="fldUserId" Type="int" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_tblRezervDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblRezervInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fldFoodCartID" Type="bigint" Mode="In" />
+          <Parameter Name="fldFoodProgramingID" Type="int" Mode="In" />
+          <Parameter Name="fldCount" Type="int" Mode="In" />
+          <Parameter Name="fldPrice" Type="int" Mode="In" />
+          <Parameter Name="fldDarsadTakhfif" Type="int" Mode="In" />
+          <Parameter Name="fldDesc" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_tblRezervSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblSelfServiceSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblSettingSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_tblStudentSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value2" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblTariffSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value2" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value3" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value4" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value5" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_tblTeachersSelect" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fieldname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Value" Type="nvarchar" Mode="In" />
+          <Parameter Name="h" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="UniAutomationModelStoreContainer" />
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="UniAutomationModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="UniAutomationEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+          <FunctionImport Name="sp_GetDate" ReturnType="Collection(UniAutomationModel.sp_GetDate)" />
+          <FunctionImport Name="sp_tblFoodProgramingSelect" ReturnType="Collection(UniAutomationModel.sp_tblFoodProgramingSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblSelfServiceSelec" ReturnType="Collection(UniAutomationModel.sp_tblSelfServiceSelec)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetCharge" ReturnType="Collection(UniAutomationModel.sp_GetCharge)">
+          <Parameter Name="fldCartId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_CheckPersonPass" ReturnType="Collection(UniAutomationModel.sp_CheckPersonPass)">
+            <Parameter Name="userName" Mode="In" Type="String" />
+            <Parameter Name="pass" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PersonImageId" ReturnType="Collection(UniAutomationModel.sp_PersonImageId)">
+          <Parameter Name="fldCartId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PersonName" ReturnType="Collection(UniAutomationModel.sp_PersonName)">
+          <Parameter Name="fldCartId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPicturesSelect" ReturnType="Collection(UniAutomationModel.sp_tblPicturesSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblRezervSelect" ReturnType="Collection(UniAutomationModel.sp_tblRezervSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblRezervInsert">
+            <Parameter Name="fldFoodCartID" Mode="In" Type="Int64" />
+            <Parameter Name="fldFoodProgramingID" Mode="In" Type="Int32" />
+            <Parameter Name="fldCount" Mode="In" Type="Int32" />
+            <Parameter Name="fldPrice" Mode="In" Type="Int32" />
+            <Parameter Name="fldDarsadTakhfif" Mode="In" Type="Int32" />
+            <Parameter Name="fldDesc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblTariffSelect" ReturnType="Collection(UniAutomationModel.sp_tblTariffSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="Value2" Mode="In" Type="String" />
+            <Parameter Name="Value3" Mode="In" Type="String" />
+            <Parameter Name="Value4" Mode="In" Type="String" />
+            <Parameter Name="Value5" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetCartPersonType" ReturnType="Collection(UniAutomationModel.sp_GetCartPersonType)">
+          <Parameter Name="fldId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblFoodCartsSelect" ReturnType="Collection(UniAutomationModel.sp_tblFoodCartsSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblSettingSelect" ReturnType="Collection(UniAutomationModel.sp_tblSettingSelect)" />
+          <FunctionImport Name="sp_tblReservDelete">
+          <Parameter Name="fldID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPardakhtOnlineSelect" ReturnType="Collection(UniAutomationModel.sp_tblPardakhtOnlineSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPardakhtOnlineDelete">
+          <Parameter Name="fldId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPardakhtOnlineInsert">
+            <Parameter Name="fldTarakoneshCode" Mode="InOut" Type="String" />
+            <Parameter Name="fldMablagh" Mode="In" Type="Int32" />
+            <Parameter Name="fldState" Mode="In" Type="Boolean" />
+            <Parameter Name="fldPeygyriCode" Mode="In" Type="String" />
+            <Parameter Name="fldlFoodCartId" Mode="In" Type="Int64" />
+            <Parameter Name="fldPayType" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPardakhtOnlineStateUpdate">
+            <Parameter Name="fldId" Mode="In" Type="String" />
+            <Parameter Name="fldState" Mode="In" Type="Boolean" />
+            <Parameter Name="PeygyriCode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPardakhtOnlineUpdate">
+            <Parameter Name="fldId" Mode="In" Type="Int32" />
+            <Parameter Name="fldTarakoneshCode" Mode="In" Type="String" />
+            <Parameter Name="fldMablagh" Mode="In" Type="Int32" />
+            <Parameter Name="fldState" Mode="In" Type="Boolean" />
+            <Parameter Name="fldPeygyriCode" Mode="In" Type="String" />
+            <Parameter Name="fldlFoodCartId" Mode="In" Type="Int64" />
+            <Parameter Name="fldPayType" Mode="In" Type="Byte" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblChargeInsert">
+            <Parameter Name="fldFoodCartsID" Mode="In" Type="Int64" />
+            <Parameter Name="fldPrice" Mode="In" Type="Int32" />
+            <Parameter Name="fldChargeType" Mode="In" Type="Byte" />
+            <Parameter Name="fldDesc" Mode="In" Type="String" />
+            <Parameter Name="fldUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_B_tblCallRegister_YearDelete">
+            <Parameter Name="fldCallCode" Mode="In" Type="Int32" />
+            <Parameter Name="fldUserId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_B_tblTermsSelect" ReturnType="Collection(UniAutomationModel.sp_B_tblTermsSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPishSabtenam_KhabgahSelect" ReturnType="Collection(UniAutomationModel.sp_tblPishSabtenam_KhabgahSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPishSabtenam_KhabgahDelete">
+            <Parameter Name="fldID" Mode="In" Type="Int32" />
+            <Parameter Name="fldUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPishSabtenam_KhabgahInsert">
+            <Parameter Name="fldTermId" Mode="In" Type="Int32" />
+            <Parameter Name="fldFoodCartId" Mode="In" Type="Int64" />
+            <Parameter Name="fldUserId" Mode="In" Type="Int32" />
+            <Parameter Name="fldDesc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPishSabtenam_KhabgahUpdate">
+            <Parameter Name="fldId" Mode="In" Type="Int32" />
+            <Parameter Name="fldTermId" Mode="In" Type="Int32" />
+            <Parameter Name="fldFoodCartId" Mode="In" Type="Int64" />
+            <Parameter Name="fldUserId" Mode="In" Type="Int32" />
+            <Parameter Name="fldDesc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblDorm_PaySelect" ReturnType="Collection(UniAutomationModel.sp_tblDorm_PaySelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblDorm_PayInsert">
+            <Parameter Name="fldFoodCartsID" Mode="In" Type="Int64" />
+            <Parameter Name="fldPrice" Mode="In" Type="Int32" />
+            <Parameter Name="fldTermsId" Mode="In" Type="Int32" />
+            <Parameter Name="fldUserId" Mode="In" Type="Int32" />
+            <Parameter Name="fldDesc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblDorm_PayDelete">
+            <Parameter Name="fldID" Mode="In" Type="Int32" />
+            <Parameter Name="fldUserID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblDorm_PayUpdate">
+            <Parameter Name="fldID" Mode="In" Type="Int64" />
+            <Parameter Name="fldFoodCartsID" Mode="In" Type="Int64" />
+            <Parameter Name="fldPrice" Mode="In" Type="Int32" />
+            <Parameter Name="fldTermsId" Mode="In" Type="Int32" />
+            <Parameter Name="fldUserId" Mode="In" Type="Int32" />
+            <Parameter Name="fldDesc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblStudentSelect" ReturnType="Collection(UniAutomationModel.sp_tblStudentSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="Value2" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_B_tblCallRegister_SectionSelect" ReturnType="Collection(UniAutomationModel.sp_B_tblCallRegister_SectionSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_PersonChPass">
+            <Parameter Name="CartId" Mode="In" Type="Int32" />
+            <Parameter Name="pass" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblDargah_Pardakht_InfoSelect" ReturnType="Collection(UniAutomationModel.sp_tblDargah_Pardakht_InfoSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblParametrHay_Dargah_PardakhtSelect" ReturnType="Collection(UniAutomationModel.sp_tblParametrHay_Dargah_PardakhtSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="Value2" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblDargah_PardakhtSelect" ReturnType="Collection(UniAutomationModel.sp_tblDargah_PardakhtSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="Value2" Mode="In" Type="String" />
+            <Parameter Name="Value3" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblEtelaeyeSelect" ReturnType="Collection(UniAutomationModel.sp_tblEtelaeyeSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblPersonalSelect" ReturnType="Collection(UniAutomationModel.sp_tblPersonalSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblTeachersSelect" ReturnType="Collection(UniAutomationModel.sp_tblTeachersSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblHistoryReserveInsert">
+            <Parameter Name="fldFoodCartID" Mode="In" Type="Int64" />
+            <Parameter Name="fldFoodProgramingID" Mode="In" Type="Int32" />
+            <Parameter Name="fldCount" Mode="In" Type="Int32" />
+            <Parameter Name="fldPrice" Mode="In" Type="Int32" />
+            <Parameter Name="fldType" Mode="In" Type="Boolean" />
+            <Parameter Name="fldDesc" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblHistoryReserveSelect" ReturnType="Collection(UniAutomationModel.sp_tblHistoryReserveSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="StartDate" Mode="In" Type="String" />
+            <Parameter Name="EndDate" Mode="In" Type="String" />
+            <Parameter Name="Nobat" Mode="In" Type="Int32" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_tblDarsadTakhfifSelect" ReturnType="Collection(UniAutomationModel.sp_tblDarsadTakhfifSelect)">
+            <Parameter Name="fieldname" Mode="In" Type="String" />
+            <Parameter Name="Value" Mode="In" Type="String" />
+            <Parameter Name="Value2" Mode="In" Type="String" />
+            <Parameter Name="h" Mode="In" Type="Int32" />
+          </FunctionImport>
+          
+        </EntityContainer>
+        <ComplexType Name="sp_GetDate">
+          <Property Type="DateTime" Name="fldDateTime" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="sp_tblFoodProgramingSelect">
+          <Property Type="Int32" Name="fldID" Nullable="false" />
+          <Property Type="String" Name="fldFoodDate" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="fldFoodInfoID" Nullable="false" />
+          <Property Type="Int32" Name="fldSelfServiceID" Nullable="false" />
+          <Property Type="Int32" Name="fldUserID" Nullable="false" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldSelfServiceName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldFoodName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldUserName" Nullable="false" />
+          <Property Type="Int32" Name="fldNobat" Nullable="false" />
+          <Property Type="String" Name="fldNobatName" Nullable="false" MaxLength="6" />
+        </ComplexType>
+        <ComplexType Name="sp_tblSelfServiceSelec">
+          <Property Type="Int32" Name="fldID" Nullable="false" />
+          <Property Type="String" Name="fldName" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="fldJender" Nullable="true" />
+          <Property Type="String" Name="fldAddress" Nullable="true" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldJenderName" Nullable="false" MaxLength="5" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_GetCharge">
+          <Property Type="Int32" Name="Charge" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_CheckPersonPass">
+          <Property Type="Int64" Name="fldID" Nullable="false" />
+          <Property Type="String" Name="PersonName" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_PersonImageId">
+          <Property Type="Int32" Name="ImageId" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_PersonName">
+          <Property Type="String" Name="PersonName" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_tblPicturesSelect">
+          <Property Type="Int64" Name="fldID" Nullable="false" />
+          <Property Type="Int64" Name="fldStudentID" Nullable="true" />
+          <Property Type="Int32" Name="fldTeacherID" Nullable="true" />
+          <Property Type="Int64" Name="fldPersonalID" Nullable="true" />
+          <Property Type="Binary" Name="fldImage" Nullable="true" />
+          <Property Type="Int32" Name="fldUserID" Nullable="false" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldUserName" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_tblRezervSelect">
+          <Property Type="Int32" Name="fldID" Nullable="false" />
+          <Property Type="Int64" Name="fldFoodCartID" Nullable="false" />
+          <Property Type="Int32" Name="fldFoodProgramingID" Nullable="false" />
+          <Property Type="Int32" Name="fldCount" Nullable="false" />
+          <Property Type="Int32" Name="fldPrice" Nullable="false" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="Int32" Name="fldDarsadTakhfif" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_GetCartPersonType">
+          <Property Type="Int32" Name="PrsonType" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_tblFoodCartsSelect">
+          <Property Type="Int64" Name="fldID" Nullable="false" />
+          <Property Type="Int64" Name="fldStudentID" Nullable="true" />
+          <Property Type="Int32" Name="fldTeacherID" Nullable="true" />
+          <Property Type="Int64" Name="fldPersonalID" Nullable="true" />
+          <Property Type="String" Name="fldUserName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldPassword" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="fldUserID" Nullable="false" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldFamily" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldMelliCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldRFID" Nullable="true" MaxLength="20" />
+          <Property Type="Byte" Name="fldType" Nullable="true" />
+          <Property Type="String" Name="fldTarikhUpdatePass" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="sp_tblPardakhtOnlineSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="String" Name="fldTarakoneshCode" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="fldMablagh" Nullable="false" />
+          <Property Type="Boolean" Name="fldState" Nullable="false" />
+          <Property Type="String" Name="fldPeygyriCode" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="Int64" Name="fldlFoodCartId" Nullable="false" />
+          <Property Type="Int64" Name="fldStudentID" Nullable="true" />
+          <Property Type="Int32" Name="fldTeacherID" Nullable="true" />
+          <Property Type="Int32" Name="fldPersonalID" Nullable="true" />
+          <Property Type="Byte" Name="fldPayType" Nullable="false" />
+          <Property Type="String" Name="fldPayTypeName" Nullable="true" MaxLength="7" />
+        </ComplexType>
+        <ComplexType Name="sp_B_tblTermsSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="String" Name="fldTermName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldStartDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldFinishDate" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="fldActive_Deactive" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_tblPishSabtenam_KhabgahSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="Int32" Name="fldTermId" Nullable="false" />
+          <Property Type="Int64" Name="fldFoodCartId" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldTermName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_tblTariffSelect">
+          <Property Type="Int32" Name="fldID" Nullable="false" />
+          <Property Type="String" Name="fldTariffDate" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="fldUserType" Nullable="false" />
+          <Property Type="String" Name="fldUserTypeName" Nullable="true" MaxLength="13" />
+          <Property Type="Int16" Name="fldStartDate" Nullable="true" />
+          <Property Type="Int16" Name="fldEndDate" Nullable="true" />
+          <Property Type="Boolean" Name="fldRezervType" Nullable="false" />
+          <Property Type="Int32" Name="fldPrice" Nullable="false" />
+          <Property Type="Int32" Name="fldFoodInfoID" Nullable="true" />
+          <Property Type="Byte" Name="fldSectionID" Nullable="true" />
+          <Property Type="Int32" Name="fldStatusID" Nullable="true" />
+          <Property Type="Int32" Name="fldUserID" Nullable="false" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldFoodName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="fldNobat" Nullable="true" />
+          <Property Type="String" Name="fldUserName" Nullable="true" />
+          <Property Type="String" Name="fldStatusName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldSectionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="fldNobatName" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="fldRezervTitle" Nullable="false" MaxLength="4" />
+        </ComplexType>
+        <ComplexType Name="sp_tblDorm_PaySelect">
+          <Property Type="Int64" Name="fldID" Nullable="false" />
+          <Property Type="Int64" Name="fldFoodCartsID" Nullable="false" />
+          <Property Type="Int32" Name="fldPrice" Nullable="false" />
+          <Property Type="Int32" Name="fldTermsId" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_B_tblCallRegister_SectionSelect">
+          <Property Type="Int32" Name="fldCallCode" Nullable="false" />
+          <Property Type="String" Name="fldStartDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldEndDate" Nullable="true" MaxLength="10" />
+          <Property Type="Byte" Name="fldSectionCodeId" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="Time" Name="fldStartTime" Nullable="false" />
+          <Property Type="Time" Name="fldEndTime" Nullable="false" />
+          <Property Type="Int32" Name="fldStatusDormId" Nullable="true" />
+          <Property Type="Int32" Name="fldTermId" Nullable="true" />
+          <Property Type="String" Name="fldTermName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="fldCallTermId" Nullable="false" />
+          <Property Type="String" Name="fldCallTermName" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="fldActive_Deactive" Nullable="false" />
+          <Property Type="String" Name="fldStatusName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldSectionName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="sp_tblParametrHay_Dargah_PardakhtSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="String" Name="fldFarsiName" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fldEnglishName" Nullable="false" MaxLength="200" />
+          <Property Type="Int32" Name="fldBankId" Nullable="false" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fldBankName" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_tblEtelaeyeSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="String" Name="fldMatn" Nullable="false" />
+          <Property Type="String" Name="fldTarikh" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="sp_tblPersonalSelect">
+          <Property Type="Int64" Name="fldID" Nullable="false" />
+          <Property Type="String" Name="fldName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldFamily" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldMelliCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldPost" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldMobile" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="fldEmail" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="fldUserID" Nullable="false" />
+          <Property Type="String" Name="fldDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldUserName" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_tblTeachersSelect">
+          <Property Type="Int32" Name="fldID" Nullable="false" />
+          <Property Type="String" Name="fldName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldFamily" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldMelliCode" Nullable="true" MaxLength="10" />
+          <Property Type="Byte" Name="fldCourseID" Nullable="true" />
+          <Property Type="String" Name="fldMobile" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="fldEmail" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="fldUserID" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldCourseName" Nullable="false" MaxLength="101" />
+        </ComplexType>
+        <ComplexType Name="sp_tblDargah_Pardakht_InfoSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="Int32" Name="fldDargahPardakhtId" Nullable="false" />
+          <Property Type="Int32" Name="fldParametrId" Nullable="false" />
+          <Property Type="String" Name="fldMount" Nullable="false" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fldBankName" Nullable="false" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_tblDargah_PardakhtSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="Byte" Name="fldDargahType" Nullable="false" />
+          <Property Type="Boolean" Name="fldPos_Online" Nullable="false" />
+          <Property Type="Int32" Name="fldBankId" Nullable="false" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fldDargahTypeName" Nullable="true" MaxLength="19" />
+          <Property Type="String" Name="fldTitle" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="fldPos_OnlineName" Nullable="false" MaxLength="6" />
+        </ComplexType>
+        <ComplexType Name="sp_tblStudentSelect">
+          <Property Type="Int64" Name="fldID" Nullable="false" />
+          <Property Type="String" Name="fldName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldFamily" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldMelliCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldStudentNumber" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="fldSystemNumber" Nullable="false" />
+          <Property Type="Byte" Name="fldCourseID" Nullable="true" />
+          <Property Type="Int32" Name="fldTermId" Nullable="false" />
+          <Property Type="Int32" Name="fldStatusID" Nullable="false" />
+          <Property Type="Byte" Name="fldSectionID" Nullable="false" />
+          <Property Type="String" Name="fldMobile" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="fldEmail" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="fldUserID" Nullable="false" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="Boolean" Name="fldGender" Nullable="true" />
+          <Property Type="String" Name="fldSectionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="fldUserName" Nullable="false" />
+          <Property Type="String" Name="fldParentPhone" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="fldTelephone" Nullable="true" MaxLength="11" />
+          <Property Type="String" Name="fldCity" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="fldStatusName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldCourseName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldFatherName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldShenasnameNo" Nullable="false" MaxLength="12" />
+          <Property Type="String" Name="fldMahaleSodoor" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldBDate" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fldTermName" Nullable="false" MaxLength="50" />
+          <Property Type="Byte" Name="fldMazhab" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_tblSettingSelect">
+          <Property Type="Int32" Name="fldId" Nullable="false" />
+          <Property Type="String" Name="fldName" Nullable="true" MaxLength="50" />
+          <Property Type="Time" Name="fldStartTime" Nullable="true" />
+          <Property Type="Time" Name="fldEndTime" Nullable="true" />
+          <Property Type="Byte" Name="fldReservDay" Nullable="true" />
+          <Property Type="Binary" Name="fldImage" Nullable="true" />
+          <Property Type="String" Name="fldRais" Nullable="true" MaxLength="100" />
+        </ComplexType>
+        <ComplexType Name="sp_tblHistoryReserveSelect">
+          <Property Type="Int32" Name="fldID" Nullable="false" />
+          <Property Type="Int64" Name="fldFoodCartID" Nullable="false" />
+          <Property Type="Int32" Name="fldFoodProgramingID" Nullable="false" />
+          <Property Type="Int32" Name="fldCount" Nullable="false" />
+          <Property Type="Int32" Name="fldPrice" Nullable="false" />
+          <Property Type="Boolean" Name="fldType" Nullable="false" />
+          <Property Type="String" Name="fldTypeTitle" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="fldTarikh" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="fldTime" Nullable="false" MaxLength="5" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="fldPersonName" Nullable="true" />
+          <Property Type="String" Name="fldFoodDate" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="fldFoodName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="fldNobat" Nullable="false" />
+          <Property Type="String" Name="fldName" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="fldSelfId" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_tblDarsadTakhfifSelect">
+          <Property Type="Int32" Name="fldID" Nullable="false" />
+          <Property Type="Int64" Name="fldFoodCartID" Nullable="false" />
+          <Property Type="Int32" Name="fldDarsadTakhfif" Nullable="false" />
+          <Property Type="String" Name="fldAzTarikh" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="fldTaTarikh" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="fldDate" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="fldUserId" Nullable="false" />
+          <Property Type="String" Name="fldDesc" Nullable="true" />
+          <Property Type="String" Name="PersonName" Nullable="true" />
+          <Property Type="String" Name="MelliCode" Nullable="true" />
+          <Property Type="String" Name="StudentNumber" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="UniAutomationModelStoreContainer" CdmEntityContainer="UniAutomationEntities">
+          <FunctionImportMapping FunctionImportName="sp_GetDate" FunctionName="UniAutomationModel.Store.sp_GetDate">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_GetDate">
+                <ScalarProperty Name="fldDateTime" ColumnName="fldDateTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblFoodProgramingSelect" FunctionName="UniAutomationModel.Store.sp_tblFoodProgramingSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblFoodProgramingSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldFoodDate" ColumnName="fldFoodDate" />
+                <ScalarProperty Name="fldFoodInfoID" ColumnName="fldFoodInfoID" />
+                <ScalarProperty Name="fldSelfServiceID" ColumnName="fldSelfServiceID" />
+                <ScalarProperty Name="fldUserID" ColumnName="fldUserID" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldSelfServiceName" ColumnName="fldSelfServiceName" />
+                <ScalarProperty Name="fldFoodName" ColumnName="fldFoodName" />
+                <ScalarProperty Name="fldUserName" ColumnName="fldUserName" />
+                <ScalarProperty Name="fldNobat" ColumnName="fldNobat" />
+                <ScalarProperty Name="fldNobatName" ColumnName="fldNobatName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblSelfServiceSelec" FunctionName="UniAutomationModel.Store.sp_tblSelfServiceSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblSelfServiceSelec">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldName" ColumnName="fldName" />
+                <ScalarProperty Name="fldJender" ColumnName="fldJender" />
+                <ScalarProperty Name="fldAddress" ColumnName="fldAddress" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldJenderName" ColumnName="fldJenderName" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetCharge" FunctionName="UniAutomationModel.Store.sp_GetCharge">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_GetCharge">
+                <ScalarProperty Name="Charge" ColumnName="Charge" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_CheckPersonPass" FunctionName="UniAutomationModel.Store.sp_CheckPersonPass">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_CheckPersonPass">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_PersonImageId" FunctionName="UniAutomationModel.Store.sp_PersonImageId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_PersonImageId">
+                <ScalarProperty Name="ImageId" ColumnName="ImageId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_PersonName" FunctionName="UniAutomationModel.Store.sp_PersonName">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_PersonName">
+                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblPicturesSelect" FunctionName="UniAutomationModel.Store.sp_tblPicturesSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblPicturesSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldStudentID" ColumnName="fldStudentID" />
+                <ScalarProperty Name="fldTeacherID" ColumnName="fldTeacherID" />
+                <ScalarProperty Name="fldPersonalID" ColumnName="fldPersonalID" />
+                <ScalarProperty Name="fldImage" ColumnName="fldImage" />
+                <ScalarProperty Name="fldUserID" ColumnName="fldUserID" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldUserName" ColumnName="fldUserName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblRezervSelect" FunctionName="UniAutomationModel.Store.sp_tblRezervSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblRezervSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldFoodCartID" ColumnName="fldFoodCartID" />
+                <ScalarProperty Name="fldFoodProgramingID" ColumnName="fldFoodProgramingID" />
+                <ScalarProperty Name="fldCount" ColumnName="fldCount" />
+                <ScalarProperty Name="fldPrice" ColumnName="fldPrice" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldDarsadTakhfif" ColumnName="fldDarsadTakhfif" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblRezervInsert" FunctionName="UniAutomationModel.Store.sp_tblRezervInsert" />
+          <FunctionImportMapping FunctionImportName="sp_tblTariffSelect" FunctionName="UniAutomationModel.Store.sp_tblTariffSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblTariffSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldTariffDate" ColumnName="fldTariffDate" />
+                <ScalarProperty Name="fldUserType" ColumnName="fldUserType" />
+                <ScalarProperty Name="fldUserTypeName" ColumnName="fldUserTypeName" />
+                <ScalarProperty Name="fldStartDate" ColumnName="fldStartDate" />
+                <ScalarProperty Name="fldEndDate" ColumnName="fldEndDate" />
+                <ScalarProperty Name="fldRezervType" ColumnName="fldRezervType" />
+                <ScalarProperty Name="fldPrice" ColumnName="fldPrice" />
+                <ScalarProperty Name="fldFoodInfoID" ColumnName="fldFoodInfoID" />
+                <ScalarProperty Name="fldSectionID" ColumnName="fldSectionID" />
+                <ScalarProperty Name="fldStatusID" ColumnName="fldStatusID" />
+                <ScalarProperty Name="fldUserID" ColumnName="fldUserID" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldFoodName" ColumnName="fldFoodName" />
+                <ScalarProperty Name="fldNobat" ColumnName="fldNobat" />
+                <ScalarProperty Name="fldUserName" ColumnName="fldUserName" />
+                <ScalarProperty Name="fldStatusName" ColumnName="fldStatusName" />
+                <ScalarProperty Name="fldSectionName" ColumnName="fldSectionName" />
+                <ScalarProperty Name="fldNobatName" ColumnName="fldNobatName" />
+                <ScalarProperty Name="fldRezervTitle" ColumnName="fldRezervTitle" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetCartPersonType" FunctionName="UniAutomationModel.Store.sp_GetCartPersonType">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_GetCartPersonType">
+                <ScalarProperty Name="PrsonType" ColumnName="PrsonType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblFoodCartsSelect" FunctionName="UniAutomationModel.Store.sp_tblFoodCartsSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblFoodCartsSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldStudentID" ColumnName="fldStudentID" />
+                <ScalarProperty Name="fldTeacherID" ColumnName="fldTeacherID" />
+                <ScalarProperty Name="fldPersonalID" ColumnName="fldPersonalID" />
+                <ScalarProperty Name="fldUserName" ColumnName="fldUserName" />
+                <ScalarProperty Name="fldPassword" ColumnName="fldPassword" />
+                <ScalarProperty Name="fldUserID" ColumnName="fldUserID" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldName" ColumnName="fldName" />
+                <ScalarProperty Name="fldFamily" ColumnName="fldFamily" />
+                <ScalarProperty Name="fldMelliCode" ColumnName="fldMelliCode" />
+                <ScalarProperty Name="fldRFID" ColumnName="fldRFID" />
+                <ScalarProperty Name="fldType" ColumnName="fldType" />
+                <ScalarProperty Name="fldTarikhUpdatePass" ColumnName="fldTarikhUpdatePass" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblSettingSelect" FunctionName="UniAutomationModel.Store.sp_tblSettingSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblSettingSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldName" ColumnName="fldName" />
+                <ScalarProperty Name="fldStartTime" ColumnName="fldStartTime" />
+                <ScalarProperty Name="fldEndTime" ColumnName="fldEndTime" />
+                <ScalarProperty Name="fldReservDay" ColumnName="fldReservDay" />
+                <ScalarProperty Name="fldImage" ColumnName="fldImage" />
+                <ScalarProperty Name="fldRais" ColumnName="fldRais" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblReservDelete" FunctionName="UniAutomationModel.Store.sp_tblRezervDelete" />
+          <FunctionImportMapping FunctionImportName="sp_tblPardakhtOnlineSelect" FunctionName="UniAutomationModel.Store.sp_tblPardakhtOnlineSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblPardakhtOnlineSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldTarakoneshCode" ColumnName="fldTarakoneshCode" />
+                <ScalarProperty Name="fldMablagh" ColumnName="fldMablagh" />
+                <ScalarProperty Name="fldState" ColumnName="fldState" />
+                <ScalarProperty Name="fldPeygyriCode" ColumnName="fldPeygyriCode" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldlFoodCartId" ColumnName="fldlFoodCartId" />
+                <ScalarProperty Name="fldStudentID" ColumnName="fldStudentID" />
+                <ScalarProperty Name="fldTeacherID" ColumnName="fldTeacherID" />
+                <ScalarProperty Name="fldPersonalID" ColumnName="fldPersonalID" />
+                <ScalarProperty Name="fldPayType" ColumnName="fldPayType" />
+                <ScalarProperty Name="fldPayTypeName" ColumnName="fldPayTypeName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblPardakhtOnlineDelete" FunctionName="UniAutomationModel.Store.sp_tblPardakhtOnlineDelete" />
+          <FunctionImportMapping FunctionImportName="sp_tblPardakhtOnlineInsert" FunctionName="UniAutomationModel.Store.sp_tblPardakhtOnlineInsert" />
+          <FunctionImportMapping FunctionImportName="sp_tblPardakhtOnlineStateUpdate" FunctionName="UniAutomationModel.Store.sp_tblPardakhtOnlineStateUpdate" />
+          <FunctionImportMapping FunctionImportName="sp_tblPardakhtOnlineUpdate" FunctionName="UniAutomationModel.Store.sp_tblPardakhtOnlineUpdate" />
+          <FunctionImportMapping FunctionImportName="sp_tblChargeInsert" FunctionName="UniAutomationModel.Store.sp_tblChargeInsert" />
+          <FunctionImportMapping FunctionImportName="sp_B_tblCallRegister_YearDelete" FunctionName="UniAutomationModel.Store.sp_B_tblCallRegister_YearDelete" />
+          <FunctionImportMapping FunctionImportName="sp_B_tblTermsSelect" FunctionName="UniAutomationModel.Store.sp_B_tblTermsSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_B_tblTermsSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldTermName" ColumnName="fldTermName" />
+                <ScalarProperty Name="fldStartDate" ColumnName="fldStartDate" />
+                <ScalarProperty Name="fldFinishDate" ColumnName="fldFinishDate" />
+                <ScalarProperty Name="fldActive_Deactive" ColumnName="fldActive_Deactive" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblPishSabtenam_KhabgahSelect" FunctionName="UniAutomationModel.Store.sp_tblPishSabtenam_KhabgahSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblPishSabtenam_KhabgahSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldTermId" ColumnName="fldTermId" />
+                <ScalarProperty Name="fldFoodCartId" ColumnName="fldFoodCartId" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldTermName" ColumnName="fldTermName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblPishSabtenam_KhabgahDelete" FunctionName="UniAutomationModel.Store.sp_tblPishSabtenam_KhabgahDelete" />
+          <FunctionImportMapping FunctionImportName="sp_tblPishSabtenam_KhabgahInsert" FunctionName="UniAutomationModel.Store.sp_tblPishSabtenam_KhabgahInsert" />
+          <FunctionImportMapping FunctionImportName="sp_tblPishSabtenam_KhabgahUpdate" FunctionName="UniAutomationModel.Store.sp_tblPishSabtenam_KhabgahUpdate" />
+          <FunctionImportMapping FunctionImportName="sp_tblDorm_PaySelect" FunctionName="UniAutomationModel.Store.sp_tblDorm_PaySelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblDorm_PaySelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldFoodCartsID" ColumnName="fldFoodCartsID" />
+                <ScalarProperty Name="fldPrice" ColumnName="fldPrice" />
+                <ScalarProperty Name="fldTermsId" ColumnName="fldTermsId" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblDorm_PayInsert" FunctionName="UniAutomationModel.Store.sp_tblDorm_PayInsert" />
+          <FunctionImportMapping FunctionImportName="sp_tblDorm_PayDelete" FunctionName="UniAutomationModel.Store.sp_tblDorm_PayDelete" />
+          <FunctionImportMapping FunctionImportName="sp_tblDorm_PayUpdate" FunctionName="UniAutomationModel.Store.sp_tblDorm_PayUpdate" />
+          <FunctionImportMapping FunctionImportName="sp_tblStudentSelect" FunctionName="UniAutomationModel.Store.sp_tblStudentSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblStudentSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldName" ColumnName="fldName" />
+                <ScalarProperty Name="fldFamily" ColumnName="fldFamily" />
+                <ScalarProperty Name="fldMelliCode" ColumnName="fldMelliCode" />
+                <ScalarProperty Name="fldStudentNumber" ColumnName="fldStudentNumber" />
+                <ScalarProperty Name="fldSystemNumber" ColumnName="fldSystemNumber" />
+                <ScalarProperty Name="fldCourseID" ColumnName="fldCourseID" />
+                <ScalarProperty Name="fldTermId" ColumnName="fldTermId" />
+                <ScalarProperty Name="fldStatusID" ColumnName="fldStatusID" />
+                <ScalarProperty Name="fldSectionID" ColumnName="fldSectionID" />
+                <ScalarProperty Name="fldMobile" ColumnName="fldMobile" />
+                <ScalarProperty Name="fldEmail" ColumnName="fldEmail" />
+                <ScalarProperty Name="fldUserID" ColumnName="fldUserID" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldGender" ColumnName="fldGender" />
+                <ScalarProperty Name="fldSectionName" ColumnName="fldSectionName" />
+                <ScalarProperty Name="fldUserName" ColumnName="fldUserName" />
+                <ScalarProperty Name="fldParentPhone" ColumnName="fldParentPhone" />
+                <ScalarProperty Name="fldTelephone" ColumnName="fldTelephone" />
+                <ScalarProperty Name="fldCity" ColumnName="fldCity" />
+                <ScalarProperty Name="fldStatusName" ColumnName="fldStatusName" />
+                <ScalarProperty Name="fldCourseName" ColumnName="fldCourseName" />
+                <ScalarProperty Name="fldFatherName" ColumnName="fldFatherName" />
+                <ScalarProperty Name="fldShenasnameNo" ColumnName="fldShenasnameNo" />
+                <ScalarProperty Name="fldMahaleSodoor" ColumnName="fldMahaleSodoor" />
+                <ScalarProperty Name="fldBDate" ColumnName="fldBDate" />
+                <ScalarProperty Name="fldTermName" ColumnName="fldTermName" />
+                <ScalarProperty Name="fldMazhab" ColumnName="fldMazhab" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_B_tblCallRegister_SectionSelect" FunctionName="UniAutomationModel.Store.sp_B_tblCallRegister_SectionSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_B_tblCallRegister_SectionSelect">
+                <ScalarProperty Name="fldCallCode" ColumnName="fldCallCode" />
+                <ScalarProperty Name="fldStartDate" ColumnName="fldStartDate" />
+                <ScalarProperty Name="fldEndDate" ColumnName="fldEndDate" />
+                <ScalarProperty Name="fldSectionCodeId" ColumnName="fldSectionCodeId" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldStartTime" ColumnName="fldStartTime" />
+                <ScalarProperty Name="fldEndTime" ColumnName="fldEndTime" />
+                <ScalarProperty Name="fldStatusDormId" ColumnName="fldStatusDormId" />
+                <ScalarProperty Name="fldTermId" ColumnName="fldTermId" />
+                <ScalarProperty Name="fldTermName" ColumnName="fldTermName" />
+                <ScalarProperty Name="fldCallTermId" ColumnName="fldCallTermId" />
+                <ScalarProperty Name="fldCallTermName" ColumnName="fldCallTermName" />
+                <ScalarProperty Name="fldActive_Deactive" ColumnName="fldActive_Deactive" />
+                <ScalarProperty Name="fldStatusName" ColumnName="fldStatusName" />
+                <ScalarProperty Name="fldSectionName" ColumnName="fldSectionName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_PersonChPass" FunctionName="UniAutomationModel.Store.sp_PersonChPass" />
+          <FunctionImportMapping FunctionImportName="sp_tblDargah_Pardakht_InfoSelect" FunctionName="UniAutomationModel.Store.sp_tblDargah_Pardakht_InfoSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblDargah_Pardakht_InfoSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldDargahPardakhtId" ColumnName="fldDargahPardakhtId" />
+                <ScalarProperty Name="fldParametrId" ColumnName="fldParametrId" />
+                <ScalarProperty Name="fldMount" ColumnName="fldMount" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldBankName" ColumnName="fldBankName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblParametrHay_Dargah_PardakhtSelect" FunctionName="UniAutomationModel.Store.sp_tblParametrHay_Dargah_PardakhtSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblParametrHay_Dargah_PardakhtSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldFarsiName" ColumnName="fldFarsiName" />
+                <ScalarProperty Name="fldEnglishName" ColumnName="fldEnglishName" />
+                <ScalarProperty Name="fldBankId" ColumnName="fldBankId" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldBankName" ColumnName="fldBankName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblDargah_PardakhtSelect" FunctionName="UniAutomationModel.Store.sp_tblDargah_PardakhtSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblDargah_PardakhtSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldDargahType" ColumnName="fldDargahType" />
+                <ScalarProperty Name="fldPos_Online" ColumnName="fldPos_Online" />
+                <ScalarProperty Name="fldBankId" ColumnName="fldBankId" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDargahTypeName" ColumnName="fldDargahTypeName" />
+                <ScalarProperty Name="fldTitle" ColumnName="fldTitle" />
+                <ScalarProperty Name="fldPos_OnlineName" ColumnName="fldPos_OnlineName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblEtelaeyeSelect" FunctionName="UniAutomationModel.Store.sp_tblEtelaeyeSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblEtelaeyeSelect">
+                <ScalarProperty Name="fldId" ColumnName="fldId" />
+                <ScalarProperty Name="fldMatn" ColumnName="fldMatn" />
+                <ScalarProperty Name="fldTarikh" ColumnName="fldTarikh" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblPersonalSelect" FunctionName="UniAutomationModel.Store.sp_tblPersonalSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblPersonalSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldName" ColumnName="fldName" />
+                <ScalarProperty Name="fldFamily" ColumnName="fldFamily" />
+                <ScalarProperty Name="fldMelliCode" ColumnName="fldMelliCode" />
+                <ScalarProperty Name="fldPost" ColumnName="fldPost" />
+                <ScalarProperty Name="fldMobile" ColumnName="fldMobile" />
+                <ScalarProperty Name="fldEmail" ColumnName="fldEmail" />
+                <ScalarProperty Name="fldUserID" ColumnName="fldUserID" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldUserName" ColumnName="fldUserName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblTeachersSelect" FunctionName="UniAutomationModel.Store.sp_tblTeachersSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblTeachersSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldName" ColumnName="fldName" />
+                <ScalarProperty Name="fldFamily" ColumnName="fldFamily" />
+                <ScalarProperty Name="fldMelliCode" ColumnName="fldMelliCode" />
+                <ScalarProperty Name="fldCourseID" ColumnName="fldCourseID" />
+                <ScalarProperty Name="fldMobile" ColumnName="fldMobile" />
+                <ScalarProperty Name="fldEmail" ColumnName="fldEmail" />
+                <ScalarProperty Name="fldUserID" ColumnName="fldUserID" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldCourseName" ColumnName="fldCourseName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblHistoryReserveInsert" FunctionName="UniAutomationModel.Store.sp_tblHistoryReserveInsert" />
+          <FunctionImportMapping FunctionImportName="sp_tblHistoryReserveSelect" FunctionName="UniAutomationModel.Store.sp_tblHistoryReserveSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblHistoryReserveSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldFoodCartID" ColumnName="fldFoodCartID" />
+                <ScalarProperty Name="fldFoodProgramingID" ColumnName="fldFoodProgramingID" />
+                <ScalarProperty Name="fldCount" ColumnName="fldCount" />
+                <ScalarProperty Name="fldPrice" ColumnName="fldPrice" />
+                <ScalarProperty Name="fldType" ColumnName="fldType" />
+                <ScalarProperty Name="fldTypeTitle" ColumnName="fldTypeTitle" />
+                <ScalarProperty Name="fldTarikh" ColumnName="fldTarikh" />
+                <ScalarProperty Name="fldTime" ColumnName="fldTime" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="fldPersonName" ColumnName="fldPersonName" />
+                <ScalarProperty Name="fldFoodDate" ColumnName="fldFoodDate" />
+                <ScalarProperty Name="fldFoodName" ColumnName="fldFoodName" />
+                <ScalarProperty Name="fldNobat" ColumnName="fldNobat" />
+                <ScalarProperty Name="fldName" ColumnName="fldName" />
+                <ScalarProperty Name="fldSelfId" ColumnName="fldSelfId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_tblDarsadTakhfifSelect" FunctionName="UniAutomationModel.Store.sp_tblDarsadTakhfifSelect">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="UniAutomationModel.sp_tblDarsadTakhfifSelect">
+                <ScalarProperty Name="fldID" ColumnName="fldID" />
+                <ScalarProperty Name="fldFoodCartID" ColumnName="fldFoodCartID" />
+                <ScalarProperty Name="fldDarsadTakhfif" ColumnName="fldDarsadTakhfif" />
+                <ScalarProperty Name="fldAzTarikh" ColumnName="fldAzTarikh" />
+                <ScalarProperty Name="fldTaTarikh" ColumnName="fldTaTarikh" />
+                <ScalarProperty Name="fldDate" ColumnName="fldDate" />
+                <ScalarProperty Name="fldUserId" ColumnName="fldUserId" />
+                <ScalarProperty Name="fldDesc" ColumnName="fldDesc" />
+                <ScalarProperty Name="PersonName" ColumnName="PersonName" />
+                <ScalarProperty Name="MelliCode" ColumnName="MelliCode" />
+                <ScalarProperty Name="StudentNumber" ColumnName="StudentNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping></EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model1" />
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

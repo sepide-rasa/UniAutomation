@@ -1,0 +1,23 @@
+﻿<div class="modal" id="error">
+    @UniAutomation.Helper.winClass.windowHeader("", "خطا", 250, 180)
+    <br />
+    <div id="message">
+        @if (Session["ER"] != null)
+        {
+            <span>@Session["ER"].ToString()</span>
+        }
+    </div>
+    <br />
+    @UniAutomation.Helper.winClass.Buttons("ok", "تایید", "yes")
+    <br />
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $("#ok").button();
+            $("#ok").click(function () {
+                $("#error").remove();
+            });
+        });
+    
+</script>
+@UniAutomation.Helper.winClass.windowFother()
+</div>

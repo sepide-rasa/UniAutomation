@@ -1,0 +1,71 @@
+﻿@{
+    UniAutomation.Models.UniAutomationEntities m = new UniAutomation.Models.UniAutomationEntities();
+    var q = m.sp_tblParametrHay_Dargah_PardakhtSelect("fldBankId", "1","", 0).ToList();
+    var id = 0;
+    var id_TransactionKey = 0;
+    var id_TerminalId = 0;
+    var id_url = 0;
+    foreach (var item in q)
+    {
+        if (item.fldEnglishName == "MerchantId")
+        {
+            id = item.fldId;
+        }
+        else if (item.fldEnglishName == "TransactionKey")
+        {
+            id_TransactionKey = item.fldId;
+        }
+        else if (item.fldEnglishName == "TerminalId")
+        {
+            id_TerminalId = item.fldId;
+        }
+        else if (item.fldEnglishName == "BackURL")
+        {
+            id_url = item.fldId;
+        }
+    }
+    var q1 = m.sp_tblDargah_Pardakht_InfoSelect("fldDargahPardakhtId", Session["Type"].ToString(), 0).Where(h => h.fldParametrId == id_TerminalId).FirstOrDefault();
+    var q2 = m.sp_tblDargah_Pardakht_InfoSelect("fldDargahPardakhtId", Session["Type"].ToString(), 0).Where(h => h.fldParametrId == id).FirstOrDefault();
+    var q3 = m.sp_tblDargah_Pardakht_InfoSelect("fldDargahPardakhtId", Session["Type"].ToString(), 0).Where(h => h.fldParametrId == id_TransactionKey).FirstOrDefault();
+    var q4 = m.sp_tblDargah_Pardakht_InfoSelect("fldDargahPardakhtId", Session["Type"].ToString(), 0).Where(h => h.fldParametrId == id_url).FirstOrDefault();
+    var url = "http://" + q4.fldMount + "/Melli/Back";
+}
+<form action="https://sadad.shaparak.ir/purchase" method="post">
+<table>
+    <tr>
+        <td>
+            <div class="tag">
+                شناسه قبض
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                @Session["Tax"]
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                مبلغ پرداخت
+            </div>
+        </td>
+        <td>
+            <div class="tag">
+                @Session["Amount"]
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="4">
+            <input type="hidden" id="CardAcqID" name="CardAcqID" value="@q2.fldMount" />
+            <input type="hidden" id="AmountTrans" name="AmountTrans" value="@Convert.ToDouble(Session["Amount"])" />
+            <input type="hidden" id="ORDERID" name="ORDERID" value="@Session["Tax"]" />
+            <input type="hidden" id="TerminalID" name="TerminalID" value="@q1.fldMount" />
+            <input type="hidden" id="TimeStamp" name="TimeStamp" value="@ViewBag.TimeStamp" />
+            <input type="hidden" id="FP" name="FP" value="@ViewBag.FP" />
+            <input type="hidden" id="Version" name="Version" value="3.22" />
+            <input type="hidden" id="RedirectURL" name="RedirectURL" value="@url" />
+            <input type="submit" id="Run" name="Run" value="پرداخت" class="run" />
+        </td>
+    </tr>
+</table>
+</form>

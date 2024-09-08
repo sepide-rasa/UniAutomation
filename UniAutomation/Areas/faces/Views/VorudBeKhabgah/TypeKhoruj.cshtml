@@ -1,0 +1,97 @@
+﻿@using Kendo.Mvc.UI;
+<div id="TypeKhoruj">
+    @UniAutomation.Helper.winClass.windowHeader("", "دلیل خروج", 300, 150)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <table>
+
+        <tr>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboTypeKhoruj")
+                              .OptionLabel("...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "درون شهر",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "میهمان",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "شهر خودش",
+                                                          Value = "3"
+                                                      }
+
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                )
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "انتخاب", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit1", "خروج", "exit")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        $("document").ready(function () {
+            $("#Select1").button();
+            $("#exit1").button();
+            $("#show").button();
+            $("#exit1").click(function () {
+                isWinOpen = false;
+                $("#TypeKhoruj").remove();
+            });
+            $('#TypeKhoruj #btnClose').click(function () {
+                $("#TypeKhoruj").remove();
+                isWinOpen = false;
+            });
+
+
+            $("#show").click(function () {
+                $.ajax({
+                    url: '/VorudBeKhabgah/VorudReload',
+                    type: 'get',
+                    datatype: 'json',
+                    data: { rfid: RFID,TypeKhoruj : $('#cboTypeKhoruj').val()},
+                    error: function (xhr, status, error) {
+                        alert(xhr + status);
+                    },
+                    success: function (result) {
+                        $("#VorudGrid").data("kendoGrid").dataSource.data(result.Vorud);
+                        $('#PersonName').html(result.PersonName);
+                        $('#Khabgah').html(result.Khabgah);
+                        $('#Otagh').html(result.Otagh);
+                        var g = '@Url.Content("~/faces/VorudBeKhabgah/image/")' + result.foodcartID;
+                        $('#image').attr('src', g);
+
+                        var audioElement = document.getElementById('audio');
+
+                        if (result.havekhabgah == false) {
+                            audioElement.setAttribute('src', '@Url.Content("~/content/ok.wav")');
+                            $('#HaveKhabgah').html('شما مجاز به ورود به خوابگاه نیستید.');
+                            $('#HaveKhabgah').attr('style', 'background-color: red;font-size: x-large;');
+
+                        } else {
+                            audioElement.setAttribute('src', '@Url.Content("~/content/error.wav")');
+                            $('#HaveKhabgah').html('شما مجاز به ورود به خوابگاه هستید.');
+                            $('#HaveKhabgah').attr('style', 'background-color: green;font-size: x-large;');
+                        }
+
+                        audioElement.play();
+
+                        $('#txtShCart').val('');
+                    }
+                });
+                $('#TypeKhoruj').remove();
+                isWinOpen = false;
+            });
+
+        });
+
+
+    </script>
+    @UniAutomation.Helper.winClass.windowFother()
+</div>

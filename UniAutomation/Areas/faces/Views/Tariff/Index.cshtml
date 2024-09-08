@@ -1,0 +1,597 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="Tariff">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    <div>
+        <br />
+        <a href="@Url.Content("~/Helps/تعریف تعرفه ژتون.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+        <center>
+            <table> 
+            @Html.Hidden("fldID")
+           
+                <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نوع کاربر:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                      .Name("cboType")
+                                      .OptionLabel("نوع کاربر...")
+                                      .BindTo(new List<SelectListItem>() {
+                                                      new SelectListItem() {
+                                                          Text = "دانشجو",
+                                                          Value = "1"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "دانشجو سنواتی",
+                                                          Value = "4"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "استاد",
+                                                          Value = "2"
+                                                      },
+                                                        new SelectListItem() {
+                                                          Text = "کارمند",
+                                                          Value = "3"
+                                                      }
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })            
+                      )                       
+                        <span id="lblTypeError" style="color: Red;"></span>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    </tr>
+                <tr id="ddd1">
+                    <td align="left">
+                        <span style="color: Red;">*</span>  وضعیت :
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                                .Name("cboStatus")
+                                          .OptionLabel("وضعیت...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetStatus", "Tariff");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                        )
+
+                        <span id="lblStatusError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>  مقطع تحصیلی:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                        .Name("cboSection")
+                                          .OptionLabel("مقطع تحصیلی...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetSection", "Tariff");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                        )
+                        <span id="lblSectionError" style="color: Red;"></span>
+
+                    </td>
+                </tr>
+                    <tr id="ddd2">
+                    <td align="left">
+                        <span style="color: Red;">*</span> از ورودی:
+                    </td>
+                    <td align="right">
+                        @*@UniAutomation.Helper.winClass.textbox("txtStart")*@
+                        @(Html.Kendo().DropDownList()
+                                                .Name("txtStart")
+                                          .OptionLabel("...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetTerms", "Tariff");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                        )
+                        <span id="lblStartError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تا ورودی:
+                    </td>
+                    <td align="right">
+                        @*@UniAutomation.Helper.winClass.textbox("txtEnd")*@  
+                        @(Html.Kendo().DropDownList()
+                                        .Name("txtEnd")
+                                          .OptionLabel("...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetTerms", "Tariff");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                        )
+                        <span id="lblEndError" style="color: Red;"></span>
+                       
+                    </td>
+                    </tr> 
+                    <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span> نوع رزرو:
+                    </td>
+                    <td align="right">  
+                        @(Html.Kendo().DropDownList()
+                                              .Name("cboRezerveType")
+                                              .OptionLabel("نوع رزرو...")
+                                      .BindTo(new List<SelectListItem>() {
+                                                      new SelectListItem() {
+                                                          Text = "رزرو",
+                                                          Value = "true"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "آزاد",
+                                                          Value = "false"
+                                                      }
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })                   
+                                    )                       
+                        <span id="lblRezerveTypeError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span>قیمت:
+                    </td>
+                    <td align="right">
+                        @UniAutomation.Helper.winClass.textbox("txtPrice")
+                        <span id="lblPriceError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+                    <tr>
+                    <td align="left"> 
+                        <span style="color: Red;">*</span> نوع غذا:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                  .Name("cboFoodInfo")
+                                  .DataTextField("fldName") 
+                                  .DataValueField("fldID")
+                                  .OptionLabel("نوع غذا...")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetFoodInfo", "Tariff");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                                  )
+                        <span id="lblFoodInfoError" style="color: Red;"></span>
+                    </td>
+                    <td align="left">
+                        <span style="color: Red;">*</span> تاریخ:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        <span id="lblDateError" style="color: Red;"></span>
+                    </td>
+                    </tr>
+               
+                <tr>
+                    <td align="left">
+                        توضیحات:
+                    </td>
+                    <td align="right" colspan="3">                        
+                       @Html.TextBox("txtDesc", null, new { @style = "width: 450px;height: 23px;"})
+                        @*@UniAutomation.Helper.winClass.textArea("txtDesc", 4, 30)*@
+                    </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "1", Name = "نوع غذا" }, new { ID = "2", Name = "از ورودی" }, new { ID = "3", Name = "وضعیت" }, new { ID = "4", Name = "مقطع" }, new { ID = "5", Name = "نوع کاربر" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblTariffSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldID).Title("کد").Visible(false);                    
+                    columns.Bound(p => p.fldTariffDate).Title("تاریخ اعمال");
+                    columns.Bound(p => p.fldPrice).Title("قیمت");
+                    columns.Bound(p => p.fldFoodName).Title("نوع غذا");
+                    columns.Bound(p => p.fldStartDate).Title("از ورودی");
+                    columns.Bound(p => p.fldEndDate).Title("تا ورودی");
+                    columns.Bound(p => p.fldUserTypeName).Title("نوع کاربر");
+                    columns.Bound(p => p.fldNobatName).Title("نوبت");
+                    columns.Bound(p => p.fldStatusName).Title("وضعیت");
+                    columns.Bound(p => p.fldSectionName).Title("مقطع");
+                    columns.Bound(p => p.fldRezervTitle).Title("نوع رزرو");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                        .Read("Fill", "Tariff")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $("document").ready(function () {
+            
+
+            $("#AddLink").button();
+            $("#EditLink").button();
+            $("#DelLink").button();
+            $("#btnBrowse1").button();
+            $("#btnRemove1").button();
+            $("#exit").button();
+            $('#Help').button();
+
+
+            $("#exit").click(function () {
+                $("#Tariff").remove();
+            });
+            
+            $('#txtDate').datepicker({
+                showButtonPanel: true
+            });
+
+              $('#Course').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#Course').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                  }
+            });
+             $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                  }
+            });
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+            $('#EditLink').attr('title', 'کلید میانبر (F2)'); //113
+            $('#DelLink').attr('title', 'کلید میانبر (F4)'); //115
+
+            jQuery("#EditLink").click(function () {
+                EditRecord();
+            });
+
+            $('#DelLink').click(function () {
+                DeleteRecord();
+            });
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+           
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "Tariff")';
+                Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+            });
+
+            $("#cboType").change(function () {
+                if ($("#cboType").val() == 2 || $("#cboType").val() == 3) {
+                    $("#ddd1").hide();
+                    $("#ddd2").hide();
+                }
+                else {
+                    $("#ddd1").show();
+                    $("#ddd2").show();
+                }
+            })
+          
+            $("#txtDate").keyup(function () {
+                if ($("#txtDate").val() != '') {
+                    $("#txtDate").removeClass("input-validation-error");
+                    $("#lblDateError").html("");
+                }
+                else {
+                    $("#txtDate").addClass("input-validation-error");
+                    $('#lblDateError').html('لطفا تاریخ را وارد نمایید.');
+                }
+            });   
+
+            
+            $("#txtPrice").keyup(function () {
+                if ($("#txtPrice").val() != '') {
+                    $("#txtPrice").removeClass("input-validation-error");
+                    $("#lblPriceError").html("");
+                }
+                else {
+                    $("#txtPrice").addClass("input-validation-error");
+                    $('#lblPriceError').html('لطفا مبلغ را وارد نمایید.');
+                }
+               });
+   
+        });
+        function Clear() {
+            $('#fldID').val(0);
+            $('#txtDate').val('');
+            $('#txtStart').val('');
+            $('#txtEnd').val('');
+            $('#txtPrice').val('');
+            $('#txtDesc').val('');
+        }
+
+        function DeleteRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldID;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/Tariff/Delete")';
+                      if (MetroDialogOpen == false) {
+                    MetroDialogOpen = true;
+                    windowAppend("body", URL);
+                    $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                }
+                }
+                else {
+                    windowAppend('body', '/metro/error');
+                    $('#message').html('لطفا یک سطر را انتخاب کنید.');
+                    $("#error .wintitle").html("خطا");
+                }
+                Clear();
+            }
+         function EditRecord() {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldID;
+                    var URL = '@Url.Content("~/Tariff/Details")';
+                    URL = URL + "/" + id;
+                    $.ajax({
+                        type: "GET",
+                        url: URL,  
+                        success: function (data) {         
+                            $('#fldID').val(data.fldID);
+                            $('#txtDate').val(data.fldTariffDate);
+                            var model = $("#txtStart").data("kendoDropDownList");
+                            model.value(data.fldStartDate);
+                            //$('#txtStart').val(data.fldStartDate);
+                            //$('#txtEnd').val(data.fldEndDate);
+                            var model = $("#txtEnd").data("kendoDropDownList");
+                            model.value(data.fldEndDate);
+                            $('#txtPrice').val(data.fldPrice);
+                            $('#txtDesc').val(data.fldDesc);
+                            var model = $("#cboStatus").data("kendoDropDownList");
+                            model.value(data.fldStatusID);
+                            var model2 = $("#cboSection").data("kendoDropDownList");
+                            model2.value(data.fldSectionID);
+                            var model3 = $("#cboType").data("kendoDropDownList");
+                            model3.value(data.fldUserType);
+                            var model4 = $("#cboRezerveType").data("kendoDropDownList");
+                            model4.value(data.fldRezervType);
+                            var model5 = $("#cboFoodInfo").data("kendoDropDownList");
+                            model5.value(data.fldFoodInfoID);
+                            
+                            if (data.fldUserType == 2 || data.fldUserType == 3) {
+                                $("#ddd1").hide();
+                                $("#ddd2").hide();
+                            }
+                            else {
+                                $("#ddd1").show();
+                                $("#ddd2").show();
+                            }
+                        },
+                        failure: function (data) {
+                            alert(data.data);
+                        }
+                    });
+                }
+                else {
+                    windowAppend('body', '/metro/error');
+                    $('#message').html('لطفا یک سطر را انتخاب کنید.');
+                    $("#error .wintitle").html("خطا");
+                }
+            }
+
+       function SaveRecord() { 
+
+                var er=false;
+               if ($("#txtPrice").val() == '') {
+                    $("#txtPrice").addClass("input-validation-error");
+                    $('#lblPriceError').html('لطفا مبلغ را وارد نمایید.');
+                    er = true;
+                }
+                else
+                     $('#lblPriceError').html('');
+
+             if ($("#txtDate").val() == '') {
+                    $("#txtDate").addClass("input-validation-error");
+                    $('#lblDateError').html('لطفا تاریخ را وارد نمایید.');
+                    er = true;
+                }
+                else
+                    $('#lblDateError').html('');
+
+            if ($("#cboRezerveType").val() == '') {
+                $("#cboRezerveType").addClass("input-validation-error");
+                $('#lblRezerveTypeError').html('لطفا نوع رزرو را انتخاب کنید.');
+                er = true;
+            }
+            else {
+                $("#cboRezerveType").removeClass("input-validation-error");
+                $('#lblRezerveTypeError').html('');
+            }
+
+            if ($("#cboType").val() == '') {
+                $("#cboType").addClass("input-validation-error");
+                $('#lblTypeError').html('لطفا نوع کاربر را انتخاب کنید.');
+                er = true;
+            }
+            else {
+                $("#cboType").removeClass("input-validation-error");
+                $('#lblTypeError').html('');
+            }
+            if ($("#cboFoodInfo").val() == '') {
+                $("#cboFoodInfo").addClass("input-validation-error");
+                $('#lblFoodInfoError').html('لطفا نوع غذا را انتخاب کنید.');
+                er = true;
+            }
+            else {
+                $("#cboFoodInfo").removeClass("input-validation-error");
+                $('#lblFoodInfoError').html('');
+            }
+
+            if ($("#cboType").val() == 1 || $("#cboType").val() == 4) {
+
+                if ($("#cboStatus").val() == '') {
+                    $("#cboStatus").addClass("input-validation-error");
+                    $('#lblStatusError').html('لطفا وضعیت را انتخاب کنید.');
+                    er = true;
+                }
+                else {
+                    $("#cboStatus").removeClass("input-validation-error");
+                    $('#lblStatusError').html('');
+                }
+                if ($("#cboSection").val() == '') {
+                    $("#cboSection").addClass("input-validation-error");
+                    $('#lblSectionError').html('لطفا مقطع را انتخاب کنید.');
+                    er = true;
+                }
+                else {
+                    $("#cboSection").removeClass("input-validation-error");
+                    $('#lblSectionError').html('');
+                }
+                if ($("#txtStart").val() == '') {
+                    $("#txtStart").addClass("input-validation-error");
+                    $('#lblStartError').html('لطفا از ورودی را انتخاب کنید.');
+                    er = true;
+                }
+                else {
+                    $("#txtStart").removeClass("input-validation-error");
+                    $('#lblStartError').html('');
+                }
+                if ($("#txtEnd").val() == '') {
+                    $("#txtEnd").addClass("input-validation-error");
+                    $('#lblEndError').html('لطفا تا ورودی را انتخاب کنید.');
+                    er = true;
+                }
+                else {
+                    $("#txtEnd").removeClass("input-validation-error");
+                    $('#lblEndError').html('');
+                }
+            }
+
+                if (er)
+                    return;
+
+                var data = {  
+                    fldTariffDate: $("#txtDate").val(),
+                    fldUserType: $("#cboType").val(), 
+                    fldStartDate: $("#txtStart").val(),
+                    fldEndDate: $("#txtEnd").val(),
+                    fldRezervType: $("#cboRezerveType").val(),
+                    fldPrice: $("#txtPrice").val(),
+                    fldFoodInfoID: $("#cboFoodInfo").val(),
+                    fldSectionID: $("#cboSection").val(),
+                    fldStatusID: $("#cboStatus").val(),
+                    fldDesc: $("#txtDesc").val(), 
+                    fldID: $("#fldID").val(),
+                };
+
+                if (data != '') {
+                    PostForm(data, '@Url.Content("~/Tariff/Save")', "#win");
+                }
+                Clear();
+            }
+
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+            });
+        }
+
+        function PostForm(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            var url = '@Url.Action("Reload", "Tariff")';
+                            Reload(url, 'Grid', '0', '', 30, 1);
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+    </script>
+</div>

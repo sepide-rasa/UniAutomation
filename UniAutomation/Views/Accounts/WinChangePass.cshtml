@@ -1,0 +1,163 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="ChangePass">
+    @UniAutomation.Helper.winClass.windowHeader("", "تغییر رمزعبور", 300, 200)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.ui.datepicker-cc.all.min.js")" type="text/javascript"></script>
+    <div>
+        <br />
+        <center>
+            <table>
+
+                <tr>
+                    <td>
+                        رمز جدید:
+                    </td>
+                    <td>
+                        @Html.Password("NewPass")
+                        <span id="lblNewPassError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        تکرار رمز جدید:
+                    </td>
+                    <td>
+                        @Html.Password("ConfirmPass")
+                        <span id="lblConfirmPassError" style="color: Red;"></span>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("SavePass", "ذخیره", "Save")
+                @*@UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")*@
+            </p>
+        </center>
+
+
+    </div>
+    <script type="text/javascript">
+        var TermId;
+        var isWinOpen = false;
+        $("document").ready(function () {
+
+
+            $("#SavePass").button();
+          
+
+
+
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecordPass();
+                }
+            });
+            $('#SavePass').attr('title', 'کلید میانبر (F8)'); //119
+
+
+
+            $("#SavePass").click(function () {
+                SaveRecordPass();
+            });
+
+
+        });
+
+        function SaveRecordPass() {
+      
+            var er = false;
+            if ($('#NewPass').val() == '') {
+                er = true;
+                $("#NewPass").addClass("input-validation-error");
+                $('#lblNewPassError').html('لطفا رمز جدید را وارد کنید.');
+            }
+            else {
+                $('#lblNewPassError').html('');
+                $("#NewPass").removeClass("input-validation-error");
+            }
+            if ($('#ConfirmPass').val() == '') {
+                er = true;
+                $("#ConfirmPass").addClass("input-validation-error");
+                $('#lblConfirmPassError').html('لطفا تکرار رمز جدید را وارد کنید.');
+            }
+            else {
+                $('#lblConfirmPassError').html('');
+                $("#ConfirmPass").removeClass("input-validation-error");
+            }
+
+            if ($('#ConfirmPass').val() != $('#NewPass').val()) {
+                er = true;
+                $("#ConfirmPass").addClass("input-validation-error");
+                $('#lblConfirmPassError').html('رمز جدید و تکرار آن یکسان نیست.');
+            }
+            else {
+                $('#lblConfirmPassError').html('');
+                $("#ConfirmPass").removeClass("input-validation-error");
+            }
+
+
+            if (er)
+                return;
+
+            var data = {
+                NewPass: $('#NewPass').val(),
+                ConfNewPass: $('#ConfirmPass').val()
+            };
+
+            if (data != '') {
+                PostFormPass(data, '@Url.Content("~/Accounts/SaveChangePass")', "#win");
+            }
+            $("#ChangePass").remove();
+        }
+
+       
+
+      
+        function Reload(Url, gridname, field, value, top, searchType) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                datatype: 'json',
+                data: { field: field, value: value, top: top, searchtype: searchType },
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                }
+
+            });
+        }
+
+        function PostFormPass(datas, url, id) {
+            var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: sendInfo,
+                datatype: "json",
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }
+    </script>
+    @UniAutomation.Helper.winClass.windowFother();
+</div>

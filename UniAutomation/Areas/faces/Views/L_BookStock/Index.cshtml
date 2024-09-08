@@ -1,0 +1,253 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="L_BookStock">
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>    
+    <div>    
+        <br />
+           <a href="@Url.Content("~/Helps/تعریف موجودی کتاب.htm")" target="_blank" id="Help" title="راهنما" style="background-image:url('/Content/images/1381415123_help.png');background-repeat: no-repeat;height: 20px;float: left;top: 10px;left: 10px;"></a>
+       
+        <center>
+            <table>   
+                  @Html.Hidden("fldId")
+                 <tr>
+                    <td align="left">
+                        <span style="color: Red;">*</span>تعداد:
+                    </td>
+                    <td>
+                        @UniAutomation.Helper.winClass.textbox("txtCount")
+                        <span id="lblCountError" style="color: Red;"></span>
+                    </td>
+                </tr>
+                     
+            </table>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("EditLink", "ویرایش", "Edit")
+                @UniAutomation.Helper.winClass.Buttons("DelLink", "حذف", "Del")
+                @UniAutomation.Helper.winClass.Buttons("Creat", "افزودن", "yes")
+                @UniAutomation.Helper.winClass.Buttons("Print", "چاپ بارکد", "Next")
+                @UniAutomation.Helper.winClass.Buttons("PrintGroup", "چاپ بارکدها", "Next")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "Exit")
+            </p>
+        </center>
+        @(Html.Kendo().PanelBar()
+        .Name("panelbar-images")
+        .Items(panelbar =>
+        {
+            panelbar.Add().Text("جستجو")
+                .ImageUrl(Url.Content("~/Content/images/search.png"))
+                .Content(@<div>
+                    <table>
+                        <tr>
+                            <td>
+                                فیلد جستجو:@Html.DropDownList("cboSearchFiald", new SelectList(new[] { new { ID = "0", Name = "عنوان کتاب" } }, "ID", "Name"))
+                            </td>
+                            <td>
+                                نوع جستجو: @Html.DropDownList("cboSearchType", new SelectList(new[] { new { ID = "0", Name = "مشابه عبارت" }, new { ID = "1", Name = "مشابه عبارت از سمت راست" }, new { ID = "2", Name = "عین عبارت" } }, "ID", "Name"))
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                عبارت جستجو: @UniAutomation.Helper.winClass.textbox("txtSearch")
+                            </td>
+                            <td>
+                                نتیجه رکوردها: @Html.TextBox("txtTop", 30, new { @style = "width:30px;" }) رکورد
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>);
+        })
+        )
+        <div class="k-rtl demo-section">
+            @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblL_BookStockSelect>()
+                .Name("Grid")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Visible(false);
+                    columns.Bound(p => p.fldBookTitle).Title("عنوان کتاب");
+                    columns.Bound(p => p.fldNashr).Title("مشخصات نشر");
+                    columns.Bound(p => p.fldRadeBandi_Kongere).Title("شماره کتابخانه ای");
+                    columns.Bound(p => p.fldTirazh).Title("تیراژ");
+                    columns.Bound(p => p.fldNobateChap).Title("نوبت چاپ");
+                })
+            .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+            .Pageable()
+            .Scrollable()
+            .DataSource(data =>
+                data.Ajax()
+                .PageSize(10)
+                                        .Read("Fill", "L_BookStock")
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+
+    var isWinOpen = false;
+    $("document").ready(function () {
+        $("#Creat").button();
+        $("#Print").button();
+        $("#exit").button();
+        $("#DelLink").button();
+        $("#EditLink").button();
+        $("#PrintGroup").button(); 
+        $('#Help').button();
+        
+
+        var BookId = '@ViewBag.BookId';
+
+
+            $("#exit").click(function () {
+                $("#L_BookStock").remove();
+            });
+
+            $('#DelLink').click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    var URL = '@Url.Content("~/faces/metro/YesNomsg")';
+                    URL = URL + "/?id=" + id + "&URL=" + '@Url.Content("~/L_BookStock/Delete")';
+                    if (MetroDialogOpen == false) {
+                        MetroDialogOpen = true;
+                        windowAppend("body", URL);
+                        $("#message").html('آیا مایل به حذف رکورد انتخاب شده هستید؟');
+                    }
+                }
+                else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+                Clear();
+            });
+
+            $("#EditLink").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    if (isWinOpen == false) {
+                        windowAppend("body", "faces/L_BookStock/EditWin?id=" + id);
+                        //isWinOpen = true;
+                    }
+                } else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+
+            });
+
+            $("#Print").click(function () {
+                var entityGrid = $("#Grid").data("kendoGrid");
+                var selectedItem = entityGrid.dataItem(entityGrid.select());
+                if (selectedItem) {
+                    var id = selectedItem.fldId;
+                    if (isWinOpen == false) {
+                        windowAppend("body", "faces/BarCodBookStock/index?id=" + id);
+                        //isWinOpen = true;
+                    }
+                } else {
+                    alert('لطفا یک سطر را انتخاب کنید.');
+                }
+            });
+            $("#PrintGroup").click(function () {
+                if (isWinOpen == false) {
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/BarCodBookStock/rptBarcodeGroup?BookId=' + BookId;
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                    isWinOpen = true;
+                }
+            });
+
+            $("#Creat").click(function () {
+                var er = false;
+                if ($("#txtCount").val() == '') {
+                    $("#txtCount").addClass("input-validation-error");
+                    $('#lblCountError').html('لطفا تعداد را وارد نمایید.');
+                    er = true;
+                }
+                else
+                    $('#lblCountError').html('');
+
+                if (er)
+                    return;
+                if (isWinOpen == false) {
+                    windowAppend("#L_BookStock", "/faces/AddBookStock/index?bookid=" + BookId + '&Count=' + $("#txtCount").val());
+                }
+            });
+
+            $('#L_BookStock').on('keyup', 'input', function (event) {
+                if (event.which == 13) {
+                    var inputs = $('#L_BookStock').find(':input:visible');
+                    inputs.eq(inputs.index(this) + 1).focus();
+                }
+            });
+
+            $('#txtSearch').keyup(function () {
+                var url = '@Url.Action("Reload", "L_BookStock")';
+            Reload(url, 'Grid', $("#cboSearchFiald").val(), $("#txtSearch").val(), $("#txtTop").val(), $("#cboSearchType").val());
+        });
+
+        $("#txtCount").keyup(function () {
+            if ($("#txtCount").val() != '') {
+                $("#txtCount").removeClass("input-validation-error");
+                $("#lblCountError").html("");
+            }
+            else {
+                $("#txtCount").addClass("input-validation-error");
+                $('#lblCountError').html('لطفا تعداد را وارد کنید.');
+            }
+        });
+    });
+    function Clear() {
+        $('#txtCount').val('');
+        $('#fldId').val(0);
+        $('#txtDesc').val('');
+    }
+
+    function Reload(Url, gridname, field, value, top, searchType) {
+        var grid = $('#' + gridname).data('kendoGrid');
+        $.ajax({
+            url: Url,
+            type: 'get',
+            datatype: 'json',
+            data: { field: field, value: value, top: top, searchtype: searchType },
+            error: function (xhr, status, error) {
+                alert(xhr + status);
+            },
+            success: function (result) {
+                $("#" + gridname).data("kendoGrid").dataSource.data(result);
+            }
+        });
+    }
+
+    function PostForm(datas, url, id) {
+        var sendInfo = datas;
+        $('#Lock').show();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: sendInfo,
+            datatype: "json",
+            success: function (data) {
+                var m = data;
+                windowAppend("body", "/faces/metro/error");
+                $("#message").html(m.data);
+                switch (m.state) {
+                    case 0:
+                        $("#error .wintitle").html("ذخیره موفق");
+                        break;
+                    case 1:
+                        $("#error .wintitle").html("خطا");
+                        break;
+                }
+                var url = '@Url.Action("Reload", "L_BookStock")';
+                Reload(url, 'Grid', '1', BookId, 30, 1);
+                $('#Lock').hide();
+            },
+            failure: function (data) {
+                alert(data.data);
+            }
+        });
+    }
+    </script>
+</div>
+
+

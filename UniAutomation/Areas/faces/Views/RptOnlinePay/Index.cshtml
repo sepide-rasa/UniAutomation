@@ -1,0 +1,110 @@
+﻿
+<div id="rptOnlinePay">
+    @using Kendo.Mvc.UI;
+    <table>
+        <tr>
+            <td>
+                از تاریخ:
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtStart")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                تا تاریخ:
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtEnd")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                نوع پرداخت:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboType")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "تغذیه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "شهریه",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "خوابگاه",
+                                                          Value = "3"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "سایر پرداخت ها",
+                                                          Value = "4"
+                                                      }
+                                                   
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                                    )
+            </td>
+        </tr>
+        <tr>
+            <td>
+                نوع واریز:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboPayType")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "موفق",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "ناموفق",
+                                                          Value = "0"
+                                                      }
+
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                )
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+                @UniAutomation.Helper.winClass.Buttons("exit", "خروج", "exit")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        $(document).ready(function () {
+            $('#show').button();
+            $('#exit').button();
+
+            $('#show').click(function () {
+                // window.open('/faces/RptOnlinePay/OnlinePayRepot?Sdate=' + $('#txtStart').val() + '&Edate=' + $('#txtEnd').val() + '&Type=' + $('#cboType').val());
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/RptOnlinePay/OnlinePayRepot?Sdate=' + $('#txtStart').val() + '&Edate=' + $('#txtEnd').val() + '&Type=' + $('#cboType').val() + '&PayType=' + $('#cboPayType').val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+            $('#exit').click(function () {
+                $('#rptOnlinePay').remove();
+            });
+
+            $('#txtStart').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtEnd').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+            $('#txtEnd').datepicker({
+                showButtonPanel: true
+            });
+        });
+    </script>
+</div>

@@ -1,0 +1,66 @@
+﻿<div id="rptReserv">
+    @using Kendo.Mvc.UI;
+    <table>        
+        <tr>
+         <td align="left">
+                        وعده:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                              .Name("cboVade")
+                              .OptionLabel("وعده ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "صبحانه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "ناهار",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "شام",
+                                                          Value = "3"
+                                                      }
+                                                   
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                                    )
+                        
+                    </td>
+             <td align="left">
+                        <span style="color: Red;">*</span> تاریخ:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        
+                    </td>
+        </tr>
+        
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        $(document).ready(function () {
+            $('#show').button();
+
+            $('#show').click(function () {
+                // window.open('/faces/RptReserv/rptAmar?date=' + $('#txtDate').val());
+                if (isWinOpen == false) {
+                    isWinOpen = true;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/RptReserv/rptAmar?date=' + $('#txtDate').val() + '&Vade=' + $('#cboVade').val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+            
+            $('#txtDate').datepicker({
+                showButtonPanel: true
+            });
+        });
+    </script>
+</div>

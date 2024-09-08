@@ -1,0 +1,271 @@
+﻿<div id="RptTahvilGhaza">
+    @using Kendo.Mvc.UI;
+    <table>        
+        <tr>
+         <td align="left">
+             <span style="color: Red;">*</span>  وعده:
+                    </td>
+                    <td>
+                        @(Html.Kendo().DropDownList()
+                              .Name("cboVade")
+                              .OptionLabel("وعده ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "صبحانه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "ناهار",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "شام",
+                                                          Value = "3"
+                                                      }
+                                                   
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                                    )
+                        <span id="lblVadeError" style="color: Red;"></span>
+                        
+                    </td>
+             @*<td align="left">
+                        <span style="color: Red;">*</span> تاریخ:
+                    </td>
+                    <td>
+                        @Html.TextBox("txtDate", null, new { @style = "width: 164px;height: 23px;", @readonly = "true" })
+                        
+                    </td>*@
+        </tr>
+        <tr>
+            <td align="left">
+                <span style="color: Red;">*</span>نوع کاربر:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboType")
+                              .OptionLabel(" ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "دانشجویان",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "اساتید",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "کارمندان",
+                                                          Value = "3"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "همه موارد",
+                                                          Value = "0"
+                                                      }
+
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                )
+
+                <span id="lblTypeError" style="color: Red;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td align="left">
+                <span style="color: Red;">*</span>نوع تحویل:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboTahvil")
+                              .OptionLabel(" ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "رزرو",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "آزاد",
+                                                          Value = "2"
+                                                      },
+                                                      new SelectListItem() {
+                                                          Text = "همه موارد",
+                                                          Value = "0"
+                                                      }
+
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                )
+
+                <span id="lblTahvilError" style="color: Red;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td align="left">
+                <span style="color: Red;">*</span>از تاریخ:
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtStart")
+                <span id="lblStartError" style="color: Red;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td align="left">
+                <span style="color: Red;">*</span>تا تاریخ:
+            </td>
+            <td>
+                @UniAutomation.Helper.winClass.textbox("txtEnd")
+                <span id="lblEndError" style="color: Red;"></span>
+            </td>
+        </tr>
+
+        <tr>
+            <td align="left">
+            دارنده کارت (Ins):
+            </td>
+            <td>
+                @Html.TextBox("txtName", null, new { @style = "width: 164px;height: 23px;background-color:rgb(222, 231, 239);" })
+            </td>
+        </tr>
+        <tr>
+            <td align="left">
+                <span style="color: Red;">*</span>نوع گزارش:
+            </td>
+            <td>
+                @(Html.Kendo().DropDownList()
+                              .Name("cboTypeReport")
+                              .OptionLabel(" ...")
+                                .BindTo(new List<SelectListItem>() {
+                                           new SelectListItem() {
+                                                    Text = "گزارش روزانه",
+                                                     Value = "1"
+                                                 },
+                                                      new SelectListItem() {
+                                                          Text = "گزارش کلی",
+                                                          Value = "2"
+                                                      }
+
+                                                  }).HtmlAttributes(new { @style = "width:164px;" })
+
+                )
+
+                <span id="lblTypeReportError" style="color: Red;"></span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                @UniAutomation.Helper.winClass.Buttons("show", "نمایش", "yes")
+            </td>
+        </tr>
+    </table>
+    <script type="text/javascript">
+        var isWinOpen = false;
+        var Cid = 0;
+        $(document).ready(function () {
+            $('#show').button();
+
+            $('#txtName').keyup(function () {
+                if ($("#cboType").val() == '' || $("#cboType").val() == '0') {
+                    $("#cboType").addClass("input-validation-error");
+                    $('#lblTypeError').html('لطفا نوع کاربر را انتخاب کنید.');
+                    return;
+                }
+                else
+                    $('#lblTypeError').html('');
+
+
+                if (isWinOpen == false) {
+                    windowAppend("#RptTahvilGhaza", "/faces/SearchFoodCartsIns/IndexWithType?id=1&type=" + $("#cboType").val());
+                    // isWinOpen = true;
+                }
+            });
+
+            $('#show').click(function () {
+                var er = false;
+                if ($("#cboTahvil").val() == '') {
+                    $("#cboTahvil").addClass("input-validation-error");
+                    $('#lblTahvilError').html('لطفا نوع تحویل را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblTahvilError').html('');
+
+                if ($("#txtStart").val() == '') {
+                    $("#txtStart").addClass("input-validation-error");
+                    $('#lblStartError').html('لطفا تاریخ شروع را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblStartError').html('');
+
+                if ($("#txtEnd").val() == '') {
+                    $("#txtEnd").addClass("input-validation-error");
+                    $('#lblEndError').html('لطفا تاریخ پایان را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblEndError').html('');
+
+                if ($("#cboVade").val() == '') {
+                    $("#cboVade").addClass("input-validation-error");
+                    $('#lblVadeError').html('لطفا وعده غذایی را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblVadeError').html('');
+
+                if ($("#cboType").val() == '') {
+                    $("#cboType").addClass("input-validation-error");
+                    $('#lblTypeError').html('لطفا نوع کاربر را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblTypeError').html('');
+
+
+                if ($("#cboTypeReport").val() == '') {
+                    $("#cboTypeReport").addClass("input-validation-error");
+                    $('#lblTypeReportError').html('لطفا نوع گزارش را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblTypeReportError').html('');
+
+                
+
+                if (er)
+                    return;
+
+                // window.open('/faces/RptReserv/rptAmar?date=' + $('#txtDate').val());
+                if (isWinOpen == false) {
+                    
+                    isWinOpen = true;
+                   
+                    var FielName = "All";
+                    if ($('#cboTahvil').val() == "1")
+                        FielName = "Reserv";
+                    else if ($('#cboTahvil').val() == "2")
+                        FielName = "Azad";
+
+                    if ($('#txtName').val() == "")
+                        Cid = 0;
+                    windowAppend('body', '/faces/Admin/PreviewRptPDFBox');
+                    var t = '/faces/RptTahvilGhaza/rptTahvilGhaza?Sdate=' + $('#txtStart').val() + '&Edate=' + $('#txtEnd').val() + '&Vade=' + $('#cboVade').val() + '&Type=' + $('#cboType').val() + '&FielName=' + FielName + '&FoodCartId=' + Cid + '&TypeReport=' + $("#cboTypeReport").val();
+                    $('#pdf').html("<br/><object style='width: 900px;height: 500px;border: 1px solid #ccc;' id='pdfbox' type='application/pdf' data='" + t + "'></object> ");
+                }
+            });
+
+            //$('#txtDate').datepicker({
+            //    showButtonPanel: true
+            //});
+            $('#txtStart').datepicker({
+                onSelect: function (dateText, inst) {
+                    $('#txtEnd').datepicker('option', 'minDate', new JalaliDate(inst['selectedYear'], inst['selectedMonth'], inst['selectedDay']));
+                },
+                showButtonPanel: true
+            });
+            $('#txtEnd').datepicker({
+                showButtonPanel: true
+            });
+        });
+    </script>
+</div>

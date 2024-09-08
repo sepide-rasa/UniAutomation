@@ -1,0 +1,205 @@
+﻿@using Kendo.Mvc.UI;
+<div class="modal" id="AddBookStock">
+@UniAutomation.Helper.winClass.windowHeader("", "تعریف موجودی کتاب", 900, 500)
+    <script src="@Url.Content("~/Content/Base.js")" type="text/javascript"></script>
+    <div>
+        <br />        
+        <div>
+               
+            <br />
+        </div>
+        <center>
+            <p>
+                @UniAutomation.Helper.winClass.Buttons("AddLink", "ذخیره", "Save")      
+                @UniAutomation.Helper.winClass.Buttons("exit2", "خروج", "Exit")
+            </p>
+        </center>
+        <div class="k-rtl demo-section">
+           @(Html.Kendo().Grid<UniAutomation.Areas.faces.Models.sp_tblL_BookStockSelect>()
+                .Name("Grid1")
+                .Columns(columns =>
+                {
+                    columns.Bound(p => p.fldId).Title("کد").Hidden();
+                    columns.Bound(p => p.fldBookTitle).Title("عنوان کتاب").Hidden();
+                    columns.Bound(p => p.fldNashr).Title("مشخصات نشر");
+                    columns.Bound(p => p.fldRadeBandi_Kongere).Title("شماره کتابخانه ای");
+                    columns.Bound(p => p.fldTirazh).Title("تیراژ");
+                    columns.Bound(p => p.fldNobateChap).Title("نوبت چاپ");
+                    columns.Bound(p => p.fldBookId).Title("کد").Hidden();
+                    @*columns.Template(@<text></text>).ClientTemplate("<input type='checkbox' value='#=fldId#' name='selected'/>").Width(35).HeaderTemplate(@<input type="checkbox" id="selectAll1" />);*@
+                })
+                    .Editable(editable => editable.Mode(GridEditMode.InCell))
+                             .Selectable(selectable => selectable.Mode(GridSelectionMode.Single))
+                             .Scrollable(m => m.Virtual(true))
+                             .Pageable()
+                             .DataSource(data =>
+                             data.Ajax()
+                             .PageSize(10)
+                                         // .Read(read => read.Action("Fill", "AddBookStock"))
+                             .Model(m =>
+                             {
+                                 m.Id(p => p.fldId);
+                                 m.Field(p => p.fldId).Editable(true);
+                                 m.Field(p => p.fldBookTitle).Editable(false);
+                                 m.Field(p => p.fldNashr).Editable(true);
+                                 m.Field(p => p.fldRadeBandi_Kongere).Editable(true);
+                                 m.Field(p => p.fldTirazh).Editable(true);
+                                 m.Field(p => p.fldNobateChap).Editable(true);
+                                 m.Field(p => p.fldDesc).Editable(true);
+                             }
+                             )
+            )
+        )
+        </div>
+    </div>
+    <script type="text/javascript">
+        var bookid;
+        var Count;
+        $("document").ready(function () {
+            $("#AddLink").button();
+            $("#exit2").button();
+             bookid = '@ViewBag.bookid';
+             Count = '@ViewBag.Count';
+
+             var url='/faces/AddBookStock/ReloadGride?Count='+Count +'&BookId='+bookid;
+             Reload2(url,"Grid1");
+
+
+            $(document).keyup(function (event) {
+                if (event.which == 119) {
+                    SaveRecord();
+                }
+                else if (event.which == 113) {
+                    EditRecord();
+                }
+                else if (event.which == 115) {
+                    DeleteRecord();
+                }
+            });
+            //$('#selectAll1').click(function () {
+            //    $("#Grid1 tbody input:checkbox").attr("checked", this.checked);
+
+            //});
+            $('#AddLink').attr('title', 'کلید میانبر (F8)'); //119
+
+            $("#AddLink").click(function () {
+                SaveRecord();
+            });
+
+            $('#AddBookStock #btnClose').click(function () {
+                $("#AddBookStock").remove();
+                isWinOpen = false;
+            });
+            $("#exit2").click(function () {
+                isWinOpen = false;
+                $("#AddBookStock").remove();
+            });
+
+           
+
+        });
+        function SaveRecord() {
+            var er = false;
+
+            var BookStock = new Array();
+            var entityGrid = $("#Grid1").data("kendoGrid");
+            var row = entityGrid.items();
+            var id;
+            var Nashr;
+             var RadeBandi_Kongere;
+             var Tirazh;
+             var NobateChap;
+             var Active_DeActive;
+
+             //var t = $('input[type=checkbox]');
+
+            for (var i = 0; i < row.length; i++) {
+                y = entityGrid.dataItem(row[i]);
+                id = row[i].cells[0].innerText;
+                Nashr = row[i].cells[2].innerText;
+                RadeBandi_Kongere = row[i].cells[3].innerText;
+                Tirazh = row[i].cells[4].innerText;
+                NobateChap = row[i].cells[5].innerText;
+                bookid = row[i].cells[6].innerText;
+                //if (t.valueOf()[i + 1].checked)
+                //    Active_DeActive = 1;
+                //else
+                //    Active_DeActive = 0;
+                
+
+                BookStock.push({
+                    'fldId': id,
+                    'fldNashr': Nashr,
+                    'fldRadeBandi_Kongere': RadeBandi_Kongere,
+                    'fldTirazh': Tirazh,
+                    'fldNobateChap': NobateChap,
+                    'fldBookId': bookid,
+                    'fldActive_DeActive': 1,
+                });
+            }
+
+            if (er)
+                return;
+
+            var data = {
+            BookStock:BookStock,
+                
+            };
+            if (data != '') {
+                PostForm(data, '@Url.Content("~/AddBookStock/Save")', "#win");
+            }
+            Clear();
+            $("#AddBookStock").remove();
+        }
+
+
+
+        function Reload2(Url, gridname) {
+            var grid = $('#' + gridname).data('kendoGrid');
+            $.ajax({
+                url: Url,
+                type: 'get',
+                error: function (xhr, status, error) {
+                    alert(xhr + status);
+                },
+                success: function (result) {
+                    $("#" + gridname).data("kendoGrid").dataSource.data(result);
+                    //$("#Grid1 tbody input:checkbox").attr("checked", this.checked);
+                }
+
+            });
+        }
+
+        function PostForm(datas, url, id) {
+             var sendInfo = datas;
+            $('#Lock').show();
+            $.ajax({
+                type: "POST",
+                url: url,
+                datatype: "json",
+                data: JSON.stringify(sendInfo),
+                contentType: 'application/json',
+                success: function (data) {
+                    var m = data;
+                    windowAppend("body", "/faces/metro/error");
+                    $("#message").html(m.data);
+                    switch (m.state) {
+                        case 0:
+                            $("#error .wintitle").html("ذخیره موفق");
+                            break;
+                        case 1:
+                            $("#error .wintitle").html("خطا");
+                            break;
+                    }
+                     var url = '@Url.Action("Reload", "L_BookStock")';
+                    Reload(url, 'Grid', '1', bookid, 30, 2);
+                    $('#Lock').hide();
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+        }    
+    </script>
+     @UniAutomation.Helper.winClass.windowFother();
+</div>

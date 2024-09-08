@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/08/2016 13:41:59" ReportInfo.Modified="03/06/2017 12:10:40" ReportInfo.CreatorVersion="2015.1.2.0">
+  <Dictionary>
+    <TableDataSource Name="sp_tblStudentSelect" ReferenceName="uniAutomationDataSet.sp_tblStudentSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldID" DataType="System.Int64"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldFamily" DataType="System.String"/>
+      <Column Name="fldMelliCode" DataType="System.String"/>
+      <Column Name="fldStudentNumber" DataType="System.String"/>
+      <Column Name="fldSystemNumber" DataType="System.Int32"/>
+      <Column Name="fldCourseID" DataType="System.Byte"/>
+      <Column Name="fldTermId" DataType="System.Int32"/>
+      <Column Name="fldStatusID" DataType="System.Int32"/>
+      <Column Name="fldSectionID" DataType="System.Byte"/>
+      <Column Name="fldMobile" DataType="System.String"/>
+      <Column Name="fldEmail" DataType="System.String"/>
+      <Column Name="fldUserID" DataType="System.Int32"/>
+      <Column Name="fldDate" DataType="System.DateTime"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="fldGender" DataType="System.Boolean" BindableControl="CheckBox"/>
+      <Column Name="fldSectionName" DataType="System.String"/>
+      <Column Name="fldUserName" DataType="System.String"/>
+      <Column Name="fldParentPhone" DataType="System.String"/>
+      <Column Name="fldTelephone" DataType="System.String"/>
+      <Column Name="fldCity" DataType="System.String"/>
+      <Column Name="fldStatusName" DataType="System.String"/>
+      <Column Name="fldCourseName" DataType="System.String"/>
+      <Column Name="fldFatherName" DataType="System.String"/>
+      <Column Name="fldShenasnameNo" DataType="System.String"/>
+      <Column Name="fldMahaleSodoor" DataType="System.String"/>
+      <Column Name="fldBDate" DataType="System.String"/>
+      <Column Name="fldTermName" DataType="System.String"/>
+      <Column Name="fldMazhab" DataType="System.Byte"/>
+      <Column Name="fldGroup_Course" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblSettingSelect" ReferenceName="uniAutomationDataSet.sp_tblSettingSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldName" DataType="System.String"/>
+      <Column Name="fldStartTime" DataType="System.TimeSpan"/>
+      <Column Name="fldEndTime" DataType="System.TimeSpan"/>
+      <Column Name="fldReservDay" DataType="System.Byte"/>
+      <Column Name="fldImage" DataType="System.Byte[]" BindableControl="Picture"/>
+      <Column Name="fldRais" DataType="System.String"/>
+      <Column Name="fldRaisKol" DataType="System.String"/>
+    </TableDataSource>
+    <TableDataSource Name="sp_tblMadrakSelect" ReferenceName="uniAutomationDataSet.sp_tblMadrakSelect" DataType="System.Int32" Enabled="true">
+      <Column Name="fldId" DataType="System.Int32"/>
+      <Column Name="fldMadrakNum" DataType="System.String"/>
+      <Column Name="fldMadrakDate" DataType="System.String"/>
+      <Column Name="fldMadrak" DataType="System.Byte[]" BindableControl="Picture"/>
+      <Column Name="fldUserId" DataType="System.Int32"/>
+      <Column Name="fldDate" DataType="System.DateTime"/>
+      <Column Name="fldDesc" DataType="System.String"/>
+      <Column Name="fldMonth" DataType="System.String"/>
+      <Column Name="fldYear" DataType="System.String"/>
+      <Column Name="fldName_Family" DataType="System.String"/>
+      <Column Name="fldMelliCode" DataType="System.String"/>
+      <Column Name="fldFatherName" DataType="System.String"/>
+      <Column Name="fldStudentNumber" DataType="System.String"/>
+      <Column Name="fldStudentId" DataType="System.Int64"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" Landscape="true" PaperWidth="330" PaperHeight="230" LeftMargin="0" TopMargin="0" RightMargin="0" BottomMargin="0">
+    <ReportTitleBand Name="ReportTitle1" Width="1247.4"/>
+    <PageHeaderBand Name="PageHeader1" Top="4" Width="1247.4"/>
+    <DataBand Name="Data1" Top="8" Width="1247.4" Height="807.07">
+      <TextObject Name="Text1" Left="385.51" Top="209.65" Width="472.49" Height="41.58" Text="[sp_tblSettingSelect.fldName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 22pt, style=Bold"/>
+      <TextObject Name="Text2" Left="282.8" Top="386.48" Width="642.57" Height="41.58" Text="خانم [sp_tblStudentSelect.fldName] [sp_tblStudentSelect.fldFamily]" VertAlign="Center" RightToLeft="true" Font="RasaFont, 24pt"/>
+      <TextObject Name="Text5" Left="992.23" Top="463.05" Width="118.12" Height="41.58" Text="[sp_tblStudentSelect.fldFatherName]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 20pt, style=Bold"/>
+      <TextObject Name="Text6" Left="757.83" Top="463.98" Width="139.91" Height="41.58" Text="[sp_tblStudentSelect.fldShenasnameNo]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 14pt, style=Bold"/>
+      <TextObject Name="Text7" Left="566.01" Top="452.67" Width="125.68" Height="61.44" Text="[sp_tblStudentSelect.fldMahaleSodoor]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 19pt, style=Bold"/>
+      <TextObject Name="Text8" Left="410.15" Top="462.1" Width="74.67" Height="41.58" Text="[sp_tblStudentSelect.fldBDate]" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 14pt, style=Bold"/>
+      <TextObject Name="Text9" Left="252.29" Top="460.2" Width="92.61" Height="41.58" Text="[sp_tblMadrakSelect.fldMonth]" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 20pt, style=Bold"/>
+      <TextObject Name="Text10" Left="127.5" Top="463.99" Width="51.99" Height="41.58" Text="[sp_tblMadrakSelect.fldYear]" HorzAlign="Right" VertAlign="Center" RightToLeft="true" Font="RasaFont, 15pt, style=Bold"/>
+      <TextObject Name="Text11" Left="852.38" Top="552.83" Width="114.35" Height="41.58" Text="آموزشکده" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 20pt, style=Bold"/>
+      <TextObject Name="Text12" Left="239.14" Top="549.97" Width="286.39" Height="41.58" Text="[sp_tblStudentSelect.fldGroup_Course]" AutoShrink="FontSize" HorzAlign="Center" VertAlign="Center" RightToLeft="true" Font="RasaFont, 20pt, style=Bold"/>
+      <TextObject Name="Text13" Left="576.26" Top="739.88" Width="280.9" Height="41.58" Text="[sp_tblSettingSelect.fldRais]" VertAlign="Center" RightToLeft="true" Font="RasaFont, 20pt, style=Bold"/>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="819.07" Width="1247.4"/>
+  </ReportPage>
+</Report>

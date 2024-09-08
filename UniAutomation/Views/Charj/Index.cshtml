@@ -1,0 +1,220 @@
+﻿@using Kendo.Mvc.UI;
+<div id="Charj">
+    <center>
+        <table>
+            <tr>
+                <td align="left">
+                    نوع پرداخت:
+                </td>
+                @*<td align="right">
+                    @(Html.Kendo().DropDownList()
+                      .Name("CboType")
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .HtmlAttributes(new { @style = "width:100px;" })
+                      .BindTo(new List<SelectListItem>() {
+                          new SelectListItem() {
+                              Text = "شارژ تغذیه",
+                              Value = "1"
+                          },
+                          new SelectListItem() {
+                              Text = "شهریه",
+                              Value = "2"
+                          },
+                          new SelectListItem() {
+                              Text = "خوابگاه",
+                              Value = "3"
+                          },
+                          new SelectListItem() {
+                              Text = "سایر پرداخت ها",
+                              Value = "4"
+                          },
+                          new SelectListItem() {
+                              Text = "پیش ثبت نام خوابگاه",
+                              Value = "5"
+                          }
+                      })
+                     )
+                </td>*@
+                <td>
+                    @(Html.Kendo().DropDownList()
+                                .Name("CboType")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .OptionLabel("نوع پرداخت...")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetType", "Charj");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:169px;" })
+                    )
+                    <span id="lblcboBankError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr id="am">
+                <td align="left">
+                    <span style="color: Red;">*</span> مبلغ:
+                </td>
+                <td align="right">
+                    @UniAutomation.Helper.winClass.textbox("Amount") ریال
+                    <span id="lblAmountError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span id="lblError" style="color: Red;"></span>
+                </td>
+            </tr>
+            <tr id=Term>
+                    <td align="left">
+                        <span style="color: Red;">*</span>ترم:
+                    </td>
+                    <td align="right">
+                        @(Html.Kendo().DropDownList()
+                                                .Name("cboSemester")
+                                                  .OptionLabel("ترم...")
+                                  .DataTextField("fldName")
+                                  .DataValueField("fldID")
+                                  .DataSource(source =>
+                                  {
+                                      source.Read(read =>
+                                      {
+                                          read.Action("GetSemester", "PishSabtenam_Khabgah");
+                                      });
+                                  }).HtmlAttributes(new { @style = "width:164px;" })
+                                  )
+                        <span id="lblSemesterError" style="color: Red;"></span>
+                    </td>
+                </tr>    
+            <tr>
+                <td colspan="2" align="center">
+                    <img src="@Url.Content("~/Content/images/MeliBank.jpg")" id="img"/>
+                    <br />
+                    @UniAutomation.Helper.winClass.Buttons("Next", "ادامه", "yes")
+                    @UniAutomation.Helper.winClass.Buttons("SendPose", "ادامه", "yes")
+                </td>
+            </tr>
+        </table>
+    </center>
+
+    <script type="text/javascript">
+    var DargahType = 0;
+    $(document).ready(function () {
+        $('#Next').button();
+        $('#SendPose').button();
+        $('#SendPose').hide();
+        $('#Term').hide();
+        $('#img').attr('src', '@Url.Content("~/Content/images/Blank.jpg")');
+
+        $('#CboType').change(function () {
+            $('#Term').hide();
+            $('#Amount').val("0");
+
+            var URL = '@Url.Content("~/Charj/DargahDetail")';
+            URL = URL + "/" + $('#CboType').val();
+            $.ajax({
+                type: "GET",
+                url: URL,
+                success: function (data) {
+                    if (data.fldBankId == 1) {
+                        $('#img').attr('src', '@Url.Content("~/Content/images/MeliBank.jpg")');
+                        //$('#SendPose').show();
+                    }
+                    else if (data.fldBankId == 2) {
+                        $('#img').attr('src', '@Url.Content("~/Content/images/TejaratBank.jpg")');
+                        //$('#SendPose').hide();
+                    }
+                    else if (data.fldBankId == 3) {
+                        $('#img').attr('src', '@Url.Content("~/Content/images/ParsianBank.jpg")');
+                        //$('#SendPose').hide();
+                    }
+                    else if (data.fldBankId == 4) {
+                        $('#img').attr('src', '@Url.Content("~/Content/images/MeliBank2.jpg")');
+                        //$('#SendPose').show();
+                    }
+
+                    DargahType = data.fldDargahType;
+                    if (data.fldDargahType == 5) {
+                        $('#Term').show();
+                        $('#Amount').val("500000");
+                        $('#lblError').html("");
+                        $('#am').show();
+                        $('#Next').show();
+                        $('#img').show();
+                    }
+                    else if (data.fldDargahType == 2) {
+                        $('#img').hide();
+                        $('#Term').hide();
+                        $('#am').hide();
+                        $('#Next').hide();
+                        $('#lblError').html("برای واریز شهریه به آدرس reg.tvu.ac.ir مراجعه فرمایید.");
+                    }
+                    else {
+                        $('#am').show();
+                        $('#Term').hide();
+                        $('#Amount').val("0");
+                        $('#lblError').html("");
+                        $('#Next').show();
+                        $('#img').show();
+                    }
+               
+                    if (data.fldPos_Online == false) {
+                        $('#SendPose').show();
+                        $('#Next').hide();
+                    }
+                    else {
+                        if (data.fldPos_Online == false) {
+                            $('#SendPose').hide();
+                            $('#Next').show();
+                        }
+                    }
+                       
+                },
+                failure: function (data) {
+                    alert(data.data);
+                }
+            });
+
+
+        });
+
+        $('#Next').click(function () {
+            var er = false;
+
+            if ($("#Amount").val() == '') {
+                $("#Amount").addClass("input-validation-error");
+                $('#lblAmountError').html('لطفامبلغ را وارد کنید.');
+                er = true;
+            }
+            else
+                $('#lblAmountError').html('');
+
+            if (DargahType == "5") {
+                if ($("#cboSemester").val() == '') {
+                    $('#lblSemesterError').html('لطفا ترم را انتخاب کنید.');
+                    er = true;
+                }
+                else
+                    $('#lblSemesterError').html('');
+            }
+
+            if (er)
+                return;
+
+            var url = '@Url.Content("~/charj/GoToPay")';
+            url = url + '?Amount=' + $('#Amount').val() + '&Type=' + $('#CboType').val() + '&Semester=' + $('#cboSemester').val();
+            window.open(url);
+        });
+        $('#SendPose').click(function () {
+            var oShell = new ActiveXObject("WScript.Shell");
+            var prog = "C:\\PCPose.exe " + $('#Amount').val() + " " +@Session["PersonId"] + " " + $('#CboType').val();
+          /*  var prog = "E:\\Projects\\test\\PCPose\\PCPose\\bin\\Debug\\PCPose.exe "*/
+  
+            oShell.Run(prog, 1, false);
+        });
+    });
+
+</script>
+</div>
